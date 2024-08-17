@@ -15,13 +15,14 @@ export class GetConnectedCityPipe implements PipeTransform {
             return '';
         }
 
-        const cities = connectedTo.reduce((acc: string, { id }) => {
+        const cities = connectedTo.reduce((acc: string[], { id }) => {
             const cityName = stationEntities[id]?.city ?? '';
-            const result = `${acc}${cityName}, `;
 
-            return result;
-        }, '');
+            acc.push(cityName);
 
-        return cities;
+            return acc;
+        }, []);
+
+        return cities.join(', ');
     }
 }
