@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { MapOptions, tileLayer, latLng, LeafletMouseEvent } from 'leaflet';
-import { StationList } from '@type/station-list.type';
 import { Station } from '@interface/station.interface';
+import { StationList } from '@type/station.type';
 import { ToMarkerPipe } from '../../pipe/to-marker/to-marker.pipe';
 import { ConnectStationService } from '../services/connect-station/connect-station.service';
 

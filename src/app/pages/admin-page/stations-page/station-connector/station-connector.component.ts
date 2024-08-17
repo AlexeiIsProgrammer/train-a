@@ -3,18 +3,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { StationList } from '@type/station-list.type';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { required } from '@shared/form-validators/required.validator';
 import { isLatitude } from '@shared/form-validators/is-latitude.validator';
 import { isLongitude } from '@shared/form-validators/is-longitude.validator';
-import { StationRequest } from '@type/create-station-request.type';
 import { Station } from '@interface/station.interface';
 import { hasGaps } from '@shared/form-validators/has-gaps.validator';
 import { omit, pick } from 'lodash';
 import { LeafletMouseEvent } from 'leaflet';
 import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
+import { StationList, StationRequest } from '@type/station.type';
 import { ConnectStationService } from '../services/connect-station/connect-station.service';
 
 @Component({

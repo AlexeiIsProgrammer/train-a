@@ -1,0 +1,70 @@
+<div #scroll="scrollToTop" appScrollToTop class="mat-elevation-z8">
+    <table mat-table multiTemplateDataRows [dataSource]="dataSource()">
+        @for (column of columnsToDisplay; track column) {
+            <!-- Row -->
+            <ng-container [matColumnDef]="column">
+                <th *matHeaderCellDef mat-header-cell class="bold">Routes</th>
+                <td *matCellDef="let route" mat-cell>
+                    <div class="info-wrap">
+                        <p>Route {{ route.position }}</p>
+
+                        <p>
+                            <span class="bold">Cities:</span>
+                            {{ route.path | getConnectedCity: stationEntities() | join: ' - ' }}
+                        </p>
+                        <p>
+                            <span class="bold">Carriage Types:</span>
+                            {{ route.carriages | join: ' - ' }}
+                        </p>
+                    </div>
+                </td>
+            </ng-container>
+        }
+
+        <!-- Buttons -->
+        <ng-container matColumnDef="expand">
+            <th *matHeaderCellDef mat-header-cell>&nbsp;</th>
+            <td *matCellDef="let element" mat-cell [style.textAlign]="'right'">
+                <button mat-icon-button type="button" (click)="$event.stopPropagation()">
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                </button>
+
+                <button mat-icon-button type="button" (click)="$event.stopPropagation()">
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Detail  -->
+        <ng-container matColumnDef="expandedDetail">
+            <td
+                *matCellDef="let element"
+                mat-cell
+                [attr.colspan]="columnsToDisplayWithExpand.length"
+            >
+                <div
+                    class="element-detail"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+                >
+                    {{ element | json }}
+                </div>
+            </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="columnsToDisplayWithExpand" mat-header-row></tr>
+        <tr
+            *matRowDef="let element; columns: columnsToDisplayWithExpand"
+            mat-row
+            class="element-row"
+            [class.expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element"
+        ></tr>
+        <tr *matRowDef="let row; columns: ['expandedDetail']" mat-row class="detail-row"></tr>
+    </table>
+
+    <mat-paginator
+        showFirstLastButtons
+        [pageSizeOptions]="[10, 30, 50]"
+        (page)="scroll.scrollToTop()"
+    />
+</div>

@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div #scroll="scrollToTop" appScrollToTop class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource()">
         <!-- City Column -->
         <ng-container matColumnDef="city">
@@ -10,7 +10,7 @@
         <ng-container matColumnDef="connectedTo">
             <th *matHeaderCellDef mat-header-cell>Connected to:</th>
             <td *matCellDef="let item" mat-cell>
-                {{ item.connectedTo | getConnectedCity: stationEntities() }}
+                {{ item.connectedTo | getConnectedCity: stationEntities() | join: ', ' }}
             </td>
         </ng-container>
 
@@ -36,7 +36,7 @@
 
     <mat-paginator
         showFirstLastButtons
-        aria-label="Select page of periodic elements"
         [pageSizeOptions]="[10, 30, 50]"
-    ></mat-paginator>
+        (page)="scroll.scrollToTop()"
+    />
 </div>

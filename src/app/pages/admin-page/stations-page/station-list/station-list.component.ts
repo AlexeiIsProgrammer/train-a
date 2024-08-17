@@ -13,6 +13,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
+import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 
 @Component({
     selector: 'app-station-list',
@@ -23,6 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
         GetConnectedCityPipe,
         MatButtonModule,
         MatIconModule,
+        JoinPipe,
+        ScrollToTopDirective,
     ],
     templateUrl: './station-list.component.html',
     styleUrl: './station-list.component.scss',

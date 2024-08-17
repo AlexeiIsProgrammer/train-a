@@ -1,6 +1,6 @@
 import { Station } from '@interface/station.interface';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { StationList } from '@type/station-list.type';
+import { StationList } from '@type/station.type';
 
 export const StationsActions = createActionGroup({
     source: 'Station',
