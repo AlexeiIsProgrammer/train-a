@@ -12,6 +12,7 @@ import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
 import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
+import { StationStepperComponent } from '../station-stepper/station-stepper.component';
 
 @Component({
     selector: 'app-route-list',
@@ -25,6 +26,7 @@ import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to
         GetConnectedCityPipe,
         JoinPipe,
         ScrollToTopDirective,
+        StationStepperComponent,
     ],
     templateUrl: './route-list.component.html',
     styleUrl: './route-list.component.scss',
@@ -41,6 +43,7 @@ export class RouteListComponent {
     readonly paginator = viewChild.required(MatPaginator);
 
     readonly routes = input<Routes>();
+    readonly carriagesNames = input<string[]>();
     readonly stationEntities = input<Dictionary<Station>>();
 
     readonly dataSource = computed(() => {

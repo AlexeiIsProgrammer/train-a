@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
+import { ToIdListPipe } from '@pages/admin-page/pipe/to-id-list/to-id-list.pipe';
+import { values } from 'lodash';
 
 @Component({
     selector: 'app-station-list',
@@ -27,6 +29,7 @@ import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to
         MatIconModule,
         JoinPipe,
         ScrollToTopDirective,
+        ToIdListPipe,
     ],
     templateUrl: './station-list.component.html',
     styleUrl: './station-list.component.scss',
@@ -41,9 +44,10 @@ export class StationListComponent {
 
     readonly removeOne = output<number>();
 
-    readonly stationList = computed(() => Object.values(this.stationEntities() ?? {}));
     readonly dataSource = computed(() => {
-        const dataSource = new MatTableDataSource<Station | undefined>(this.stationList());
+        const dataSource = new MatTableDataSource<Station | undefined>(
+            values(this.stationEntities()),
+        );
 
         dataSource.paginator = this.paginator();
 

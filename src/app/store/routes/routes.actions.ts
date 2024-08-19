@@ -1,4 +1,6 @@
-import { createActionGroup, emptyProps } from '@ngrx/store';
+import { Route } from '@interface/route.inrerface';
+import { Update } from '@ngrx/entity';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Routes } from '@type/roures.type';
 
 export const RoutesActions = createActionGroup({
@@ -6,5 +8,6 @@ export const RoutesActions = createActionGroup({
     events: {
         'Load all': emptyProps(),
         'Set all': (routes: Routes) => ({ routes }),
+        'Update one': props<{ update: Update<Route> }>(),
     },
 });

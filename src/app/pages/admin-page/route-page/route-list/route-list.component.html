@@ -26,11 +26,11 @@
             <th *matHeaderCellDef mat-header-cell>&nbsp;</th>
             <td *matCellDef="let element" mat-cell [style.textAlign]="'right'">
                 <button mat-icon-button type="button" (click)="$event.stopPropagation()">
-                    <mat-icon>keyboard_arrow_up</mat-icon>
+                    <mat-icon>train</mat-icon>
                 </button>
 
                 <button mat-icon-button type="button" (click)="$event.stopPropagation()">
-                    <mat-icon>keyboard_arrow_down</mat-icon>
+                    <mat-icon>delete</mat-icon>
                 </button>
             </td>
         </ng-container>
@@ -46,7 +46,7 @@
                     class="element-detail"
                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
                 >
-                    {{ element | json }}
+                    <app-station-stepper [route]="element" [stationEntities]="stationEntities()" />
                 </div>
             </td>
         </ng-container>
