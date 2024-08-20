@@ -1,0 +1,16 @@
+<mat-toolbar>
+    <a mat-button [routerLink]="['/']">Home</a>
+
+    @if (userType !== 'guest') {
+        <a mat-button [routerLink]="['/profile']">Profile</a>
+        <a mat-button [routerLink]="['/orders']">My Orders</a>
+    }
+    <span class="space"></span>
+    @if (userType === 'admin') {
+        <a mat-button [routerLink]="['/admin']">Admin</a>
+    }
+    @if (userType === 'guest') {
+        <a mat-button [routerLink]="['/signin']">Sign In</a>
+        <a mat-button [routerLink]="['/signup']">Sign Up</a>
+    }
+</mat-toolbar>
