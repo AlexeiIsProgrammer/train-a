@@ -8,7 +8,7 @@
     }
     <span class="space"></span>
     @if (userType === 'admin') {
-        <a mat-button [routerLink]="['/admin']">Admin</a>
+        <a mat-button [routerLink]="['/admin/stations']">Admin</a>
     }
     @if (userType === 'guest') {
         <a mat-button [routerLink]="['/signin']">Sign In</a>
