@@ -14,5 +14,5 @@ import { UserType } from '@type/header.type';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-    userType: UserType = 'guest';
+    userType: UserType = 'user';
 }
