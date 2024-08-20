@@ -1,0 +1,54 @@
+<mat-stepper orientation="vertical">
+    <mat-step state="title" completed="false">
+        <ng-template matStepLabel>Carriage type</ng-template>
+    </mat-step>
+
+    @for (control of carriageControls; track $index) {
+        <!-- Type step-->
+        <mat-step state="title" completed="false">
+            <ng-template matStepLabel>{{ control.value }}</ng-template>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+
+                <mat-select #select>
+                    @for (carriageType of carriagesTypes(); track $index) {
+                        <mat-option [value]="carriageType">
+                            {{ carriageType }}
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <div class="btns-wrap">
+                <button
+                    mat-button
+                    [disabled]="!select.value"
+                    (click)="selectCity($index, select.value)"
+                >
+                    Edit
+                </button>
+
+                <button
+                    mat-button
+                    [disabled]="!select.value"
+                    (click)="addOne($index, select.value); select.value = ''"
+                >
+                    Add
+                </button>
+
+                <button mat-button [disabled]="!canRemove" (click)="removeOne($index)">
+                    Remove
+                </button>
+            </div>
+        </mat-step>
+    }
+</mat-stepper>
+
+<ng-template matStepperIcon="title">
+    <mat-icon>title</mat-icon>
+</ng-template>
+
+<ng-template matStepperIcon="add">
+    <mat-icon>add</mat-icon>
+</ng-template>

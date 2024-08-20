@@ -1,16 +1,16 @@
-<div #scroll="scrollToTop" appScrollToTop class="mat-elevation-z8">
+<div #scroll="scrollToTop" appScrollToTop>
     <table mat-table multiTemplateDataRows [dataSource]="dataSource()">
-        @for (column of columnsToDisplay; track column) {
+        @for (column of columnsToDisplay; track $index) {
             <!-- Row -->
             <ng-container [matColumnDef]="column">
                 <th *matHeaderCellDef mat-header-cell class="bold">Routes</th>
-                <td *matCellDef="let route" mat-cell>
+                <td *matCellDef="let route" mat-cell (click)="addDetail(route)">
                     <div class="info-wrap">
                         <p>Route {{ route.position }}</p>
 
                         <p>
                             <span class="bold">Cities:</span>
-                            {{ route.path | getConnectedCity: stationEntities() | join: ' - ' }}
+                            {{ route.path | getConnectedCity: stationEntities() | join: ' -> ' }}
                         </p>
                         <p>
                             <span class="bold">Carriage Types:</span>
@@ -35,7 +35,7 @@
             </td>
         </ng-container>
 
-        <!-- Detail  -->
+        <!-- Detail -->
         <ng-container matColumnDef="expandedDetail">
             <td
                 *matCellDef="let element"
@@ -46,7 +46,8 @@
                     class="element-detail"
                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
                 >
-                    <app-station-stepper [route]="element" [stationEntities]="stationEntities()" />
+                    <!-- Detail container -->
+                    <ng-container #detailContainer />
                 </div>
             </td>
         </ng-container>
@@ -64,7 +65,22 @@
 
     <mat-paginator
         showFirstLastButtons
-        [pageSizeOptions]="[10, 30, 50]"
-        (page)="scroll.scrollToTop()"
+        [pageSizeOptions]="[15, 50]"
+        (page)="scroll.scrollToTop(); updatePageInfo($event)"
     />
 </div>
+
+<!-- Detail template -->
+<ng-template
+    #detailTemplate
+    let-routeListItem="routeListItem"
+    let-stationEntities="stationEntities"
+    let-carriagesTypes="carriagesTypes"
+>
+    <app-route-detail
+        [route]="routeListItem"
+        [stationEntities]="stationEntities()"
+        [carriagesTypes]="carriagesTypes()"
+        (update)="updateRoute($event)"
+    />
+</ng-template>

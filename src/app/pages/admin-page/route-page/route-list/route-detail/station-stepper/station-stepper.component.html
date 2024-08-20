@@ -1,0 +1,57 @@
+<form [formGroup]="$any(stationsForm)">
+    <mat-stepper orientation="vertical" (selectionChange)="addSelector($event.selectedIndex)">
+        <mat-step state="train" completed="false">
+            <ng-template matStepLabel>Route {{ route()?.position }}</ng-template>
+        </mat-step>
+
+        <!-- Stations -->
+        @for (control of pathControls; track $index) {
+            @let stationName = [control.value] | getConnectedCity: stationEntities();
+
+            <mat-step state="train" completed="false" appScrollToTop>
+                <ng-template matStepLabel>
+                    {{ stationName }}
+                </ng-template>
+
+                <!-- #selectOptions template-->
+                <ng-container #stepContainer />
+            </mat-step>
+        }
+    </mat-stepper>
+</form>
+
+<!-- icons -->
+<ng-template matStepperIcon="train">
+    <mat-icon>train</mat-icon>
+</ng-template>
+
+<!-- #selectOptions -->
+<ng-template #selectOptions let-idx>
+    <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+
+        <mat-select #select>
+            @for (station of stationList(); track station?.id) {
+                <mat-option [value]="station?.id">
+                    {{ station?.city }}
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <div class="btns-wrap">
+        <button mat-button [disabled]="!select.value" (click)="editOne(idx, select.value)">
+            Edit
+        </button>
+
+        <button
+            mat-button
+            [disabled]="!select.value"
+            (click)="addOne(idx, select.value); select.value = ''"
+        >
+            Add
+        </button>
+
+        <button mat-button [disabled]="!canRemove" (click)="removeOne(idx)">Remove</button>
+    </div>
+</ng-template>

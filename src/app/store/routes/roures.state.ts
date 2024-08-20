@@ -1,4 +1,4 @@
-import { Route } from '@interface/route.inrerface';
+import { Route } from '@interface/route.interface';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 
 export const ROUTES_FEATURE = 'routes';

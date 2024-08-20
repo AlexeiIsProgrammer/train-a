@@ -19,6 +19,7 @@ export class ToMarkerPipe implements PipeTransform {
             }),
         })
             .bindPopup(city)
+            .bindTooltip(city)
             .addEventListener('click', () => {
                 eventCb(station);
             });

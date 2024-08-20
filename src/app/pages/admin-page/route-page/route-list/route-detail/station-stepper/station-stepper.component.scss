@@ -1,0 +1,17 @@
+:host {
+    display: block;
+    position: relative;
+    overflow: scroll;
+    height: 100%;
+    min-width: 300px;
+}
+
+mat-stepper {
+    mat-form-field {
+        margin-top: 30px;
+    }
+}
+
+.btns-wrap {
+    display: flex;
+}

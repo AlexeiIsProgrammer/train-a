@@ -1,0 +1,9 @@
+:host {
+    display: flex;
+    max-height: 55vh;
+    overflow: scroll;
+
+    [mat-button] {
+        align-self: center;
+    }
+}

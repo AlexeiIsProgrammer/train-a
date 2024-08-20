@@ -1,4 +1,4 @@
-import { Route } from '@interface/route.inrerface';
+import { Route } from '@interface/route.interface';
 import { Update } from '@ngrx/entity';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Routes } from '@type/roures.type';

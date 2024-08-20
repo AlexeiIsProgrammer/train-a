@@ -5,7 +5,7 @@ const { selectAll, selectIds } = carriageAdapter.getSelectors();
 const carriageFeature = createFeatureSelector<CarriagesState>(CARRIAGES_FEATURE);
 
 export const selectAllCarriages = createSelector(carriageFeature, state => selectAll(state));
-export const selectCarriageNames = createSelector(
+export const selectCarriageTypes = createSelector(
     carriageFeature,
     state => <string[]>selectIds(state),
 );

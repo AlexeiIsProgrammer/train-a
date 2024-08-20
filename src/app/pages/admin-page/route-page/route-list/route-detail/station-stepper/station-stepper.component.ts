@@ -1,33 +1,32 @@
-import { STEPPER_GLOBAL_OPTIONS, StepperSelectionEvent } from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     computed,
     DestroyRef,
     effect,
     Injector,
     input,
-    output,
     signal,
     TemplateRef,
     viewChild,
     viewChildren,
     ViewContainerRef,
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
-import { Route } from '@interface/route.inrerface';
 import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
 import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatSelectModule } from '@angular/material/select';
-import { omit, values } from 'lodash';
+import { omit, uniq, values } from 'lodash';
+import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouteListItem } from '../../route-list-item.type';
 
 @Component({
     selector: 'app-station-stepper',
@@ -42,6 +41,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         MatButtonModule,
         MatIconModule,
         MatSelectModule,
+        ScrollToTopDirective,
     ],
     templateUrl: './station-stepper.component.html',
     styleUrl: './station-stepper.component.scss',
@@ -56,24 +56,24 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class StationStepperComponent {
     private readonly stepContainer = viewChildren('stepContainer', { read: ViewContainerRef });
     private readonly selectOptionsTemplate =
-        viewChild<TemplateRef<{ $implicit: number }>>('selectOptions');
+        viewChild.required<TemplateRef<{ $implicit: number }>>('selectOptions');
 
     private readonly selectedStation = signal<number[]>([]);
 
     readonly stationEntities = input<Dictionary<Station>>();
-    readonly route = input.required<Route & { position: number }>();
-
-    readonly update = output<Route>();
+    readonly route = input<RouteListItem>();
 
     readonly stationList = computed(() => {
-        const availableStations = omit(this.stationEntities(), this.selectedStation());
+        const availableStations = omit(
+            this.stationEntities(),
+            uniq([...this.selectedStation(), ...this.stationsForm.getRawValue()]),
+        );
 
         return values(availableStations);
     });
 
     constructor(
         private readonly formBuilder: FormBuilder,
-        private readonly changeDetectorRef: ChangeDetectorRef,
         private readonly injector: Injector,
         private readonly destroyRef: DestroyRef,
     ) {
@@ -83,44 +83,48 @@ export class StationStepperComponent {
 
     readonly stationsForm = this.formBuilder.nonNullable.array<number>([]);
 
-    addSelector({ selectedIndex }: StepperSelectionEvent): void {
-        const stepContainers = this.stepContainer();
+    removeOne(index: number): void {
+        this.stationsForm.removeAt(index);
+
+        const { length } = this.stepContainer();
+        const isLastIndex = length === index + 1;
+
+        if (isLastIndex) {
+            this.addSelector(index);
+
+            return;
+        }
+
+        this.addSelector(index + 2);
+    }
+
+    editOne(index: number, stationID: number): void {
+        this.stationsForm.controls.at(index)?.setValue(stationID);
+    }
+
+    addOne(index: number, stationID: number): void {
+        const newControl = this.formBuilder.nonNullable.control(stationID);
+
+        this.stationsForm.insert(index, newControl);
+    }
+
+    addSelector(selectedIndex: number): void {
         const idx = selectedIndex - 1;
+        const stepContainer = this.stepContainer().at(idx);
 
-        if (idx >= 0 && idx < stepContainers.length) {
-            const stepContainer = stepContainers[idx];
-
+        if (selectedIndex && stepContainer) {
             stepContainer.clear();
-            stepContainer.createEmbeddedView(this.selectOptionsTemplate()!, { $implicit: idx });
-
-            this.changeDetectorRef.markForCheck();
+            stepContainer.createEmbeddedView(this.selectOptionsTemplate(), { $implicit: idx });
         }
-    }
-
-    selectCity(stationsFormIndex: number, stationId: number): void {
-        const { controls } = this.stationsForm;
-
-        controls[stationsFormIndex].setValue(stationId);
-    }
-
-    updateRoute(stationID?: number): void {
-        const route = this.route();
-        const path = this.selectedStation();
-
-        if (stationID) {
-            path.push(stationID);
-        }
-
-        const updatedRoute = { ...route, path };
-
-        this.update.emit(omit(updatedRoute, 'position'));
     }
 
     private watchRoute(): void {
         effect(
             () => {
                 this.route()?.path.forEach(id => {
-                    this.stationsForm.push(this.formBuilder.nonNullable.control(id));
+                    const newStationControl = this.formBuilder.nonNullable.control(id);
+
+                    this.stationsForm.push(newStationControl);
                 });
             },
             { injector: this.injector },
@@ -135,7 +139,15 @@ export class StationStepperComponent {
             });
     }
 
-    get pathControls() {
+    get path(): number[] {
+        return this.stationsForm.getRawValue();
+    }
+
+    get pathControls(): Array<FormControl<number>> {
         return this.stationsForm.controls;
+    }
+
+    get canRemove(): boolean {
+        return this.stationsForm.controls.length > 1;
     }
 }
