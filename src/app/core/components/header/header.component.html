@@ -1,4 +1,5 @@
 <mat-toolbar>
+    <a class="logo" [routerLink]="['/']"><img src="assets/logo.jpg" alt="logo" /></a>
     <a mat-button [routerLink]="['/']">Home</a>
 
     @if (userType !== 'guest') {
