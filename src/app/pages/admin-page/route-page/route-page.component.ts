@@ -11,7 +11,6 @@ import { keys, take } from 'lodash';
 import { Route } from '@interface/route.interface';
 import { filter } from 'rxjs';
 import { RoutesActions } from '@store/routes/routes.actions';
-import { HttpErrorResponse } from '@angular/common/http';
 import { RouteListComponent } from './route-list/route-list.component';
 import { CreateRouteComponent } from './route-list/create-route/create-route.component';
 
@@ -36,7 +35,7 @@ export class RoutePageComponent {
 
     updateRoute(route: Route): void {
         this.store.dispatch(
-            RoutesActions.updateCurrent(route, (_err: HttpErrorResponse) => {
+            RoutesActions.updateCurrent(route, (_err: unknown) => {
                 // Todo: handle err
             }),
         );
@@ -44,7 +43,7 @@ export class RoutePageComponent {
 
     createRoute(route: Omit<Route, 'id'>): void {
         this.store.dispatch(
-            RoutesActions.createCurrent(route, (_err: HttpErrorResponse) => {
+            RoutesActions.createCurrent(route, (_err: unknown) => {
                 // Todo: handle err
             }),
         );
@@ -52,7 +51,7 @@ export class RoutePageComponent {
 
     removeRoute(id: Route['id']): void {
         this.store.dispatch(
-            RoutesActions.removeCurrent(id, (_err: HttpErrorResponse) => {
+            RoutesActions.removeCurrent(id, (_err: unknown) => {
                 // Todo: handle err
             }),
         );
