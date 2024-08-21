@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { selectAllRoutes } from '@store/routes/routes.selectors';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { selectCarriageTypes } from '@store/carriages/carriages.selectors';
@@ -28,6 +28,7 @@ export class RoutePageComponent {
     constructor(
         private readonly store: Store,
         private readonly matDialog: MatDialog,
+        private readonly destroyRef: DestroyRef,
     ) {}
 
     openMatDialog(): void {
@@ -48,8 +49,11 @@ export class RoutePageComponent {
         componentInstance.carriages = randomCarriagesTypes;
         componentInstance.pathIds = randomStationId;
 
-        dialogRef.afterClosed().subscribe((_route: Pick<Route, 'carriages' | 'path'> | null) => {
-            // todo: attach api
-        });
+        dialogRef
+            .afterClosed()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((_route: Pick<Route, 'carriages' | 'path'> | null) => {
+                // todo: attach api
+            });
     }
 }
