@@ -3,6 +3,7 @@ import {
     Component,
     computed,
     input,
+    output,
     TemplateRef,
     viewChild,
     viewChildren,
@@ -62,6 +63,9 @@ export class RouteListComponent {
     readonly carriagesTypes = input<string[]>();
     readonly stationEntities = input<Dictionary<Station>>();
 
+    readonly updateOne = output<Route>();
+    readonly removeOne = output<Route['id']>();
+
     readonly dataSource = computed(() => {
         const routes = this.routes()?.map((route, i) => ({ ...route, position: i + 1 }));
         const dataSource = new MatTableDataSource<RouteListItem>(routes);
@@ -80,10 +84,6 @@ export class RouteListComponent {
         pageIndex: 0,
         pageSize: 10,
     };
-
-    updateRoute(_route: Route): void {
-        //! --- update api
-    }
 
     addDetail(route: RouteListItem) {
         const { pageIndex, pageSize } = this.pageInfo;

@@ -8,6 +8,14 @@ export const RoutesActions = createActionGroup({
     events: {
         'Load all': emptyProps(),
         'Set all': (routes: Routes) => ({ routes }),
-        'Update one': props<{ update: Update<Route> }>(),
+        'Update current': (route: Route, err: (err: unknown) => void) => ({ route, err }),
+        'Remove current': (id: Route['id'], err: (err: unknown) => void) => ({ id, err }),
+        'Create current': (route: Omit<Route, 'id'>, err: (err: unknown) => void) => ({
+            route,
+            err,
+        }),
+        'Update one': props<Update<Route>>(),
+        'Remove one': (id: number) => ({ id }),
+        'Add one': props<Route>(),
     },
 });

@@ -1,5 +1,5 @@
 export interface Route {
     carriages: string[];
-    id: string;
+    id: number;
     path: number[];
 }

@@ -29,7 +29,11 @@
                     <mat-icon>train</mat-icon>
                 </button>
 
-                <button mat-icon-button type="button" (click)="$event.stopPropagation()">
+                <button
+                    mat-icon-button
+                    type="button"
+                    (click)="removeOne.emit(element.id); $event.stopPropagation()"
+                >
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>
@@ -81,6 +85,6 @@
         [route]="routeListItem"
         [stationEntities]="stationEntities()"
         [carriagesTypes]="carriagesTypes()"
-        (update)="updateRoute($event)"
+        (update)="updateOne.emit($event)"
     />
 </ng-template>

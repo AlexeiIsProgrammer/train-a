@@ -7,4 +7,6 @@
     [routes]="routes()"
     [stationEntities]="stationEntities()"
     [carriagesTypes]="carriagesTypes()"
+    (updateOne)="updateRoute($event)"
+    (removeOne)="removeRoute($event)"
 />

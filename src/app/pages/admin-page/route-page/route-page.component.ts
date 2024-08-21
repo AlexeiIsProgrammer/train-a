@@ -9,8 +9,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { keys, take } from 'lodash';
 import { Route } from '@interface/route.interface';
-import { CreateRouteComponent } from './route-list/create-route/create-route.component';
+import { filter } from 'rxjs';
+import { RoutesActions } from '@store/routes/routes.actions';
+import { HttpErrorResponse } from '@angular/common/http';
 import { RouteListComponent } from './route-list/route-list.component';
+import { CreateRouteComponent } from './route-list/create-route/create-route.component';
 
 @Component({
     selector: 'app-route-page',
@@ -30,6 +33,30 @@ export class RoutePageComponent {
         private readonly matDialog: MatDialog,
         private readonly destroyRef: DestroyRef,
     ) {}
+
+    updateRoute(route: Route): void {
+        this.store.dispatch(
+            RoutesActions.updateCurrent(route, (_err: HttpErrorResponse) => {
+                // Todo: handle err
+            }),
+        );
+    }
+
+    createRoute(route: Omit<Route, 'id'>): void {
+        this.store.dispatch(
+            RoutesActions.createCurrent(route, (_err: HttpErrorResponse) => {
+                // Todo: handle err
+            }),
+        );
+    }
+
+    removeRoute(id: Route['id']): void {
+        this.store.dispatch(
+            RoutesActions.removeCurrent(id, (_err: HttpErrorResponse) => {
+                // Todo: handle err
+            }),
+        );
+    }
 
     openMatDialog(): void {
         const dialogRef = this.matDialog.open(CreateRouteComponent, {
@@ -51,9 +78,9 @@ export class RoutePageComponent {
 
         dialogRef
             .afterClosed()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((_route: Pick<Route, 'carriages' | 'path'> | null) => {
-                // todo: attach api
+            .pipe(takeUntilDestroyed(this.destroyRef), filter(Boolean))
+            .subscribe((route: Pick<Route, 'carriages' | 'path'>) => {
+                this.createRoute(route);
             });
     }
 }
