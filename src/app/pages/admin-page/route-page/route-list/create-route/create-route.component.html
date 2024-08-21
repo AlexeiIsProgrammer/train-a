@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Create route</h2>
+
+<mat-dialog-content>
+    <div class="stepper-wrap">
+        <app-station-stepper [pathIds]="pathIds" [stationEntities]="stationEntities" />
+        <app-carriages-stepper [carriagesTypes]="carriagesTypes" [carriages]="carriages" />
+    </div>
+
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button [mat-dialog-close]="newRoute">Save</button>
+    </mat-dialog-actions>
+</mat-dialog-content>

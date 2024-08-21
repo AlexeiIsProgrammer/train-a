@@ -1,7 +1,7 @@
 <form [formGroup]="$any(stationsForm)">
     <mat-stepper orientation="vertical" (selectionChange)="addSelector($event.selectedIndex)">
         <mat-step state="train" completed="false">
-            <ng-template matStepLabel>Route {{ route()?.position }}</ng-template>
+            <ng-template matStepLabel>Route {{ position() }}</ng-template>
         </mat-step>
 
         <!-- Stations -->
@@ -13,7 +13,7 @@
                     {{ stationName }}
                 </ng-template>
 
-                <!-- #selectOptions template-->
+                <!-- SelectOptions container-->
                 <ng-container #stepContainer />
             </mat-step>
         }
@@ -40,7 +40,11 @@
     </mat-form-field>
 
     <div class="btns-wrap">
-        <button mat-button [disabled]="!select.value" (click)="editOne(idx, select.value)">
+        <button
+            mat-button
+            [disabled]="!select.value"
+            (click)="editOne(idx, select.value); select.value = ''"
+        >
             Edit
         </button>
 

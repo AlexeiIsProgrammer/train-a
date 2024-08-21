@@ -44,7 +44,7 @@ export class CarriagesStepperComponent {
     }
 
     addOne(index: number, type: string): void {
-        this.carriagesForm.insert(index, this.formBuilder.nonNullable.control(type));
+        this.carriagesForm.insert(index + 1, this.formBuilder.nonNullable.control(type));
     }
 
     get carriageControls(): Array<FormControl<string>> {

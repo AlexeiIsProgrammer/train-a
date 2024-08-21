@@ -3,9 +3,9 @@ import { Station } from '@interface/station.interface';
 import { Dictionary, omit } from 'lodash';
 import { Route } from '@interface/route.interface';
 import { MatButtonModule } from '@angular/material/button';
+import { CarriagesStepperComponent } from '../../carriages-stepper/carriages-stepper.component';
+import { StationStepperComponent } from '../../station-stepper/station-stepper.component';
 import { RouteListItem } from '../route-list-item.type';
-import { StationStepperComponent } from './station-stepper/station-stepper.component';
-import { CarriagesStepperComponent } from './carriages-stepper/carriages-stepper.component';
 
 @Component({
     selector: 'app-route-detail',

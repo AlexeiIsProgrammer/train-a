@@ -81,8 +81,7 @@ export class RouteListComponent {
         pageSize: 10,
     };
 
-    updateRoute(route: Route): void {
-        console.info(route);
+    updateRoute(_route: Route): void {
         //! --- update api
     }
 

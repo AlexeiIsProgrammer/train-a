@@ -1,0 +1,12 @@
+:host {
+    display: block;
+    padding: 10px;
+}
+
+.stepper-wrap {
+    display: flex;
+}
+
+mat-dialog-content {
+    max-height: none;
+}

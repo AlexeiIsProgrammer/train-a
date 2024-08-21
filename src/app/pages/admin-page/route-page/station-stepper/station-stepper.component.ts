@@ -26,7 +26,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { omit, uniq, values } from 'lodash';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouteListItem } from '../../route-list-item.type';
 
 @Component({
     selector: 'app-station-stepper',
@@ -61,7 +60,8 @@ export class StationStepperComponent {
     private readonly selectedStation = signal<number[]>([]);
 
     readonly stationEntities = input<Dictionary<Station>>();
-    readonly route = input<RouteListItem>();
+    readonly pathIds = input<number[]>();
+    readonly position = input<number>();
 
     readonly stationList = computed(() => {
         const availableStations = omit(
@@ -105,7 +105,7 @@ export class StationStepperComponent {
     addOne(index: number, stationID: number): void {
         const newControl = this.formBuilder.nonNullable.control(stationID);
 
-        this.stationsForm.insert(index, newControl);
+        this.stationsForm.insert(index + 1, newControl);
     }
 
     addSelector(selectedIndex: number): void {
@@ -121,7 +121,7 @@ export class StationStepperComponent {
     private watchRoute(): void {
         effect(
             () => {
-                this.route()?.path.forEach(id => {
+                this.pathIds()?.forEach(id => {
                     const newStationControl = this.formBuilder.nonNullable.control(id);
 
                     this.stationsForm.push(newStationControl);
@@ -148,6 +148,6 @@ export class StationStepperComponent {
     }
 
     get canRemove(): boolean {
-        return this.stationsForm.controls.length > 1;
+        return this.stationsForm.controls.length > 3;
     }
 }

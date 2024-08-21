@@ -1,4 +1,8 @@
-<app-station-stepper [route]="route()" [stationEntities]="stationEntities()" />
+<app-station-stepper
+    [pathIds]="route()?.path"
+    [position]="route()?.position"
+    [stationEntities]="stationEntities()"
+/>
 <app-carriages-stepper [carriagesTypes]="carriagesTypes()" [carriages]="route()?.carriages" />
 
 <button mat-button [disabled]="canSave" (click)="updateRoute()">Save changes</button>
