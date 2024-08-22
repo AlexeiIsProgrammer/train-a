@@ -25,7 +25,7 @@
         <ng-container matColumnDef="expand">
             <th *matHeaderCellDef mat-header-cell>&nbsp;</th>
             <td *matCellDef="let element" mat-cell [style.textAlign]="'right'">
-                <button mat-icon-button type="button" (click)="$event.stopPropagation()">
+                <button mat-icon-button type="button" [routerLink]="[element.id]">
                     <mat-icon>train</mat-icon>
                 </button>
 
