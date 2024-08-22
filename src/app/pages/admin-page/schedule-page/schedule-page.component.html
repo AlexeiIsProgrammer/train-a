@@ -1,1 +1,21 @@
-<p>schedule-page works!</p>
+<mat-accordion>
+    @for (ride of scheduleService.schedule$ | async; track ride.rideId) {
+        <mat-expansion-panel [expanded]="$first">
+            <mat-expansion-panel-header>
+                <mat-panel-description>
+                    Ride {{ $index + 1 }}
+
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="remove(ride.rideId); $event.stopPropagation()"
+                    >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <app-ride [ride]="ride" />
+        </mat-expansion-panel>
+    }
+</mat-accordion>
