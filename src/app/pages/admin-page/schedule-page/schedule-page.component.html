@@ -3,7 +3,7 @@
 
 <mat-accordion class="example-headers-align">
     @for (ride of schedule; track ride.rideId) {
-        <mat-expansion-panel [expanded]="$first">
+        <mat-expansion-panel #panel [expanded]="$first">
             <mat-expansion-panel-header>
                 <mat-panel-description>
                     Ride {{ ride.rideId }}
@@ -18,7 +18,9 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <app-ride [ride]="ride" [path]="path" />
+            @if (panel.expanded) {
+                <app-ride [ride]="ride" [path]="path" />
+            }
         </mat-expansion-panel>
     }
 </mat-accordion>

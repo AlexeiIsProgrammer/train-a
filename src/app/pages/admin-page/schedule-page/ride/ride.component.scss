@@ -7,12 +7,25 @@
 .segment-wrap {
     display: flex;
     justify-content: space-between;
-    background-color: aquamarine;
-    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    align-items: center;
+
+    div {
+        margin: 5px;
+    }
+}
+
+.background {
+    background-color: #68686814;
+}
+
+input {
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
 }
 
 form {
     min-height: 100px;
-    // width: 100%;
-    background-color: aquamarine;
 }

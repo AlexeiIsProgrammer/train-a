@@ -1,29 +1,60 @@
-<!-- @let segments = ride!.segments; -->
-<!-- @let currentStationId = path!.slice(0, 1); -->
-<!-- @let nextStation = segments.at(0); -->
-@let stationsIds = path!.slice(1);
-<!-- @let stationEntities = stationEntities$ | async;  -->
+@let stationsIds = path!;
+@let stationEntities = stationEntities$ | async;
+@let departureIdx = 0;
+@let arrivalIdx = 1;
 
 @let controls = scheduleForm.controls;
 
-<div [formGroup]="$any(scheduleForm)">
-    @for (segmentFormGroup of controls; track $index) {
+<form [formGroup]="$any(scheduleForm)">
+    @for (segmentFormGroup of controls; track $index; let firstSegment = $first) {
         @let segmentControls = segmentFormGroup.controls;
+        <!-- @let departureTimeControl = segmentControls.time.get(departureIdx); -->
+        <!-- @let arrivalTimeControl = segmentControls.time.get(arrivalIdx); -->
 
-        <div class="segment-wrap" [formGroupName]="$index">
-            {{ stationsIds[$index] }}
-
+        <div class="segment-wrap" [class.background]="$even" [formGroupName]="$index">
             <ng-container [formArrayName]="'time'">
-                @for (timeControl of segmentControls.time.controls; track $index) {
-                    <input [formControlName]="$index" />
-                }
+                <div class="time-control-wrap">
+                    <div class="departure">
+                        Departure from
+                        {{ [stationsIds[$index]] | getConnectedCity: stationEntities }}:
+
+                        <input
+                            readonly
+                            [owlDateTimeTrigger]="dtFrom"
+                            [formControlName]="departureIdx"
+                            [owlDateTime]="dtFrom"
+                        />
+                        <owl-date-time #dtFrom />
+                    </div>
+
+                    <div class="arrival">
+                        Arrival to
+                        {{ [stationsIds[$index + 1]] | getConnectedCity: stationEntities }}:
+
+                        <input
+                            readonly
+                            [formControlName]="arrivalIdx"
+                            [owlDateTimeTrigger]="dtTo"
+                            [owlDateTime]="dtTo"
+                        />
+                        <owl-date-time #dtTo />
+                    </div>
+                </div>
             </ng-container>
 
             <ng-container [formGroupName]="'price'">
-                @for (price of segmentControls.price.getRawValue() | objectEntries; track $index) {
-                    <input [formControlName]="price[0]" />
-                }
+                <div>
+                    @for (
+                        price of segmentControls.price.getRawValue() | objectEntries;
+                        track $index
+                    ) {
+                        <div>
+                            {{ price[0] }} $
+                            <input type="number" matInput [formControlName]="price[0]" />
+                        </div>
+                    }
+                </div>
             </ng-container>
         </div>
     }
-</div>
+</form>

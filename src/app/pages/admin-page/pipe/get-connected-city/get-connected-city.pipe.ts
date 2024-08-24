@@ -7,7 +7,10 @@ import { Dictionary } from '@ngrx/entity';
     standalone: true,
 })
 export class GetConnectedCityPipe implements PipeTransform {
-    transform(connectedTo: number[], stationEntities: Dictionary<Station> | undefined): string[] {
+    transform(
+        connectedTo: number[],
+        stationEntities: Dictionary<Station> | undefined | null,
+    ): string[] {
         if (!stationEntities) {
             return [];
         }
