@@ -1,1 +1,29 @@
-<p>ride works!</p>
+<!-- @let segments = ride!.segments; -->
+<!-- @let currentStationId = path!.slice(0, 1); -->
+<!-- @let nextStation = segments.at(0); -->
+@let stationsIds = path!.slice(1);
+<!-- @let stationEntities = stationEntities$ | async;  -->
+
+@let controls = scheduleForm.controls;
+
+<div [formGroup]="$any(scheduleForm)">
+    @for (segmentFormGroup of controls; track $index) {
+        @let segmentControls = segmentFormGroup.controls;
+
+        <div class="segment-wrap" [formGroupName]="$index">
+            {{ stationsIds[$index] }}
+
+            <ng-container [formArrayName]="'time'">
+                @for (timeControl of segmentControls.time.controls; track $index) {
+                    <input [formControlName]="$index" />
+                }
+            </ng-container>
+
+            <ng-container [formGroupName]="'price'">
+                @for (price of segmentControls.price.getRawValue() | objectEntries; track $index) {
+                    <input [formControlName]="price[0]" />
+                }
+            </ng-container>
+        </div>
+    }
+</div>

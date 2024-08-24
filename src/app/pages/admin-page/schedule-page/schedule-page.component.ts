@@ -15,6 +15,7 @@ import { ScheduleService } from './service/schedule/schedule.service';
     templateUrl: './schedule-page.component.html',
     styleUrl: './schedule-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ScheduleService],
 })
 export class SchedulePageComponent {
     @Input() set id(id: string) {

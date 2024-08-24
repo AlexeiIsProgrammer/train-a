@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Rides } from '@interface/ride.interface';
-import { Subject, Subscription, map } from 'rxjs';
+import { BehaviorSubject, Subscription, map, filter } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class ScheduleService {
-    private readonly rides = new Subject<Rides>();
+    private readonly rides = new BehaviorSubject<Rides | null>(null);
 
-    readonly schedule$ = this.rides.asObservable().pipe(map(rides => rides.schedule));
+    readonly schedule$ = this.rides.asObservable().pipe(
+        filter(Boolean),
+        map(({ schedule }) => schedule),
+    );
 
-    readonly path$ = this.rides.asObservable().pipe(map(rides => rides.path));
+    readonly path$ = this.rides.asObservable().pipe(
+        filter(Boolean),
+        map(({ path }) => path),
+    );
 
     constructor(
         readonly httpClient: HttpClient,
@@ -26,6 +32,7 @@ export class ScheduleService {
 
         this.rideSubscription = this.httpClient.get<Rides>(`/api/route/${id}`).subscribe({
             next: rides => {
+                // console.log(rides)
                 this.rides.next(rides);
             },
             complete: () => {

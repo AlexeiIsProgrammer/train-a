@@ -1,3 +1,18 @@
 :host {
     display: block;
+    max-height: 60vh;
+    overflow: scroll;
+}
+
+.segment-wrap {
+    display: flex;
+    justify-content: space-between;
+    background-color: aquamarine;
+    margin: 5px;
+}
+
+form {
+    min-height: 100px;
+    // width: 100%;
+    background-color: aquamarine;
 }

@@ -7,7 +7,6 @@ import { CarriageActions } from '@store/carriages/carriages.actions';
 import { RouterModule } from '@angular/router';
 import { StationsPageComponent } from './stations-page/stations-page.component';
 import { RoutePageComponent } from './route-page/route-page.component';
-import { ScheduleService } from './schedule-page/service/schedule/schedule.service';
 
 @Component({
     selector: 'app-admin-page',
@@ -16,7 +15,6 @@ import { ScheduleService } from './schedule-page/service/schedule/schedule.servi
     templateUrl: './admin-page.component.html',
     styleUrl: './admin-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [ScheduleService],
 })
 export class AdminPageComponent {
     constructor(private readonly store: Store) {

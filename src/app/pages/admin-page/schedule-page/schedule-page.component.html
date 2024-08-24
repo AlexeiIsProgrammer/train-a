@@ -1,9 +1,12 @@
-<mat-accordion>
-    @for (ride of scheduleService.schedule$ | async; track ride.rideId) {
+@let schedule = scheduleService.schedule$ | async;
+@let path = scheduleService.path$ | async;
+
+<mat-accordion class="example-headers-align">
+    @for (ride of schedule; track ride.rideId) {
         <mat-expansion-panel [expanded]="$first">
             <mat-expansion-panel-header>
                 <mat-panel-description>
-                    Ride {{ $index + 1 }}
+                    Ride {{ ride.rideId }}
 
                     <button
                         mat-icon-button
@@ -15,7 +18,7 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <app-ride [ride]="ride" />
+            <app-ride [ride]="ride" [path]="path" />
         </mat-expansion-panel>
     }
 </mat-accordion>
