@@ -22,6 +22,7 @@ import {
 import { ObjectEntriesPipe } from '@shared/pipes/object-entries/object-entries.pipe';
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
+import { EditComponent } from '@shared/components/edit/edit.component';
 
 type SegmentFormGroup = FormGroup<{
     time: FormArray<FormControl<string>>;
@@ -40,6 +41,7 @@ type SegmentFormGroup = FormGroup<{
         MatIconModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
+        EditComponent,
     ],
     templateUrl: './ride.component.html',
     styleUrl: './ride.component.scss',
