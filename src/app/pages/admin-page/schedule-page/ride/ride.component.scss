@@ -23,7 +23,31 @@
 input {
     font-size: 16px;
     background-color: transparent;
+    outline: none;
     border: none;
+}
+
+.price-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.price-input-wrap {
+    max-width: 100px;
+
+    input {
+        width: -webkit-fill-available;
+        color: gray;
+        cursor: default;
+    }
+}
+
+.edit {
+    input {
+        color: black;
+        outline: auto;
+    }
 }
 
 form {

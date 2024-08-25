@@ -8,15 +8,15 @@ import { Dictionary } from '@ngrx/entity';
 })
 export class GetConnectedCityPipe implements PipeTransform {
     transform(
-        connectedTo: number[],
+        connectedTo: Array<number | undefined>,
         stationEntities: Dictionary<Station> | undefined | null,
     ): string[] {
-        if (!stationEntities) {
+        if (!stationEntities || !connectedTo) {
             return [];
         }
 
         const cities = connectedTo.reduce((acc: string[], id) => {
-            const cityName = stationEntities[id]?.city ?? '';
+            const cityName = stationEntities[Number(id)]?.city ?? '';
 
             acc.push(cityName);
 

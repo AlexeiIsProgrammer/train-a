@@ -11,8 +11,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import {
     ReactiveFormsModule,
@@ -20,7 +18,6 @@ import {
     FormBuilder,
     FormControl,
     FormGroup,
-    AbstractControl,
 } from '@angular/forms';
 import { ObjectEntriesPipe } from '@shared/pipes/object-entries/object-entries.pipe';
 import { Store } from '@ngrx/store';
@@ -41,8 +38,6 @@ type SegmentFormGroup = FormGroup<{
         ReactiveFormsModule,
         ObjectEntriesPipe,
         MatIconModule,
-        MatInputModule,
-        MatFormFieldModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
     ],
@@ -56,11 +51,8 @@ export class RideComponent implements OnChanges {
 
     readonly stationEntities$ = inject(Store).select(selectStationsEntities);
 
-    constructor(private readonly formBuilder: FormBuilder) {}
-
-    setDate(_dateTime: string, _control: AbstractControl | null) {
-        // console.log(2)
-        // control?.setValue(new Date(dateTime).toISOString());
+    constructor(private readonly formBuilder: FormBuilder) {
+        // this.scheduleForm.valueChanges.subscribe(console.log)
     }
 
     ngOnChanges({ ride }: SimpleChanges): void {
@@ -80,5 +72,20 @@ export class RideComponent implements OnChanges {
 
             this.scheduleForm.push(group);
         });
+    }
+
+    handleInputPriceValue(input: HTMLInputElement): void {
+        const { value } = input;
+
+        const MIN_VALUE = 1;
+        const MAX_VALUE = 999999999;
+
+        if (Number(value) < MIN_VALUE) {
+            input.value = `${MIN_VALUE}`;
+        }
+
+        if (Number(value) > MAX_VALUE) {
+            input.value = `${MAX_VALUE}`;
+        }
     }
 }

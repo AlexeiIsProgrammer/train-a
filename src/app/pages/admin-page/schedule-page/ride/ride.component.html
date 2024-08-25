@@ -1,60 +1,81 @@
-@let stationsIds = path!;
 @let stationEntities = stationEntities$ | async;
+@let controls = scheduleForm.controls;
 @let departureIdx = 0;
 @let arrivalIdx = 1;
 
-@let controls = scheduleForm.controls;
-
 <form [formGroup]="$any(scheduleForm)">
-    @for (segmentFormGroup of controls; track $index; let firstSegment = $first) {
+    @for (segmentFormGroup of controls; track $index) {
         @let segmentControls = segmentFormGroup.controls;
-        <!-- @let departureTimeControl = segmentControls.time.get(departureIdx); -->
-        <!-- @let arrivalTimeControl = segmentControls.time.get(arrivalIdx); -->
 
-        <div class="segment-wrap" [class.background]="$even" [formGroupName]="$index">
-            <ng-container [formArrayName]="'time'">
-                <div class="time-control-wrap">
-                    <div class="departure">
-                        Departure from
-                        {{ [stationsIds[$index]] | getConnectedCity: stationEntities }}:
+        @let departureCityName = [path?.at($index)] | getConnectedCity: stationEntities;
+        @let arrivalCityName = [path?.at($index + 1)] | getConnectedCity: stationEntities;
 
-                        <input
-                            readonly
-                            [owlDateTimeTrigger]="dtFrom"
-                            [formControlName]="departureIdx"
-                            [owlDateTime]="dtFrom"
-                        />
-                        <owl-date-time #dtFrom />
-                    </div>
+        @let departureTime = segmentControls.time.get(departureIdx.toString())?.value;
+        @let arrivalTime = segmentControls.time.get(arrivalIdx.toString())?.value;
 
-                    <div class="arrival">
-                        Arrival to
-                        {{ [stationsIds[$index + 1]] | getConnectedCity: stationEntities }}:
+        @let departureTimeNextCity =
+            $last ? '' : controls.at($index + 1)?.controls?.time?.get(arrivalIdx.toString())?.value;
+        @let arrivalTimePreviousCity =
+            $first
+                ? ''
+                : controls.at($index - 1)?.controls?.time?.get(arrivalIdx.toString())?.value;
 
-                        <input
-                            readonly
-                            [formControlName]="arrivalIdx"
-                            [owlDateTimeTrigger]="dtTo"
-                            [owlDateTime]="dtTo"
-                        />
-                        <owl-date-time #dtTo />
-                    </div>
+        <section class="segment-wrap" [class.background]="$even" [formGroupName]="$index">
+            <!--!---- -->
+            @let dis = true;
+
+            <div formArrayName="time" class="time-control-wrap" [class.edit]="!dis">
+                <div class="departure-time">
+                    Departure from {{ departureCityName }}:
+
+                    <input
+                        readonly
+                        [owlDateTimeTrigger]="dtFrom"
+                        [formControlName]="departureIdx"
+                        [owlDateTime]="dtFrom"
+                        [max]="arrivalTime"
+                        [min]="arrivalTimePreviousCity"
+                        [disabled]="dis"
+                    />
+                    <owl-date-time #dtFrom [disabled]="dis" />
                 </div>
-            </ng-container>
 
-            <ng-container [formGroupName]="'price'">
-                <div>
-                    @for (
-                        price of segmentControls.price.getRawValue() | objectEntries;
-                        track $index
-                    ) {
-                        <div>
-                            {{ price[0] }} $
-                            <input type="number" matInput [formControlName]="price[0]" />
+                <div class="arrival-time">
+                    Arrival to {{ arrivalCityName }}:
+
+                    <input
+                        readonly
+                        [formControlName]="arrivalIdx"
+                        [owlDateTimeTrigger]="dtTo"
+                        [owlDateTime]="dtTo"
+                        [min]="departureTime"
+                        [max]="departureTimeNextCity"
+                        [disabled]="dis"
+                    />
+                    <owl-date-time #dtTo [disabled]="dis" />
+                </div>
+            </div>
+
+            <div [formGroupName]="'price'">
+                @let disPrice = false;
+
+                @for (price of segmentControls.price.getRawValue() | objectEntries; track $index) {
+                    @let typeName = price.at(0);
+
+                    <div class="price-wrap">
+                        {{ typeName }} $
+                        <div class="price-input-wrap" [class.edit]="!disPrice">
+                            <input
+                                #priceInput
+                                type="number"
+                                [formControlName]="typeName ?? ''"
+                                [readonly]="disPrice"
+                                (change)="handleInputPriceValue(priceInput)"
+                            />
                         </div>
-                    }
-                </div>
-            </ng-container>
-        </div>
+                    </div>
+                }
+            </div>
+        </section>
     }
 </form>
