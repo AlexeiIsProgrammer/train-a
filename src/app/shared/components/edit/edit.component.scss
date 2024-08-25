@@ -6,7 +6,7 @@
 mat-icon {
     position: absolute;
     font-size: medium;
-    color: rgb(82, 82, 82);
+    color: rgba(82, 82, 82, 0.744);
     cursor: pointer;
 }
 
@@ -15,5 +15,5 @@ mat-icon {
 }
 
 .left {
-    left: -10px;
+    left: -20px;
 }

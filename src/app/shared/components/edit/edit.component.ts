@@ -11,7 +11,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class EditComponent {
     @ViewChild(MatIcon, { static: true }) icon!: MatIcon;
-    @Input() position: 'left' | 'right' = 'right';
+    @Input() position: 'left' | 'right' = 'left';
 
     private is_edit = false;
 

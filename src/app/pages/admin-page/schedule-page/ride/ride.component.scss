@@ -5,11 +5,11 @@
 }
 
 .segment-wrap {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
     padding: 5px;
     border-radius: 5px;
     align-items: center;
+    grid-template-columns: 0.5fr 1fr 1fr;
 
     div {
         margin: 5px;
@@ -41,6 +41,11 @@ input {
         color: gray;
         cursor: default;
     }
+}
+
+.price-block {
+    justify-self: end;
+    position: relative;
 }
 
 .edit {
