@@ -1,9 +1,12 @@
+/* eslint-disable rxjs/no-ignored-takewhile-value */
 import {
     ChangeDetectionStrategy,
     Component,
+    EventEmitter,
     inject,
     Input,
     OnChanges,
+    Output,
     SimpleChanges,
 } from '@angular/core';
 import { Ride, Rides, RideSegment } from '@interface/ride.interface';
@@ -24,6 +27,8 @@ import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { EditComponent } from '@shared/components/edit/edit.component';
 import { first, last } from 'lodash';
+import { takeWhile } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type SegmentFormGroup = FormGroup<{
     time: FormArray<FormControl<string>>;
@@ -52,9 +57,22 @@ export class RideComponent implements OnChanges {
     @Input({ required: true }) ride: Ride | null = null;
     @Input({ required: true }) path: Rides['path'] | null = null;
 
+    @Output() readonly valueChange = new EventEmitter<void>();
+
     readonly stationEntities$ = inject(Store).select(selectStationsEntities);
 
-    constructor(private readonly formBuilder: FormBuilder) {}
+    constructor(private readonly formBuilder: FormBuilder) {
+        this.scheduleForm.valueChanges
+            .pipe(
+                takeUntilDestroyed(),
+                takeWhile(() => !this.scheduleForm.dirty),
+            )
+            .subscribe({
+                complete: () => {
+                    this.valueChange.emit();
+                },
+            });
+    }
 
     ngOnChanges({ ride }: SimpleChanges): void {
         if (ride) {

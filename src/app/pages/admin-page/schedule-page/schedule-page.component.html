@@ -8,19 +8,33 @@
                 <mat-panel-description>
                     Ride {{ ride.rideId }}
 
-                    <button
-                        mat-icon-button
-                        type="button"
-                        (click)="remove(ride.rideId); $event.stopPropagation()"
-                    >
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                    <div>
+                        <ng-container #saveBtnContainer />
+                        <button
+                            mat-icon-button
+                            type="button"
+                            (click)="remove(ride.rideId); $event.stopPropagation()"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
             @if (panel.expanded) {
-                <app-ride [ride]="ride" [path]="path" />
+                <app-ride
+                    #rideSchedule
+                    [ride]="ride"
+                    [path]="path"
+                    (valueChange)="addSaveBtn($index, ride)"
+                />
             }
         </mat-expansion-panel>
     }
 </mat-accordion>
+
+<ng-template #saveBtn let-ride>
+    <button mat-icon-button type="button" (click)="save(ride); $event.stopPropagation()">
+        <mat-icon>save</mat-icon>
+    </button>
+</ng-template>
