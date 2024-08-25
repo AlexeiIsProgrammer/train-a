@@ -1,4 +1,3 @@
-@let stationEntities = stationEntities$ | async;
 @let controls = scheduleForm.controls;
 @let departureIdx = 0;
 @let arrivalIdx = 1;
@@ -7,8 +6,9 @@
     @for (segmentFormGroup of controls; track $index) {
         @let segmentControls = segmentFormGroup.controls;
 
-        @let departureCityName = [path?.at($index)] | getConnectedCity: stationEntities;
-        @let arrivalCityName = [path?.at($index + 1)] | getConnectedCity: stationEntities;
+        @let departureCityName = [path?.at($index)] | getConnectedCity: (stationEntities$ | async);
+        @let arrivalCityName =
+            [path?.at($index + 1)] | getConnectedCity: (stationEntities$ | async);
 
         @let departureTime = segmentControls.time.get(departureIdx.toString())?.value;
         @let arrivalTime = segmentControls.time.get(arrivalIdx.toString())?.value;
@@ -29,7 +29,6 @@
             >
                 <div class="departure-time">
                     Departure from {{ departureCityName }}:
-
                     <input
                         readonly
                         [owlDateTimeTrigger]="dtFrom"
@@ -44,7 +43,6 @@
 
                 <div class="arrival-time">
                     Arrival to {{ arrivalCityName }}:
-
                     <input
                         readonly
                         [formControlName]="arrivalIdx"
