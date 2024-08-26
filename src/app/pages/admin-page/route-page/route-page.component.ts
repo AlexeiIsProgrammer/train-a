@@ -11,6 +11,7 @@ import { keys, take } from 'lodash';
 import { Route } from '@interface/route.interface';
 import { filter } from 'rxjs';
 import { RoutesActions } from '@store/routes/routes.actions';
+import { ConfirmDeleteComponent } from '@shared/components/confirm-delete/confirm-delete.component';
 import { RouteListComponent } from './route-list/route-list.component';
 import { CreateRouteComponent } from './route-list/create-route/create-route.component';
 
@@ -50,11 +51,20 @@ export class RoutePageComponent {
     }
 
     removeRoute(id: Route['id']): void {
-        this.store.dispatch(
-            RoutesActions.removeCurrent(id, (_err: unknown) => {
-                // Todo: handle err
-            }),
-        );
+        const dialogRef = this.matDialog.open(ConfirmDeleteComponent);
+
+        dialogRef
+            .afterClosed()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(boolean => {
+                if (boolean) {
+                    this.store.dispatch(
+                        RoutesActions.removeCurrent(id, (_err: unknown) => {
+                            // Todo: handle err
+                        }),
+                    );
+                }
+            });
     }
 
     openMatDialog(): void {
