@@ -16,11 +16,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { Ride } from '@interface/ride.interface';
 import { RideComponent } from './ride/ride.component';
 import { ScheduleService } from './service/schedule/schedule.service';
+import { CreateRideComponent } from './create-ride/create-ride.component';
 
 @Component({
     selector: 'app-schedule-page',
     standalone: true,
-    imports: [CommonModule, RideComponent, MatExpansionModule, MatIcon, MatButtonModule],
+    imports: [
+        CommonModule,
+        RideComponent,
+        MatExpansionModule,
+        MatIcon,
+        MatButtonModule,
+        CreateRideComponent,
+    ],
     templateUrl: './schedule-page.component.html',
     styleUrl: './schedule-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

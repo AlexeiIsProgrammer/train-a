@@ -1,15 +1,18 @@
+@let carriages = scheduleService.carriages$ | async;
 @let schedule = scheduleService.schedule$ | async;
 @let path = scheduleService.path$ | async;
 
 <mat-accordion class="example-headers-align">
+    <!-- Rides -->
     @for (ride of schedule; track ride.rideId) {
-        <mat-expansion-panel #panel [expanded]="$first">
+        <mat-expansion-panel #panel>
             <mat-expansion-panel-header>
                 <mat-panel-description>
                     Ride {{ ride.rideId }}
 
                     <div>
                         <ng-container #saveBtnContainer />
+
                         <button
                             mat-icon-button
                             type="button"
@@ -31,10 +34,30 @@
             }
         </mat-expansion-panel>
     }
+
+    <!-- Create ride -->
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <button mat-icon-button type="button">
+                    <mat-icon>add</mat-icon>
+                </button>
+                Create ride
+            </mat-panel-title>
+
+            @if (createRide.canSave) {
+                <button mat-icon-button type="button" [style.marginRight.px]="15">
+                    <mat-icon>save</mat-icon>
+                </button>
+            }
+        </mat-expansion-panel-header>
+
+        <app-create-ride #createRide [path]="path" [carriages]="carriages" />
+    </mat-expansion-panel>
 </mat-accordion>
 
 <ng-template #saveBtn let-ride>
-    <button mat-icon-button type="button" (click)="save(ride); $event.stopPropagation()">
+    <button mat-icon-button type="button" (click)="save(ride)">
         <mat-icon>save</mat-icon>
     </button>
 </ng-template>

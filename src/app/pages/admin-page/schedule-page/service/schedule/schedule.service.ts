@@ -3,6 +3,7 @@ import { Rides } from '@interface/ride.interface';
 import { BehaviorSubject, Subscription, map, filter } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { uniq } from 'lodash';
 
 @Injectable()
 export class ScheduleService {
@@ -16,6 +17,11 @@ export class ScheduleService {
     readonly path$ = this.rides.asObservable().pipe(
         filter(Boolean),
         map(({ path }) => path),
+    );
+
+    readonly carriages$ = this.rides.asObservable().pipe(
+        filter(Boolean),
+        map(({ carriages }) => uniq(carriages)),
     );
 
     constructor(

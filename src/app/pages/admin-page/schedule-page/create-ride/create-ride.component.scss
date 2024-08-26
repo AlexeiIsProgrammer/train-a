@@ -1,0 +1,35 @@
+:host {
+    display: block;
+    overflow: scroll;
+}
+
+input {
+    position: relative;
+    outline: none;
+    max-width: 500px;
+    border-radius: 8px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition:
+        border-color 0.3s,
+        box-shadow 0.3s;
+
+    &:focus {
+        border-color: #333333;
+    }
+}
+
+p {
+    font-weight: bold;
+}
+
+.price-block {
+    margin-top: 20px;
+}
+.price-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}

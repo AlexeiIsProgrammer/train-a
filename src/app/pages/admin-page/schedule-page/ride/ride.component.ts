@@ -15,13 +15,7 @@ import { CommonModule } from '@angular/common';
 import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
-import {
-    ReactiveFormsModule,
-    FormArray,
-    FormBuilder,
-    FormControl,
-    FormGroup,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { ObjectEntriesPipe } from '@shared/pipes/object-entries/object-entries.pipe';
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
@@ -29,11 +23,7 @@ import { EditComponent } from '@shared/components/edit/edit.component';
 import { first, last } from 'lodash';
 import { takeWhile } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-type SegmentFormGroup = FormGroup<{
-    time: FormArray<FormControl<string>>;
-    price: FormGroup<Record<string, FormControl<number>>>;
-}>;
+import { SegmentFormGroup } from '../segment-form-group.type';
 
 @Component({
     selector: 'app-ride',
@@ -86,6 +76,8 @@ export class RideComponent implements OnChanges {
         if (!this.path) {
             return;
         }
+
+        this.scheduleForm.clear();
 
         this.path.forEach((_, i, path) => {
             const isFirst = first(path) === path[i];
