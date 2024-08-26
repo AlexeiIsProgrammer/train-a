@@ -1,0 +1,44 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <div class="selects">
+        <mat-form-field appearance="fill">
+            <mat-label>From</mat-label>
+            <input matInput formControlName="startCityInput" [matAutocomplete]="startCityAuto" />
+            <mat-autocomplete
+                #startCityAuto="matAutocomplete"
+                (optionSelected)="onCitySelected('startCity', $event)"
+            >
+                <mat-option *ngFor="let city of filteredStartCities | async" [value]="city">
+                    {{ city.city }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <button mat-icon-button class="compare" (click)="swapValues()">
+            <mat-icon>compare_arrows</mat-icon>
+        </button>
+
+        <mat-form-field appearance="fill">
+            <mat-label>To</mat-label>
+            <input matInput formControlName="endCityInput" [matAutocomplete]="endCityAuto" />
+            <mat-autocomplete
+                #endCityAuto="matAutocomplete"
+                (optionSelected)="onCitySelected('endCity', $event)"
+            >
+                <mat-option *ngFor="let city of filteredEndCities | async" [value]="city">
+                    {{ city.city }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Date/Time</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!searchForm.valid">
+        Search
+    </button>
+</form>
