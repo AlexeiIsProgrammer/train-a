@@ -150,4 +150,8 @@ export class StationStepperComponent {
     get canRemove(): boolean {
         return this.stationsForm.controls.length > 3;
     }
+
+    get canSave(): boolean {
+        return this.stationsForm.controls.length >= 3;
+    }
 }

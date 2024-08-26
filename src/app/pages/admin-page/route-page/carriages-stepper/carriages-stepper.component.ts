@@ -59,6 +59,10 @@ export class CarriagesStepperComponent {
         return this.carriagesForm.controls.length > 3;
     }
 
+    get canSave(): boolean {
+        return this.carriagesForm.controls.length >= 3;
+    }
+
     private watchCarriagesTypes(): void {
         effect(
             () => {

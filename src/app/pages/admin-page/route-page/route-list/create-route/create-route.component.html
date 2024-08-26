@@ -2,12 +2,26 @@
 
 <mat-dialog-content>
     <div class="stepper-wrap">
-        <app-station-stepper [pathIds]="pathIds" [stationEntities]="stationEntities" />
-        <app-carriages-stepper [carriagesTypes]="carriagesTypes" [carriages]="carriages" />
+        <app-station-stepper
+            #stationStepper
+            [pathIds]="pathIds"
+            [stationEntities]="stationEntities"
+        />
+        <app-carriages-stepper
+            #carriagesStepper
+            [carriagesTypes]="carriagesTypes"
+            [carriages]="carriages"
+        />
     </div>
 
     <mat-dialog-actions>
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button [mat-dialog-close]="newRoute">Save</button>
+        <button
+            mat-button
+            [mat-dialog-close]="newRoute"
+            [disabled]="!(carriagesStepper.canSave && stationStepper.canSave)"
+        >
+            Save
+        </button>
     </mat-dialog-actions>
 </mat-dialog-content>

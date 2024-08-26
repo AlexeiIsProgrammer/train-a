@@ -1,6 +1,7 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DestroyRef,
     Input,
     QueryList,
     TemplateRef,
@@ -14,9 +15,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Ride } from '@interface/ride.interface';
-import { RideComponent } from './ride/ride.component';
-import { ScheduleService } from './service/schedule/schedule.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeleteComponent } from '@shared/components/confirm-delete/confirm-delete.component';
+import { catchError, EMPTY, exhaustMap, filter, map, switchMap, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { CreateRideComponent } from './create-ride/create-ride.component';
+import { ScheduleService } from './service/schedule/schedule.service';
+import { RideComponent } from './ride/ride.component';
 
 @Component({
     selector: 'app-schedule-page',
@@ -46,7 +52,10 @@ export class SchedulePageComponent {
 
     constructor(
         private readonly title: Title,
+        private readonly matDialog: MatDialog,
         readonly scheduleService: ScheduleService,
+        private readonly destroyRef: DestroyRef,
+        private readonly activatedRoute: ActivatedRoute,
     ) {}
 
     addSaveBtn(viewContainerIdx: number, ride: Ride): void {
@@ -62,7 +71,27 @@ export class SchedulePageComponent {
         // console.log(_ride)
     }
 
-    remove(_id: Ride['rideId']) {
-        //    this.scheduleService.removeById(_id).subscribe((v)=> console.log(v, '----'))
+    remove(id: Ride['rideId']) {
+        const dialogRef = this.matDialog.open(ConfirmDeleteComponent);
+
+        dialogRef
+            .afterClosed()
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                filter(Boolean),
+                exhaustMap(() =>
+                    this.scheduleService.removeById(id).pipe(
+                        catchError(() => EMPTY),
+                        switchMap(() => this.activatedRoute.paramMap),
+                        map(param => param.get('id')),
+                        filter(Boolean),
+                        tap(_rideId => {
+                            // this.scheduleService.loadSchedule(Number(id));
+                            this.scheduleService.fakeRideRemove(id);
+                        }),
+                    ),
+                ),
+            )
+            .subscribe();
     }
 }

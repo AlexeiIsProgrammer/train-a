@@ -64,10 +64,10 @@ export class RoutePageComponent {
         });
         const { componentInstance } = dialogRef;
 
-        const randomCarriagesTypes = take(this.carriagesTypes(), 3);
+        const randomCarriagesTypes = take(this.carriagesTypes(), 1);
         const randomStationId = take(
             keys(this.stationEntities()).map(id => Number(id)),
-            3,
+            1,
         );
 
         componentInstance.stationEntities = this.stationEntities();

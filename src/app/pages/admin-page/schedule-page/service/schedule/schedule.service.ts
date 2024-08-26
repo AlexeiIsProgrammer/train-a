@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Rides } from '@interface/ride.interface';
-import { BehaviorSubject, Subscription, map, filter } from 'rxjs';
+import { BehaviorSubject, Subscription, map, filter, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { uniq } from 'lodash';
+import { remove, uniq } from 'lodash';
 
 @Injectable()
 export class ScheduleService {
@@ -48,5 +48,20 @@ export class ScheduleService {
                 this.router.navigateByUrl('404');
             },
         });
+    }
+
+    removeById(id: number): Observable<unknown> {
+        return this.httpClient.delete<unknown>(`/api/route/${id}`);
+    }
+
+    fakeRideRemove(id: number): void {
+        const rides = this.rides.value;
+
+        if (rides) {
+            this.rides.next({
+                ...rides,
+                schedule: remove(rides.schedule, ({ rideId }) => rideId !== id),
+            });
+        }
     }
 }
