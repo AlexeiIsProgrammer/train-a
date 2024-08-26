@@ -63,6 +63,6 @@ export class SchedulePageComponent {
     }
 
     remove(_id: Ride['rideId']) {
-        // console.log(id)
+        //    this.scheduleService.removeById(_id).subscribe((v)=> console.log(v, '----'))
     }
 }
