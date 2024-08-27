@@ -8,8 +8,14 @@ import { SearchActions } from './search.actions';
 export const getSearchStations = createEffect(
     (actions$ = inject(Actions), httpClient = inject(HttpClient)) =>
         actions$.pipe(
-            ofType(SearchActions.searchAll),
-            switchMap(() => httpClient.get<SearchStations>('/api/search')),
+            ofType(SearchActions.loadAll),
+            switchMap(params =>
+                httpClient.get<SearchStations>('/api/search', {
+                    params: {
+                        ...params,
+                    },
+                }),
+            ),
             map(searchStations => SearchActions.setAll(searchStations)),
             catchError(() => EMPTY),
         ),

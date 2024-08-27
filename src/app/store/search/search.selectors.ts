@@ -1,6 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { SEARCH_FEATURE, SearchState } from './search.state';
+import { SEARCH_FEATURE, searchAdapter, SearchState } from './search.state';
+
+const { selectEntities } = searchAdapter.getSelectors();
 
 const searchFeature = createFeatureSelector<SearchState>(SEARCH_FEATURE);
 
-export const selectAllSearchStations = createSelector(searchFeature, state => state);
+export const selectSearchEntities = createSelector(searchFeature, state => selectEntities(state));

@@ -1,3 +1,4 @@
+import { Geolocation, Segment } from '@type/search.type';
 import { Route } from './route.interface';
 
 export interface Search {
@@ -8,24 +9,11 @@ export interface Search {
     toLongitude: number;
 }
 
-export type Geolocation = {
-    latitude: number;
-    longitude: number;
-};
-
 export interface Coordinate {
     stationId: number;
     city: string;
     geolocation: Geolocation;
 }
-
-export type Segment = {
-    time: string[];
-    price: {
-        'dynamic-carriage-type-1': number;
-    };
-    occupiedSeats: number[];
-};
 
 export interface Schedule {
     rideId: number;

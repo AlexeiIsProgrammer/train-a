@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SearchComponent } from '@core/components/search/search.component';
 import { Store } from '@ngrx/store';
+import { selectSearchEntities } from '@store/search/search.selectors';
 import { StationsActions } from '@store/stations/stations.actions';
 import { selectAllStations } from '@store/stations/stations.selectors';
 
@@ -15,6 +16,7 @@ import { selectAllStations } from '@store/stations/stations.selectors';
 })
 export class HomePageComponent {
     readonly stations = toSignal(this.store.select(selectAllStations));
+    readonly searchStations = toSignal(this.store.select(selectSearchEntities));
 
     constructor(private readonly store: Store) {
         this.store.dispatch(StationsActions.loadAll());

@@ -1,29 +1,27 @@
+@let control = searchForm.controls;
+
 <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <div class="selects">
         <mat-form-field appearance="fill">
             <mat-label>From</mat-label>
-            <input matInput formControlName="startCityInput" [matAutocomplete]="startCityAuto" />
-            <mat-autocomplete
-                #startCityAuto="matAutocomplete"
-                (optionSelected)="onCitySelected('startCity', $event)"
-            >
+            <input matInput formControlName="startCity" [matAutocomplete]="startCityAuto" />
+            <mat-error>{{ control.startCity.errors | getControlErrorMessage }}</mat-error>
+            <mat-autocomplete #startCityAuto="matAutocomplete" [displayWith]="displayFn">
                 <mat-option *ngFor="let city of filteredStartCities | async" [value]="city">
                     {{ city.city }}
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
 
-        <button mat-icon-button class="compare" (click)="swapValues()">
+        <button type="button" mat-icon-button class="compare" (click)="swapValues()">
             <mat-icon>compare_arrows</mat-icon>
         </button>
 
         <mat-form-field appearance="fill">
             <mat-label>To</mat-label>
-            <input matInput formControlName="endCityInput" [matAutocomplete]="endCityAuto" />
-            <mat-autocomplete
-                #endCityAuto="matAutocomplete"
-                (optionSelected)="onCitySelected('endCity', $event)"
-            >
+            <input matInput formControlName="endCity" [matAutocomplete]="endCityAuto" />
+            <mat-error>{{ control.endCity.errors | getControlErrorMessage }}</mat-error>
+            <mat-autocomplete #endCityAuto="matAutocomplete" [displayWith]="displayFn">
                 <mat-option *ngFor="let city of filteredEndCities | async" [value]="city">
                     {{ city.city }}
                 </mat-option>
@@ -33,7 +31,8 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Date/Time</mat-label>
-        <input matInput formControlName="date" [matDatepicker]="picker" />
+        <input matInput formControlName="date" [matDatepicker]="picker" [min]="minDate" />
+        <mat-error>{{ control.date.errors | getControlErrorMessage }}</mat-error>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

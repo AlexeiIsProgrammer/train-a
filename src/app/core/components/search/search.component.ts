@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +13,10 @@ import { StationList } from '@type/station.type';
 import { required } from '@shared/form-validators/required.validator';
 import { Store } from '@ngrx/store';
 import { SearchActions } from '@store/search/search.actions';
+import { Station } from '@interface/station.interface';
+import { getTomorrow } from '@shared/utils/get-tomorrow';
+import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
+import { futureDateValidator } from '@shared/form-validators/future-date.validator';
 
 @Component({
     selector: 'app-search',
@@ -27,6 +31,7 @@ import { SearchActions } from '@store/search/search.actions';
         MatAutocompleteModule,
         MatDatepickerModule,
         MatIconModule,
+        GetControlErrorMessagePipe,
     ],
     templateUrl: './search.component.html',
     styleUrl: './search.component.scss',
@@ -35,57 +40,51 @@ import { SearchActions } from '@store/search/search.actions';
 export class SearchComponent implements OnInit {
     readonly stationList = input<StationList>();
 
-    readonly searchForm = this.fb.group({
-        startCityInput: ['', required()],
+    readonly minDate: Date = getTomorrow();
 
-        startCity: ['', required()],
-        startCityLongitude: [0, required()],
-        startCityLatitude: [0, required()],
-
-        endCityInput: ['', required()],
-
-        endCity: ['', required()],
-        endCityLongitude: [0, required()],
-        endCityLatitude: [0, required()],
-
-        date: [''],
+    readonly searchForm = new FormGroup({
+        startCity: new FormControl<string | Station>('', required()),
+        endCity: new FormControl<string | Station>('', required()),
+        date: new FormControl<string>('', futureDateValidator),
     });
 
     filteredStartCities?: Observable<StationList>;
     filteredEndCities?: Observable<StationList>;
 
-    constructor(
-        private readonly fb: FormBuilder,
-        private readonly store: Store,
-    ) {}
+    constructor(private readonly store: Store) {}
 
     ngOnInit(): void {
-        this.filteredStartCities = this.searchForm.get('startCityInput')?.valueChanges.pipe(
+        this.filteredStartCities = this.searchForm.get('startCity')?.valueChanges.pipe(
             startWith(''),
-            map((value: string | null) => this.filter(value || '', this.stationList() || [])),
+            map(value => (typeof value === 'string' ? value : value?.city || '')),
+            map(title => this.filter(title)),
         );
 
-        this.filteredEndCities = this.searchForm.get('endCityInput')?.valueChanges.pipe(
+        this.filteredEndCities = this.searchForm.get('endCity')?.valueChanges.pipe(
             startWith(''),
-            map((value: string | null) => this.filter(value || '', this.stationList() || [])),
+            map(value => (typeof value === 'string' ? value : value?.city || '')),
+            map(title => this.filter(title)),
         );
     }
 
-    private filter(value: string, cities: StationList): StationList {
-        const filterValue = value.toLowerCase();
+    private filter(city: string): StationList {
+        const filterValue = city.toLowerCase();
 
-        return cities.filter(city => city.city.toLowerCase().includes(filterValue));
+        return (
+            this.stationList()?.filter(option => option.city.toLowerCase().includes(filterValue)) ||
+            []
+        );
     }
 
     onSubmit(): void {
-        if (this.searchForm.valid) {
+        if (this.isCityStation(this.getStartCity) && this.isCityStation(this.getEndCity)) {
             this.store.dispatch(
-                SearchActions.searchAll({
-                    fromLatitude: this.searchForm.get('startCityLatitude')?.value || 0,
-                    fromLongitude: this.searchForm.get('startCityLongitude')?.value || 0,
-                    toLatitude: this.searchForm.get('endCityLatitude')?.value || 0,
-                    toLongitude: this.searchForm.get('endCityLongitude')?.value || 0,
-                    time: new Date(this.searchForm.get('date')?.value || '').getTime(),
+                SearchActions.loadAll({
+                    fromLatitude: this.getStartCity.latitude,
+                    fromLongitude: this.getStartCity.longitude,
+                    toLatitude: this.getEndCity.latitude,
+                    toLongitude: this.getEndCity.longitude,
+                    time: new Date(this.getDate).getTime(),
                 }),
             );
         }
@@ -93,23 +92,28 @@ export class SearchComponent implements OnInit {
 
     swapValues(): void {
         this.searchForm.patchValue({
-            startCity: this.searchForm.get('endCity')?.value,
-            startCityLatitude: this.searchForm.get('endCityLatitude')?.value,
-            startCityLongitude: this.searchForm.get('endCityLongitude')?.value,
-            endCity: this.searchForm.get('startCity')?.value,
-            endCityLatitude: this.searchForm.get('startCityLatitude')?.value,
-            endCityLongitude: this.searchForm.get('startCityLongitude')?.value,
+            startCity: this.getEndCity,
+            endCity: this.getStartCity,
         });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onCitySelected(field: string, event: any): void {
-        const selectedCity = event.option.value;
+    displayFn(option: Station): string {
+        return option && option.city ? option.city : '';
+    }
 
-        this.searchForm.patchValue({
-            [field]: selectedCity.city,
-            [`${field}Latitude`]: selectedCity.latitude,
-            [`${field}Longitude`]: selectedCity.longitude,
-        });
+    isCityStation(city: Station | string | null): city is Station {
+        return Boolean(typeof city !== 'string' && city?.id);
+    }
+
+    get getStartCity(): Station | string {
+        return this.searchForm.get('startCity')?.value || '';
+    }
+
+    get getEndCity(): Station | string {
+        return this.searchForm.get('endCity')?.value || '';
+    }
+
+    get getDate(): string {
+        return this.searchForm.get('date')?.value || '';
     }
 }
