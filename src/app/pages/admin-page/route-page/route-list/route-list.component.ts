@@ -4,16 +4,13 @@ import {
     computed,
     input,
     output,
-    TemplateRef,
     viewChild,
-    viewChildren,
-    ViewContainerRef,
 } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { Route } from '@interface/route.interface';
 import { Routes } from '@type/roures.type';
@@ -22,7 +19,6 @@ import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
 import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
-import { DetailTemplateContext } from './detail-template-context.interface';
 import { RouteListItem } from './route-list-item.type';
 import { RouteDetailComponent } from './route-detail/route-detail.component';
 
@@ -52,11 +48,6 @@ import { RouteDetailComponent } from './route-detail/route-detail.component';
     ],
 })
 export class RouteListComponent {
-    private readonly detailContainers = viewChildren('detailContainer', { read: ViewContainerRef });
-    private readonly detailTemplate = viewChild.required('detailTemplate', {
-        read: TemplateRef<DetailTemplateContext>,
-    });
-
     readonly paginator = viewChild.required(MatPaginator);
 
     readonly routes = input<Routes>();
@@ -79,33 +70,4 @@ export class RouteListComponent {
     readonly columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
     expandedElement: Route | null = null;
-
-    private pageInfo: Pick<PageEvent, 'pageIndex' | 'pageSize'> = {
-        pageIndex: 0,
-        pageSize: 10,
-    };
-
-    addDetail(route: RouteListItem) {
-        const { pageIndex, pageSize } = this.pageInfo;
-        const idx = route.position - 1;
-
-        const detailContainer = this.detailContainers().at(idx - pageIndex * pageSize);
-
-        if (detailContainer) {
-            detailContainer.clear();
-
-            detailContainer.createEmbeddedView(this.detailTemplate(), {
-                routeListItem: route,
-                stationEntities: this.stationEntities,
-                carriagesTypes: this.carriagesTypes,
-            });
-        }
-    }
-
-    updatePageInfo({ pageIndex, pageSize }: PageEvent): void {
-        this.pageInfo = {
-            pageIndex,
-            pageSize,
-        };
-    }
 }

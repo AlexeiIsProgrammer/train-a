@@ -18,7 +18,7 @@ import { RouteListItem } from '../route-list-item.type';
 export class RouteDetailComponent {
     readonly route = input<RouteListItem>();
     readonly carriagesTypes = input<string[]>();
-    readonly stationEntities = input<Dictionary<Station>>();
+    readonly stationEntities = input<Dictionary<Station | undefined>>();
 
     readonly update = output<Route>();
 

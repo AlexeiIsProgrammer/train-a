@@ -4,7 +4,7 @@
             <!-- Row -->
             <ng-container [matColumnDef]="column">
                 <th *matHeaderCellDef mat-header-cell class="bold">Routes</th>
-                <td *matCellDef="let route" mat-cell (click)="addDetail(route)">
+                <td *matCellDef="let route" mat-cell>
                     <div class="info-wrap">
                         <p>Route {{ route.position }}</p>
 
@@ -48,10 +48,16 @@
             >
                 <div
                     class="element-detail"
-                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+                    [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'"
                 >
-                    <!-- Detail container -->
-                    <ng-container #detailContainer />
+                    @if (element === expandedElement) {
+                        <app-route-detail
+                            [route]="element"
+                            [stationEntities]="stationEntities()"
+                            [carriagesTypes]="carriagesTypes()"
+                            (update)="updateOne.emit($event)"
+                        />
+                    }
                 </div>
             </td>
         </ng-container>
@@ -70,21 +76,6 @@
     <mat-paginator
         showFirstLastButtons
         [pageSizeOptions]="[15, 50]"
-        (page)="scroll.scrollToTop(); updatePageInfo($event)"
+        (page)="scroll.scrollToTop()"
     />
 </div>
-
-<!-- Detail template -->
-<ng-template
-    #detailTemplate
-    let-routeListItem="routeListItem"
-    let-stationEntities="stationEntities"
-    let-carriagesTypes="carriagesTypes"
->
-    <app-route-detail
-        [route]="routeListItem"
-        [stationEntities]="stationEntities()"
-        [carriagesTypes]="carriagesTypes()"
-        (update)="updateOne.emit($event)"
-    />
-</ng-template>
