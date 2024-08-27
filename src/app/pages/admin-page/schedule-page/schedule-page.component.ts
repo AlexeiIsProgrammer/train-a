@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteComponent } from '@shared/components/confirm-delete/confirm-delete.component';
 import { catchError, EMPTY, exhaustMap, filter, map, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CreateRideComponent } from './create-ride/create-ride.component';
 import { ScheduleService } from './service/schedule/schedule.service';
 import { RideComponent } from './ride/ride.component';
@@ -34,6 +34,7 @@ import { RideComponent } from './ride/ride.component';
         MatIcon,
         MatButtonModule,
         CreateRideComponent,
+        RouterLink,
     ],
     templateUrl: './schedule-page.component.html',
     styleUrl: './schedule-page.component.scss',

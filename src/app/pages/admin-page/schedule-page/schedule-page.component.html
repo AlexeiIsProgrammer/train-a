@@ -2,6 +2,10 @@
 @let schedule = scheduleService.schedule$ | async;
 @let path = scheduleService.path$ | async;
 
+<button mat-icon-button routerLink="../">
+    <mat-icon>keyboard_return</mat-icon>
+</button>
+
 <mat-accordion class="example-headers-align">
     <!-- Rides -->
     @for (ride of schedule; track ride.rideId) {
