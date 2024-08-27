@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Ride } from '@interface/ride.interface';
+import { Ride, RideSegment } from '@interface/ride.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeleteComponent } from '@shared/components/confirm-delete/confirm-delete.component';
 import { catchError, EMPTY, exhaustMap, filter, map, switchMap, tap } from 'rxjs';
@@ -79,7 +79,18 @@ export class SchedulePageComponent {
         const { id } = this.scheduleService;
 
         this.scheduleService
-            .updateRide(id, rideId, segments)
+            .updateRide(rideId, segments)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.scheduleService.loadSchedule(id);
+            });
+    }
+
+    createRide(newRide: RideSegment[]): void {
+        const { id } = this.scheduleService;
+
+        this.scheduleService
+            .createRide(newRide)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => {
                 this.scheduleService.loadSchedule(id);

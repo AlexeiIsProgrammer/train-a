@@ -1,12 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { ObjectEntriesPipe } from '@shared/pipes/object-entries/object-entries.pipe';
 import { SegmentFormGroup } from '../segment-form-group.type';
+import { parseToRequest } from '../utils/parse-to-request';
 
 @Component({
     selector: 'app-create-ride',
@@ -56,8 +49,6 @@ import { SegmentFormGroup } from '../segment-form-group.type';
 export class CreateRideComponent implements OnChanges {
     @Input({ required: true }) path: number[] | null = null;
     @Input({ required: true }) carriages: string[] | null = null;
-
-    @Output() valid = new EventEmitter<boolean>();
 
     readonly stationEntities$ = this.store.select(selectStationsEntities);
     readonly scheduleForm = this.formBuilder.nonNullable.array<SegmentFormGroup>([]);
@@ -94,6 +85,10 @@ export class CreateRideComponent implements OnChanges {
 
     get canSave(): boolean {
         return this.scheduleForm.status === 'VALID';
+    }
+
+    get newRide(): RideSegment[] {
+        return parseToRequest(this.scheduleForm.getRawValue());
     }
 
     private createForm(): void {

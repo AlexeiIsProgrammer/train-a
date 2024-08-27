@@ -45,14 +45,19 @@
                 Create ride
             </mat-panel-title>
 
-            @if (createRide.canSave) {
-                <button mat-icon-button type="button" [style.marginRight.px]="15">
+            @if (create.canSave) {
+                <button
+                    mat-icon-button
+                    type="button"
+                    [style.marginRight.px]="15"
+                    (click)="createRide(create.newRide)"
+                >
                     <mat-icon>save</mat-icon>
                 </button>
             }
         </mat-expansion-panel-header>
 
-        <app-create-ride #createRide [path]="path" [carriages]="carriages" />
+        <app-create-ride #create [path]="path" [carriages]="carriages" />
     </mat-expansion-panel>
 </mat-accordion>
 

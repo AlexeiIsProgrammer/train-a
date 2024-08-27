@@ -50,12 +50,16 @@ export class ScheduleService {
         });
     }
 
-    updateRide(routeId: number, rideId: number, segments: Ride['segments']) {
-        return this.httpClient.put(`/api/route/${routeId}/ride/${rideId}`, { segments });
+    updateRide(rideId: number, segments: Ride['segments']): Observable<unknown> {
+        return this.httpClient.put<unknown>(`/api/route/${this.id}/ride/${rideId}`, { segments });
     }
 
     removeById(id: number): Observable<unknown> {
         return this.httpClient.delete<unknown>(`/api/route/${id}`);
+    }
+
+    createRide(segments: Ride['segments']) {
+        return this.httpClient.post<unknown>(`/api/route/${this.id}/ride`, { segments });
     }
 
     fakeRideRemove(id: number): void {
