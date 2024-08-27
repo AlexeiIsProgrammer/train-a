@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+}
+
+@media screen and (min-width: 769px) {
+    :host {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 50px clamp(30px, 3.5vw, 50px);
+    }
+}

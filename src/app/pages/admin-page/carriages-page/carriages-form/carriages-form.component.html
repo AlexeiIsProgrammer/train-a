@@ -1,0 +1,107 @@
+<form [formGroup]="carriageForm" (ngSubmit)="onSave()">
+    <button mat-icon-button type="button" class="close" (click)="closeWindow()">
+        <mat-icon>close</mat-icon>
+    </button>
+    <div>
+        <label for="name">Name</label>
+        <input id="name" formControlName="name" placeholder="Enter carriage name" />
+        <div
+            *ngIf="
+                carriageForm.get('name')?.invalid &&
+                (carriageForm.get('name')?.touched || carriageForm.get('name')?.dirty)
+            "
+        >
+            <p class="error-message">Name is required.</p>
+        </div>
+    </div>
+
+    <div>
+        <label for="rows">Rows</label>
+        <input id="rows" type="number" formControlName="rows" placeholder="Enter number of rows" />
+        <div
+            *ngIf="
+                carriageForm.get('rows')?.invalid &&
+                (carriageForm.get('rows')?.touched || carriageForm.get('rows')?.dirty)
+            "
+        >
+            <p *ngIf="carriageForm.get('rows')?.errors?.['required']" class="error-message">
+                Rows are required.
+            </p>
+            <p
+                *ngIf="
+                    carriageForm.get('rows')?.errors?.['min'] ||
+                    carriageForm.get('rows')?.errors?.['max']
+                "
+                class="error-message"
+            >
+                Rows must be between 1 and 200.
+            </p>
+        </div>
+    </div>
+
+    <div>
+        <label for="left-seats">Left Seats</label>
+        <input
+            id="left-seats"
+            type="number"
+            formControlName="leftSeats"
+            placeholder="Enter left seats"
+        />
+        <div
+            *ngIf="
+                carriageForm.get('leftSeats')?.invalid &&
+                (carriageForm.get('leftSeats')?.touched || carriageForm.get('leftSeats')?.dirty)
+            "
+        >
+            <p *ngIf="carriageForm.get('leftSeats')?.errors?.['required']" class="error-message">
+                Left Seats are required.
+            </p>
+            <p
+                *ngIf="
+                    carriageForm.get('leftSeats')?.errors?.['min'] ||
+                    carriageForm.get('leftSeats')?.errors?.['max']
+                "
+                class="error-message"
+            >
+                Left Seats must be between 1 and 20.
+            </p>
+        </div>
+    </div>
+
+    <div>
+        <label for="right-seats">Right Seats</label>
+        <input
+            id="right-seats"
+            type="number"
+            formControlName="rightSeats"
+            placeholder="Enter right seats"
+        />
+        <div
+            *ngIf="
+                carriageForm.get('rightSeats')?.invalid &&
+                (carriageForm.get('rightSeats')?.touched || carriageForm.get('rightSeats')?.dirty)
+            "
+        >
+            <p *ngIf="carriageForm.get('rightSeats')?.errors?.['required']" class="error-message">
+                Right Seats are required.
+            </p>
+            <p
+                *ngIf="
+                    carriageForm.get('rightSeats')?.errors?.['min'] ||
+                    carriageForm.get('rightSeats')?.errors?.['max']
+                "
+                class="error-message"
+            >
+                Right Seats must be between 1 and 20.
+            </p>
+        </div>
+    </div>
+
+    <app-carriage
+        *ngIf="carriageForm.valid"
+        [carriage]="carriageForm.value"
+        [isSmallModel]="true"
+    ></app-carriage>
+
+    <button mat-stroked-button type="submit" [disabled]="carriageForm.invalid">Save</button>
+</form>

@@ -1,0 +1,120 @@
+$border-color: rgb(192, 192, 192);
+$seats-gap: 8px;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:host {
+    display: block;
+}
+
+.small-name {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.large-name {
+    font-size: 26px;
+    font-weight: 400;
+}
+
+.seating-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border-color;
+    border-radius: 20px;
+}
+
+@media screen and (min-width: 769px) {
+    .seating-container {
+        padding: 15px clamp(30px, 3.5vw, 50px);
+        gap: clamp(5px, 0.55vw, $seats-gap);
+    }
+
+    .large-seating-container {
+        padding: 15px clamp(30px, 3.5vw, 50px);
+        gap: clamp(5px, 0.55vw, $seats-gap);
+    }
+
+    .large-seating-row {
+        display: flex;
+        gap: clamp(5px, 0.55vw, $seats-gap);
+    }
+
+    .large-empty-seat {
+        width: 1px;
+        height: 30px;
+        display: inline-block;
+    }
+
+    .small-empty-seat {
+        width: 1px;
+        height: 15px;
+        display: inline-block;
+    }
+}
+
+.small-seating-container {
+    padding: 10px 30px;
+    gap: 5px;
+    border-radius: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    .large-seating-container {
+        padding: 15px 50px;
+        gap: $seats-gap;
+    }
+
+    .large-seating-row {
+        display: flex;
+        gap: $seats-gap;
+    }
+
+    .large-empty-seat {
+        width: 20px;
+        height: 1px;
+        display: inline-block;
+    }
+
+    .small-empty-seat {
+        width: 5px;
+        height: 1px;
+        display: inline-block;
+    }
+}
+
+.small-seating-row {
+    display: flex;
+    gap: 5px;
+}
+
+.carriage_data {
+    display: flex;
+    gap: 15px;
+}
+
+.seats_count {
+    @include flex-center;
+    border: 1px solid black;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.small-seats_count {
+    font-size: 14px;
+    padding: 0px 20px;
+}
+
+.large-seats_count {
+    font-size: 18px;
+    padding: 0px 15px;
+}
+
+.carriage_control_box {
+    display: flex;
+    justify-content: space-between;
+}

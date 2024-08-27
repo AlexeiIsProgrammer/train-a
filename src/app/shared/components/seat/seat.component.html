@@ -1,0 +1,9 @@
+<div
+    appSeatBackground
+    class="seat"
+    [seatBackground]="value"
+    [ngClass]="isSmallModel ? 'small-seat' : 'large-seat'"
+    (click)="isSmallModel ? $event.stopPropagation() : onSeatClick()"
+>
+    {{ seatNumber }}
+</div>
