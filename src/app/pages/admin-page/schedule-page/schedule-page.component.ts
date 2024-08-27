@@ -46,7 +46,7 @@ export class SchedulePageComponent {
         this.scheduleService.loadSchedule(Number(id));
     }
 
-    @ViewChild('saveBtn') saveBtnTemplate!: TemplateRef<{ $implicit: Ride }>;
+    @ViewChild('saveBtn') saveBtnTemplate!: TemplateRef<{ $implicit: Ride; index: number }>;
     @ViewChildren('saveBtnContainer', { read: ViewContainerRef })
     saveBtnContainers!: QueryList<ViewContainerRef>;
 
@@ -64,11 +64,26 @@ export class SchedulePageComponent {
         viewContainer?.clear();
         viewContainer?.createEmbeddedView(this.saveBtnTemplate, {
             $implicit: ride,
+            index: viewContainerIdx,
         });
     }
 
-    save(_ride: Ride): void {
-        // console.log(_ride)
+    hideSaveBtn(index: number): void {
+        const viewContainer = this.saveBtnContainers?.get(index);
+
+        viewContainer?.clear();
+    }
+
+    save(ride: Ride): void {
+        const { rideId, segments } = ride;
+        const { id } = this.scheduleService;
+
+        this.scheduleService
+            .updateRide(id, rideId, segments)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.scheduleService.loadSchedule(id);
+            });
     }
 
     remove(id: Ride['rideId']) {
@@ -86,7 +101,7 @@ export class SchedulePageComponent {
                         map(param => param.get('id')),
                         filter(Boolean),
                         tap(_rideId => {
-                            // this.scheduleService.loadSchedule(Number(id));
+                            // this.scheduleService.loadSchedule(Number(_rideId));
                             this.scheduleService.fakeRideRemove(id);
                         }),
                     ),

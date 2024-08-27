@@ -1,5 +1,5 @@
 export interface RideSegment {
-    time: [string, string];
+    time: string[];
     price: Record<string, number>;
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Rides } from '@interface/ride.interface';
+import { Ride, Rides } from '@interface/ride.interface';
 import { BehaviorSubject, Subscription, map, filter, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -50,6 +50,10 @@ export class ScheduleService {
         });
     }
 
+    updateRide(routeId: number, rideId: number, segments: Ride['segments']) {
+        return this.httpClient.put(`/api/route/${routeId}/ride/${rideId}`, { segments });
+    }
+
     removeById(id: number): Observable<unknown> {
         return this.httpClient.delete<unknown>(`/api/route/${id}`);
     }
@@ -63,5 +67,9 @@ export class ScheduleService {
                 schedule: remove(rides.schedule, ({ rideId }) => rideId !== id),
             });
         }
+    }
+
+    get id() {
+        return this.rides.value?.id ?? NaN;
     }
 }
