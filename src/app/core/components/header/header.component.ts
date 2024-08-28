@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import { UserType } from '@type/header.type';
+import { UserType } from '@type/user-type.type';
 
 @Component({
     selector: 'app-header',

@@ -6,4 +6,11 @@ export const routes: Routes = [
         loadChildren: () =>
             import('@pages/admin-page/admin.routes').then(({ AdminRoutes }) => AdminRoutes),
     },
+    {
+        path: 'singup',
+        loadComponent: () =>
+            import('@pages/sing-up/sing-up.component').then(
+                ({ SingUpComponent }) => SingUpComponent,
+            ),
+    },
 ];
