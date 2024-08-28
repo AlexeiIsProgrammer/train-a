@@ -64,6 +64,7 @@
         "@commitlint/config-conventional": "^19.2.2",
         "@html-eslint/eslint-plugin": "^0.26.0",
         "@html-eslint/parser": "^0.26.0",
+        "@ngx-env/builder": "^18.0.1",
         "@types/jest": "^29.5.12",
         "@types/leaflet": "^1.9.12",
         "@types/lodash": "^4.17.7",

@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { hasGaps } from '@shared/form-validators/has-gaps.validator';
@@ -66,7 +66,6 @@ export class SingUpComponent implements OnInit {
     ];
 
     constructor(
-        private readonly router: Router,
         private readonly formBuilder: FormBuilder,
         private readonly authService: AuthService,
     ) {}
@@ -82,9 +81,6 @@ export class SingUpComponent implements OnInit {
         const formValue = this.singUpForm.getRawValue();
 
         this.authService.singUp(formValue).subscribe({
-            next: () => {
-                this.router.navigateByUrl('login');
-            },
             error: (err: unknown) => {
                 if (!(err instanceof HttpErrorResponse)) {
                     return;

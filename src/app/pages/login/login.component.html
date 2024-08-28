@@ -1,0 +1,36 @@
+@let control = loginForm.controls;
+
+<mat-card>
+    <mat-card-title>login</mat-card-title>
+
+    <form [formGroup]="loginForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Enter your email</mat-label>
+            <input #email matInput placeholder="pat@example.com" formControlName="email" />
+            <mat-error>{{ control.email.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Enter your password</mat-label>
+            <input
+                matInput
+                formControlName="password"
+                [type]="isPasswordHide ? 'password' : 'text'"
+            />
+            <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                [attr.aria-pressed]="isPasswordHide"
+                (click)="isPasswordHide = !isPasswordHide; $event.stopPropagation()"
+            >
+                <mat-icon>{{ isPasswordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+
+            <mat-error>{{ control.password.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button [disabled]="!loginForm.valid" (click)="login()">Login</button>
+        <a routerLink="/login">Don't have an account yet?</a>
+    </form>
+</mat-card>
