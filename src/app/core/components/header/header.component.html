@@ -5,11 +5,24 @@
         <img src="assets/logo.jpg" alt="logo" />
     </a>
 
-    <a mat-button [routerLink]="['/']">Home</a>
+    <a
+        mat-button
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLink]="['/']"
+    >
+        Home
+    </a>
 
     @if (userType === 'user') {
-        <a mat-button [routerLink]="['/profile']">Profile</a>
-        <a mat-button [routerLink]="['/orders']">My Orders</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/profile']">Profile</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/orders']">My Orders</a>
+    }
+
+    @if (userType === 'admin') {
+        <a mat-button routerLinkActive="active" [routerLink]="['admin/stations']">Stations</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['admin/routes']">Routes</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['admin/carriages']">Carriages</a>
     }
 
     <span class="space"></span>
@@ -19,12 +32,12 @@
     }
 
     @if (userType === 'admin') {
-        <a mat-button [routerLink]="['/admin']">Admin</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/admin']">Admin</a>
     }
 
     @if (userType === 'guest') {
-        <a mat-button [routerLink]="['/signin']">Sign In</a>
-        <a mat-button [routerLink]="['/signup']">Sign Up</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/signin']">Sign In</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/signup']">Sign Up</a>
     }
 
     @if (userType !== 'guest') {
