@@ -25,6 +25,13 @@ export const routes: Routes = [
         canMatch: [isGuestGuard],
     },
     {
+        path: '',
+        loadComponent: () =>
+            import('@pages/home-page/home-page.component').then(
+                ({ HomePageComponent }) => HomePageComponent,
+            ),
+    },
+    {
         path: '**',
         component: PageNotFoundComponent,
     },

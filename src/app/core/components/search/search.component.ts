@@ -84,7 +84,7 @@ export class SearchComponent implements OnInit {
                     fromLongitude: this.getStartCity.longitude,
                     toLatitude: this.getEndCity.latitude,
                     toLongitude: this.getEndCity.longitude,
-                    time: new Date(this.getDate).getTime(),
+                    time: new Date(this.getDate).getFullYear(),
                 }),
             );
         }

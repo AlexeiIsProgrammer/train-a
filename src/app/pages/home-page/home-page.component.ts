@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ResultListComponent } from '@core/components/result-list/result-list.component';
 import { SearchComponent } from '@core/components/search/search.component';
 import { Store } from '@ngrx/store';
 import { selectSearchEntities } from '@store/search/search.selectors';
@@ -9,7 +10,7 @@ import { selectAllStations } from '@store/stations/stations.selectors';
 @Component({
     selector: 'app-home-page',
     standalone: true,
-    imports: [SearchComponent],
+    imports: [SearchComponent, ResultListComponent],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
