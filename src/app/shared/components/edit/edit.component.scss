@@ -1,0 +1,19 @@
+:host {
+    display: block;
+    position: relative;
+}
+
+mat-icon {
+    position: absolute;
+    font-size: medium;
+    color: rgba(82, 82, 82, 0.744);
+    cursor: pointer;
+}
+
+.right {
+    right: -10px;
+}
+
+.left {
+    left: -20px;
+}

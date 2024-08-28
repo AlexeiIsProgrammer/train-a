@@ -1,0 +1,62 @@
+@let control = singUpForm.controls;
+
+<mat-card>
+    <mat-card-title>Sing up</mat-card-title>
+
+    <form [formGroup]="singUpForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Enter your email</mat-label>
+            <input #email matInput placeholder="pat@example.com" formControlName="email" />
+            <mat-error>{{ control.email.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Enter your password</mat-label>
+            <input
+                matInput
+                formControlName="password"
+                [type]="isPasswordHide ? 'password' : 'text'"
+            />
+            <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                [attr.aria-pressed]="isPasswordHide"
+                (click)="isPasswordHide = !isPasswordHide; $event.stopPropagation()"
+            >
+                <mat-icon>{{ isPasswordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+
+            <mat-error>{{ control.password.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Confirm your password</mat-label>
+            <input
+                matInput
+                [formControl]="confirmPassword"
+                [type]="isPasswordHide ? 'password' : 'text'"
+            />
+            <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                [attr.aria-pressed]="isPasswordHide"
+                (click)="isPasswordHide = !isPasswordHide; $event.stopPropagation()"
+            >
+                <mat-icon>{{ isPasswordHide ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+
+            <mat-error>{{ confirmPassword.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <button
+            mat-raised-button
+            [disabled]="!(singUpForm.valid && confirmPassword.valid)"
+            (click)="singUp()"
+        >
+            Sing up
+        </button>
+        <a routerLink="/signin">Already have an account?</a>
+    </form>
+</mat-card>

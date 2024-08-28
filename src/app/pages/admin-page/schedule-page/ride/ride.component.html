@@ -1,0 +1,80 @@
+@let controls = scheduleForm.controls;
+@let departureIdx = 0;
+@let arrivalIdx = 1;
+
+<form [formGroup]="$any(scheduleForm)">
+    @for (segmentFormGroup of controls; track $index) {
+        @let segmentControls = segmentFormGroup.controls;
+
+        @let departureCityName = [path?.at($index)] | getConnectedCity: (stationEntities$ | async);
+
+        @let departureTime = segmentControls.time.get(departureIdx.toString())?.value;
+        @let arrivalTime = segmentControls.time.get(arrivalIdx.toString())?.value;
+
+        @let arrivalTimeToNextCity =
+            controls.at($index + 1)?.controls?.time?.get(arrivalIdx.toString())?.value;
+        @let departureTimePreviousCity =
+            controls.at($index - 1)?.controls?.time?.get(departureIdx.toString())?.value;
+
+        <section class="segment-wrap" [class.background]="$even" [formGroupName]="$index">
+            {{ departureCityName }}
+            <div formArrayName="time" class="time-control-wrap">
+                @if (!$first) {
+                    <app-edit #arTime [class.edit]="arTime.isEdit">
+                        Arrival:
+                        <input
+                            readonly
+                            [formControlName]="$last ? 0 : arrivalIdx"
+                            [owlDateTimeTrigger]="dtTo"
+                            [owlDateTime]="dtTo"
+                            [min]="departureTimePreviousCity"
+                            [max]="$last ? '' : departureTime"
+                            [disabled]="!arTime.isEdit"
+                        />
+                        <owl-date-time #dtTo [disabled]="!arTime.isEdit" />
+                    </app-edit>
+                }
+
+                @if (!$last) {
+                    <app-edit #depTime [class.edit]="depTime.isEdit">
+                        Departure:
+                        <input
+                            readonly
+                            [owlDateTimeTrigger]="dtFrom"
+                            [formControlName]="departureIdx"
+                            [owlDateTime]="dtFrom"
+                            [min]="$first ? '' : arrivalTime"
+                            [max]="arrivalTimeToNextCity"
+                            [disabled]="!depTime.isEdit"
+                        />
+                        <owl-date-time #dtFrom [disabled]="!depTime.isEdit" />
+                    </app-edit>
+                }
+            </div>
+
+            @if (!$last) {
+                <div class="price-block" [formGroupName]="'price'">
+                    @for (
+                        price of segmentControls.price.getRawValue() | objectEntries;
+                        track $index
+                    ) {
+                        @let typeName = price.at(0);
+
+                        <app-edit #priceEdit class="price-wrap">
+                            {{ typeName }} $
+                            <div class="price-input-wrap" [class.edit]="priceEdit.isEdit">
+                                <input
+                                    #priceInput
+                                    type="number"
+                                    [formControlName]="typeName ?? ''"
+                                    [readonly]="!priceEdit.isEdit"
+                                    (change)="handleInputPriceValue(priceInput)"
+                                />
+                            </div>
+                        </app-edit>
+                    }
+                </div>
+            }
+        </section>
+    }
+</form>

@@ -1,0 +1,62 @@
+:host {
+    display: block;
+    max-height: 60vh;
+    overflow: scroll;
+}
+
+.segment-wrap {
+    display: grid;
+    padding: 5px;
+    border-radius: 5px;
+    align-items: center;
+    grid-template-columns: 0.5fr 1fr 1fr;
+    grid-template-rows: repeat(auto-fit, minmax(150px, auto));
+
+    div {
+        margin: 5px;
+    }
+}
+
+.background {
+    background-color: #68686814;
+}
+
+input {
+    font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+.price-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.price-input-wrap {
+    max-width: 100px;
+
+    input {
+        width: -webkit-fill-available;
+        color: gray;
+        cursor: default;
+    }
+}
+
+.price-block {
+    justify-self: end;
+    position: relative;
+}
+
+.edit {
+    input {
+        color: black;
+        outline: 1px gray solid;
+        border-radius: 3px;
+    }
+}
+
+form {
+    min-height: 100px;
+}

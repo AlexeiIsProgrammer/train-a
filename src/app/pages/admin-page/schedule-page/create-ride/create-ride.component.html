@@ -1,0 +1,88 @@
+@let cityNames = path ?? [] | getConnectedCity: (stationEntities$ | async);
+@let controls = scheduleForm.controls;
+@let departureIdx = 0;
+@let arrivalIdx = 1;
+
+<mat-stepper orientation="vertical" [formGroup]="$any(scheduleForm)">
+    @for (segmentFormGroup of controls; track $index) {
+        @let segmentControls = segmentFormGroup.controls;
+
+        @let departureTime = segmentControls.time.get(departureIdx.toString())?.value;
+        @let arrivalTime = segmentControls.time.get(arrivalIdx.toString())?.value;
+
+        @let arrivalTimeToNextCity =
+            controls.at($index + 1)?.controls?.time?.get(arrivalIdx.toString())?.value;
+        @let departureTimePreviousCity =
+            controls.at($index - 1)?.controls?.time?.get(departureIdx.toString())?.value;
+
+        <mat-step state="train" completed="false" [formGroupName]="$index">
+            <ng-template matStepLabel>{{ cityNames.at($index) }}</ng-template>
+
+            <section>
+                <div formArrayName="time" class="time-control-wrap">
+                    <p>Time:</p>
+                    @if (!$first) {
+                        <div class="input-wrap">
+                            Arrival:
+                            <input
+                                required
+                                readonly
+                                [formControlName]="$last ? 0 : arrivalIdx"
+                                [owlDateTimeTrigger]="dtTo"
+                                [owlDateTime]="dtTo"
+                                [min]="departureTimePreviousCity"
+                                [max]="$last ? '' : departureTime"
+                            />
+                            <owl-date-time #dtTo />
+                        </div>
+                    }
+
+                    @if (!$last) {
+                        <div class="input-wrap">
+                            Departure:
+                            <input
+                                readonly
+                                required
+                                [formControlName]="departureIdx"
+                                [min]="$first ? minDate : arrivalTime"
+                                [max]="arrivalTimeToNextCity"
+                                [owlDateTimeTrigger]="dtFrom"
+                                [owlDateTime]="dtFrom"
+                            />
+                            <owl-date-time #dtFrom />
+                        </div>
+                    }
+                </div>
+
+                @if (!$last) {
+                    <div class="price-block" [formGroupName]="'price'">
+                        <p>Carriage price:</p>
+                        @for (
+                            price of segmentControls.price.getRawValue() | objectEntries;
+                            track $index
+                        ) {
+                            @let typeName = price.at(0);
+
+                            <div class="price-wrap">
+                                {{ typeName }} $
+                                <div class="price-input-wrap">
+                                    <input
+                                        #priceInput
+                                        required
+                                        type="number"
+                                        [formControlName]="typeName ?? ''"
+                                        (change)="handleInputPriceValue(priceInput)"
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+        </mat-step>
+    }
+</mat-stepper>
+
+<ng-template matStepperIcon="train">
+    <mat-icon>train</mat-icon>
+</ng-template>

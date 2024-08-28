@@ -4,7 +4,7 @@
             <!-- Row -->
             <ng-container [matColumnDef]="column">
                 <th *matHeaderCellDef mat-header-cell class="bold">Routes</th>
-                <td *matCellDef="let route" mat-cell (click)="addDetail(route)">
+                <td *matCellDef="let route" mat-cell>
                     <div class="info-wrap">
                         <p>Route {{ route.position }}</p>
 
@@ -25,7 +25,12 @@
         <ng-container matColumnDef="expand">
             <th *matHeaderCellDef mat-header-cell>&nbsp;</th>
             <td *matCellDef="let element" mat-cell [style.textAlign]="'right'">
-                <button mat-icon-button type="button" (click)="$event.stopPropagation()">
+                <button
+                    mat-icon-button
+                    type="button"
+                    [routerLink]="[element.id]"
+                    (click)="$event.stopPropagation()"
+                >
                     <mat-icon>train</mat-icon>
                 </button>
 
@@ -48,10 +53,16 @@
             >
                 <div
                     class="element-detail"
-                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+                    [@detailExpand]="element === expandedElement ? 'expanded' : 'collapsed'"
                 >
-                    <!-- Detail container -->
-                    <ng-container #detailContainer />
+                    @if (element === expandedElement) {
+                        <app-route-detail
+                            [route]="element"
+                            [stationEntities]="stationEntities()"
+                            [carriagesTypes]="carriagesTypes()"
+                            (update)="updateOne.emit($event)"
+                        />
+                    }
                 </div>
             </td>
         </ng-container>
@@ -69,22 +80,7 @@
 
     <mat-paginator
         showFirstLastButtons
-        [pageSizeOptions]="[15, 50]"
-        (page)="scroll.scrollToTop(); updatePageInfo($event)"
+        [pageSizeOptions]="[10, 30, 50]"
+        (page)="scroll.scrollToTop()"
     />
 </div>
-
-<!-- Detail template -->
-<ng-template
-    #detailTemplate
-    let-routeListItem="routeListItem"
-    let-stationEntities="stationEntities"
-    let-carriagesTypes="carriagesTypes"
->
-    <app-route-detail
-        [route]="routeListItem"
-        [stationEntities]="stationEntities()"
-        [carriagesTypes]="carriagesTypes()"
-        (update)="updateOne.emit($event)"
-    />
-</ng-template>

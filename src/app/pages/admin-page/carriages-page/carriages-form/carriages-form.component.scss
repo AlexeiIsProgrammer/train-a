@@ -1,0 +1,46 @@
+:host {
+    display: block;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    border: 1px solid black;
+    border-radius: 15px;
+    width: fit-content;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+label,
+input {
+    width: 100%;
+    max-width: 300px;
+}
+
+label {
+    font-size: 12px;
+}
+
+input {
+    box-sizing: border-box;
+    height: 24px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+}
+
+.close {
+    align-self: flex-end;
+}

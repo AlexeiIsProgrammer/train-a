@@ -1,0 +1,72 @@
+@let carriages = scheduleService.carriages$ | async;
+@let schedule = scheduleService.schedule$ | async;
+@let path = scheduleService.path$ | async;
+
+<button mat-icon-button routerLink="../">
+    <mat-icon>keyboard_return</mat-icon>
+</button>
+
+<mat-accordion class="example-headers-align">
+    <!-- Rides -->
+    @for (ride of schedule; track ride.rideId) {
+        <mat-expansion-panel #panel [expanded]="$first">
+            <mat-expansion-panel-header>
+                <mat-panel-description>
+                    Ride {{ ride.rideId }}
+
+                    <div>
+                        <ng-container #saveBtnContainer />
+
+                        <button
+                            mat-icon-button
+                            type="button"
+                            (click)="remove(ride.rideId); $event.stopPropagation()"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            @if (panel.expanded) {
+                <app-ride
+                    #rideSchedule
+                    [ride]="ride"
+                    [path]="path"
+                    (valueChange)="addSaveBtn($index, $event)"
+                />
+            }
+        </mat-expansion-panel>
+    }
+
+    <!-- Create ride -->
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <button mat-icon-button type="button">
+                    <mat-icon>add</mat-icon>
+                </button>
+                Create ride
+            </mat-panel-title>
+
+            @if (create.canSave) {
+                <button
+                    mat-icon-button
+                    type="button"
+                    [style.marginRight.px]="15"
+                    (click)="createRide(create.newRide)"
+                >
+                    <mat-icon>save</mat-icon>
+                </button>
+            }
+        </mat-expansion-panel-header>
+
+        <app-create-ride #create [path]="path" [carriages]="carriages" />
+    </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #saveBtn let-ride let-index="index">
+    <button mat-icon-button type="button" (click)="save(ride); hideSaveBtn(index)">
+        <mat-icon>save</mat-icon>
+    </button>
+</ng-template>

@@ -10,6 +10,4 @@ import { HeaderComponent } from '@core/components/header/header.component';
     styleUrl: './app.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-    title = 'Train-A';
-}
+export class AppComponent {}

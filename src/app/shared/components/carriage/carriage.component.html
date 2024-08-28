@@ -1,0 +1,33 @@
+<div class="carriage_control_box">
+    <div class="carriage_data">
+        <h4 [ngClass]="isSmallModel ? 'small-name' : 'large-name'">{{ carriage.name }}</h4>
+        <p class="seats_count" [ngClass]="isSmallModel ? 'small-seats_count' : 'large-seats_count'">
+            {{ countFreeSeats() }} seats
+        </p>
+    </div>
+    <button *ngIf="!isSmallModel" mat-icon-button type="button" (click)="openEditForm()">
+        <mat-icon>edit</mat-icon>
+    </button>
+</div>
+<div
+    class="seating-container"
+    [ngClass]="isSmallModel ? 'small-seating-container' : 'large-seating-container'"
+>
+    <div *ngFor="let row of rotatedSeatingMatrices; let rowIndex = index">
+        <div [ngClass]="isSmallModel ? 'small-seating-row' : 'large-seating-row'">
+            <ng-container *ngFor="let seat of row; let columnIndex = index">
+                <ng-container *ngIf="seat.isFree !== '-'">
+                    <app-seat
+                        [value]="seat.isFree"
+                        [seatNumber]="seat.seat_number + 1"
+                        [isSmallModel]="isSmallModel"
+                        (seatClicked)="onSeatClick(carriage.code, columnIndex, rowIndex)"
+                    ></app-seat>
+                </ng-container>
+                <ng-container *ngIf="seat.isFree === '-'">
+                    <div [ngClass]="isSmallModel ? 'small-empty-seat' : 'large-empty-seat'"></div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
