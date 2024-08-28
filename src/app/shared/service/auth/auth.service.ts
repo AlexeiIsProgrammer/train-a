@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AuthUser, UserType } from '@type/user-type.type';
 import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
-import { serialize } from 'cookie';
 import { Router } from '@angular/router';
-import { accessTokenName, USER_TOKEN_SHORT_NAME } from './token-names.const';
+import { accessTokenName, ADMIN_TOKEN_SHORT_NAME } from './token-names.const';
 
 type Token = { token: string };
 @Injectable({
@@ -19,6 +18,7 @@ export class AuthService {
     constructor(
         private readonly httpClient: HttpClient,
         private readonly router: Router,
+        private readonly z: NgZone,
     ) {}
 
     singUp(payLoad: AuthUser): Observable<Token> {
@@ -26,7 +26,7 @@ export class AuthService {
             switchMap(() => this.logIn(payLoad)),
             tap({
                 error: () => {
-                    this.userType$$.next('guest');
+                    this.setUserStatus('guest');
                 },
             }),
         );
@@ -39,32 +39,36 @@ export class AuthService {
                     const isAdmin = import.meta.env.NG_APP_ADMINS.includes(payLoad.email);
 
                     if (isAdmin) {
-                        this.userType$$.next('admin');
+                        this.setUserStatus('admin');
                     }
 
-                    this.userType$$.next('user');
+                    if (!isAdmin) {
+                        this.setUserStatus('user');
+                    }
 
                     this.setToken(token);
-
-                    this.router.navigateByUrl('/');
                 },
                 error: () => {
-                    this.userType$$.next('guest');
+                    this.setUserStatus('guest');
                 },
             }),
         );
     }
 
-    setToken(token: string): void {
-        const TEN_HOURS = 36000;
+    logout(): void {
+        this.router.navigateByUrl('/signin');
+        this.setUserStatus('guest');
+        localStorage.clear();
+    }
 
-        document.cookie = serialize(
+    setToken(token: string): void {
+        localStorage.setItem(
             accessTokenName,
-            this.userType$$.value === 'user' ? USER_TOKEN_SHORT_NAME + token : token,
-            {
-                secure: true,
-                maxAge: TEN_HOURS,
-            },
+            this.userType$$.value === 'admin' ? token + ADMIN_TOKEN_SHORT_NAME : token,
         );
+    }
+
+    setUserStatus(userType: UserType): void {
+        this.userType$$.next(userType);
     }
 }

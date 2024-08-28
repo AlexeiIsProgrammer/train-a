@@ -12,6 +12,7 @@ import { required } from '@shared/form-validators/required.validator';
 import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
 import { length } from '@shared/form-validators/length.validator';
 import { AuthService } from '@shared/service/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
@@ -50,19 +51,22 @@ export class LoginComponent {
     ) {}
 
     login(): void {
-        // const formValue = this.loginForm.getRawValue();
-        // this.authService.singUp(formValue).subscribe({
-        //     next: () => {
-        //         this.router.navigateByUrl('login');
-        //     },
-        //     error: (err: unknown) => {
-        //         if (!(err instanceof HttpErrorResponse)) {
-        //             return;
-        //         }
-        //         const message = err.error.message;
-        //         this.handleErr(message);
-        //     },
-        // });
+        const formValue = this.loginForm.getRawValue();
+
+        this.authService.logIn(formValue).subscribe({
+            next: () => {
+                this.router.navigateByUrl('');
+            },
+            error: (err: unknown) => {
+                if (!(err instanceof HttpErrorResponse)) {
+                    return;
+                }
+
+                const message = err.error.message;
+
+                this.handleErr(message);
+            },
+        });
     }
 
     private handleErr(message?: string): void {

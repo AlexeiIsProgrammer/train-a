@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import { UserType } from '@type/user-type.type';
+import { AuthService } from '@shared/service/auth/auth.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
+    imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, AsyncPipe],
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-    userType: UserType = 'user';
+    readonly authService = inject(AuthService);
 }

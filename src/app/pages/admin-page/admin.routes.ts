@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PageNotFoundComponent } from '@pages/page-not-found/page-not-found.component';
 import { StationsPageComponent } from './stations-page/stations-page.component';
 import { RoutePageComponent } from './route-page/route-page.component';
 import { AdminPageComponent } from './admin-page.component';
@@ -30,6 +31,10 @@ export const AdminRoutes: Routes = [
             {
                 path: 'carriages',
                 component: CarriagesPageComponent,
+            },
+            {
+                path: '**',
+                component: PageNotFoundComponent,
             },
         ],
     },

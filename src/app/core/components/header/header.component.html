@@ -1,22 +1,35 @@
+@let userType = authService.userType$ | async;
+
 <mat-toolbar>
     <a class="logo" [routerLink]="['/']">
         <img src="assets/logo.jpg" alt="logo" />
     </a>
+
     <a mat-button [routerLink]="['/']">Home</a>
 
-    @if (userType !== 'guest') {
+    @if (userType === 'user') {
         <a mat-button [routerLink]="['/profile']">Profile</a>
         <a mat-button [routerLink]="['/orders']">My Orders</a>
     }
+
     <span class="space"></span>
+
     @if (userType === 'user') {
         <span>Hello, {{ userType }}</span>
     }
+
     @if (userType === 'admin') {
-        <a mat-button [routerLink]="['/admin/stations']">Admin</a>
+        <a mat-button [routerLink]="['/admin']">Admin</a>
     }
+
     @if (userType === 'guest') {
         <a mat-button [routerLink]="['/signin']">Sign In</a>
         <a mat-button [routerLink]="['/signup']">Sign Up</a>
+    }
+
+    @if (userType !== 'guest') {
+        <button mat-icon-button (click)="authService.logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
     }
 </mat-toolbar>
