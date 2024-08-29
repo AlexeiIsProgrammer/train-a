@@ -8,6 +8,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 export class SearchDetailService {
     private readonly rideDetail$$ = new BehaviorSubject<RideDetail | null>(null);
 
+    readonly rideDetail$ = this.rideDetail$$.asObservable();
+
     constructor(
         private readonly router: Router,
         private readonly httpClient: HttpClient,

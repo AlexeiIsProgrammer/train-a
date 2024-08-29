@@ -1,12 +1,12 @@
-<!-- @let pageParams = pageParams$ | async; -->
+@let pageParams = pageParams$ | async;
 @let stationsEntities = stationsEntities$ | async;
 
-<section class="rida-info">
-    <button mat-icon-button>
-        <mat-icon>keyboard_return</mat-icon>
-    </button>
+@let fromCity = pageParams?.query?.from | getCityName: stationsEntities;
+@let toCity = pageParams?.query?.to | getCityName: stationsEntities;
 
-    <div>
-        <p>{{ 3 | getCityName: stationsEntities }}</p>
-    </div>
-</section>
+<app-ride-info
+    [dateOfDeparture]="dateOfDeparture$ | async"
+    [fromCity]="fromCity?.toString()"
+    [toCity]="toCity?.toString()"
+    [pageParams]="pageParams"
+/>

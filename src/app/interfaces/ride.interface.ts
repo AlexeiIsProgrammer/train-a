@@ -14,9 +14,12 @@ export interface Rides {
     schedule: Ride[];
 }
 
+export interface RideDetailSegments {
+    segments: Array<RideSegment & { occupiedSeats: number[] }>;
+}
 export interface RideDetail {
     rideId: number;
     path: number[];
     carriages: string[];
-    schedule: Array<Ride & { occupiedSeats: number[] }>;
+    schedule: RideDetailSegments;
 }

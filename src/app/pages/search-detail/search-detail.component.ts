@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     map,
@@ -16,18 +14,21 @@ import {
     tap,
     shareReplay,
     Observable,
+    withLatestFrom,
+    filter,
 } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
-import { SearchDetailService } from './search-detail/search-detail.service';
+import { SearchDetailService } from './service/search-detail/search-detail.service';
 import { PageParams } from './page-params.type';
+import { RideInfoComponent } from './ride-info/ride-info.component';
 
 @Component({
     selector: 'app-search-detail',
     standalone: true,
-    imports: [MatButtonModule, MatIconModule, AsyncPipe, GetCityNamePipe],
+    imports: [RideInfoComponent, GetCityNamePipe, CommonModule],
     templateUrl: './search-detail.component.html',
     styleUrl: './search-detail.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +36,6 @@ import { PageParams } from './page-params.type';
 })
 export class SearchDetailComponent {
     readonly stationsEntities$ = this.store.select(selectStationsEntities);
-
     readonly pageParams$: Observable<PageParams> = forkJoin({
         rideId: this.activatedRoute.paramMap.pipe(
             first(),
@@ -50,10 +50,15 @@ export class SearchDetailComponent {
         ),
         query: this.activatedRoute.queryParams.pipe(
             first(),
-            concatMap(query =>
+            concatMap(({ from, to }) =>
                 iif(
-                    () => query['from'] && query['to'],
-                    of(<PageParams['query']>query),
+                    () => {
+                        const isInteger =
+                            Number.isInteger(Number(from)) && Number.isInteger(Number(to));
+
+                        return isInteger;
+                    },
+                    of({ from: Number(from), to: Number(to) }),
                     throwError(() => EmptyError),
                 ),
             ),
@@ -64,8 +69,8 @@ export class SearchDetailComponent {
 
             return EMPTY;
         }),
-        tap(({ rideId }) => {
-            this.searchDetailService.loadRide(rideId);
+        tap(pageParams => {
+            this.searchDetailService.loadRide(pageParams.rideId);
         }),
         shareReplay({ bufferSize: 1, refCount: true }),
     );
@@ -76,4 +81,15 @@ export class SearchDetailComponent {
         private readonly store: Store,
         private readonly router: Router,
     ) {}
+
+    dateOfDeparture$ = this.searchDetailService.rideDetail$.pipe(
+        filter(Boolean),
+        withLatestFrom(this.pageParams$),
+        map(([{ path, schedule }, { query }]) => {
+            const cityIdx = path.slice(1).indexOf(query.to);
+            const departureTime = schedule.segments.at(cityIdx)?.time.at(0);
+
+            return departureTime ?? null;
+        }),
+    );
 }
