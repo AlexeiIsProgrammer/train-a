@@ -25,6 +25,13 @@ export const routes: Routes = [
         canMatch: [isGuestGuard],
     },
     {
+        path: 'trip/:rideId',
+        loadComponent: () =>
+            import('@pages/search-detail/search-detail.component').then(
+                ({ SearchDetailComponent }) => SearchDetailComponent,
+            ),
+    },
+    {
         path: '**',
         component: PageNotFoundComponent,
     },
