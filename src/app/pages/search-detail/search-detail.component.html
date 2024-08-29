@@ -1,1 +1,12 @@
-<p>search-detail works!</p>
+<!-- @let pageParams = pageParams$ | async; -->
+@let stationsEntities = stationsEntities$ | async;
+
+<section class="rida-info">
+    <button mat-icon-button>
+        <mat-icon>keyboard_return</mat-icon>
+    </button>
+
+    <div>
+        <p>{{ 3 | getCityName: stationsEntities }}</p>
+    </div>
+</section>

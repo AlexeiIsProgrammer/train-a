@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
-import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { CommonModule } from '@angular/common';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,6 +14,7 @@ import { first, last } from 'lodash';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { ObjectEntriesPipe } from '@shared/pipes/object-entries/object-entries.pipe';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { SegmentFormGroup } from '../segment-form-group.type';
 import { parseToRequest } from '../utils/parse-to-request';
 
@@ -28,7 +28,7 @@ import { parseToRequest } from '../utils/parse-to-request';
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        GetConnectedCityPipe,
+        GetCityNamePipe,
         CommonModule,
         MatSelectModule,
         MatIconModule,

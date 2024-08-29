@@ -6,7 +6,7 @@
     @for (segmentFormGroup of controls; track $index) {
         @let segmentControls = segmentFormGroup.controls;
 
-        @let departureCityName = [path?.at($index)] | getConnectedCity: (stationEntities$ | async);
+        @let departureCityName = path?.at($index) | getCityName: (stationEntities$ | async);
 
         @let departureTime = segmentControls.time.get(departureIdx.toString())?.value;
         @let arrivalTime = segmentControls.time.get(arrivalIdx.toString())?.value;

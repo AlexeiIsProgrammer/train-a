@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     map,
@@ -15,19 +17,25 @@ import {
     shareReplay,
     Observable,
 } from 'rxjs';
-import { PageParams } from './page-params.type';
+import { AsyncPipe } from '@angular/common';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
+import { Store } from '@ngrx/store';
+import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { SearchDetailService } from './search-detail/search-detail.service';
+import { PageParams } from './page-params.type';
 
 @Component({
     selector: 'app-search-detail',
     standalone: true,
-    imports: [],
+    imports: [MatButtonModule, MatIconModule, AsyncPipe, GetCityNamePipe],
     templateUrl: './search-detail.component.html',
     styleUrl: './search-detail.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [SearchDetailService],
 })
 export class SearchDetailComponent {
+    readonly stationsEntities$ = this.store.select(selectStationsEntities);
+
     readonly pageParams$: Observable<PageParams> = forkJoin({
         rideId: this.activatedRoute.paramMap.pipe(
             first(),
@@ -65,6 +73,7 @@ export class SearchDetailComponent {
     constructor(
         readonly searchDetailService: SearchDetailService,
         private readonly activatedRoute: ActivatedRoute,
+        private readonly store: Store,
         private readonly router: Router,
     ) {}
 }

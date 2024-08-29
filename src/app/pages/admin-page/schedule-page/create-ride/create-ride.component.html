@@ -1,4 +1,4 @@
-@let cityNames = path ?? [] | getConnectedCity: (stationEntities$ | async);
+@let cityNames = path | getCityName: (stationEntities$ | async);
 @let controls = scheduleForm.controls;
 @let departureIdx = 0;
 @let arrivalIdx = 1;
@@ -16,7 +16,7 @@
             controls.at($index - 1)?.controls?.time?.get(departureIdx.toString())?.value;
 
         <mat-step state="train" completed="false" [formGroupName]="$index">
-            <ng-template matStepLabel>{{ cityNames.at($index) }}</ng-template>
+            <ng-template matStepLabel>{{ cityNames?.at($index) }}</ng-template>
 
             <section>
                 <div formArrayName="time" class="time-control-wrap">

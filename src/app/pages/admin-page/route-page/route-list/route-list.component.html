@@ -10,7 +10,7 @@
 
                         <p>
                             <span class="bold">Cities:</span>
-                            {{ route.path | getConnectedCity: stationEntities() | join: ' -> ' }}
+                            {{ route.path | getCityName: stationEntities() | join: ' -> ' }}
                         </p>
                         <p>
                             <span class="bold">Carriage Types:</span>

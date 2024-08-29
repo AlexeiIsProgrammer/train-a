@@ -21,11 +21,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
-import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatSelectModule } from '@angular/material/select';
 import { omit, uniq, values } from 'lodash';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 
 @Component({
     selector: 'app-station-stepper',
@@ -36,7 +36,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
-        GetConnectedCityPipe,
+        GetCityNamePipe,
         MatButtonModule,
         MatIconModule,
         MatSelectModule,

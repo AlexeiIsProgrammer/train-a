@@ -11,7 +11,6 @@ import {
 import { Ride, Rides, RideSegment } from '@interface/ride.interface';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
@@ -22,6 +21,7 @@ import { EditComponent } from '@shared/components/edit/edit.component';
 import { first, last } from 'lodash';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { SegmentFormGroup } from '../segment-form-group.type';
 import { parseToRequest } from '../utils/parse-to-request';
 
@@ -31,7 +31,7 @@ import { parseToRequest } from '../utils/parse-to-request';
     imports: [
         MatButtonModule,
         CommonModule,
-        GetConnectedCityPipe,
+        GetCityNamePipe,
         ReactiveFormsModule,
         ObjectEntriesPipe,
         MatIconModule,

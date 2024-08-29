@@ -10,7 +10,7 @@
         <ng-container matColumnDef="connectedTo">
             <th *matHeaderCellDef mat-header-cell>Connected to:</th>
             <td *matCellDef="let item" mat-cell>
-                {{ item.connectedTo | toIdList | getConnectedCity: stationEntities() | join: ', ' }}
+                {{ item.connectedTo | toIdList | getCityName: stationEntities() | join: ', ' }}
             </td>
         </ng-container>
 

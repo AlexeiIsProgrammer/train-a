@@ -10,13 +10,13 @@ import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 import { ToIdListPipe } from '@pages/admin-page/pipe/to-id-list/to-id-list.pipe';
 import { values } from 'lodash';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 
 @Component({
     selector: 'app-station-list',
@@ -24,7 +24,7 @@ import { values } from 'lodash';
     imports: [
         MatTableModule,
         MatPaginatorModule,
-        GetConnectedCityPipe,
+        GetCityNamePipe,
         MatButtonModule,
         MatIconModule,
         JoinPipe,
