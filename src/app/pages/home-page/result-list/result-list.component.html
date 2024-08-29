@@ -1,0 +1,11 @@
+@let stations = searchStations();
+
+@if (stations && stations.routes.length > 0) {
+    <mat-list role="list">
+        @for (route of stations.routes; track route.id) {
+            <app-result-list-item [route]="route" [from]="stations.from" [to]="stations.to" />
+        }
+    </mat-list>
+} @else {
+    <app-no-trains-found />
+}

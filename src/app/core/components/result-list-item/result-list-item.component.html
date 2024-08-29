@@ -1,0 +1,40 @@
+@for (ride of route.schedule; track ride.rideId) {
+    <div class="train-schedule-card mat-elevation-z4">
+        <div class="time-info">
+            <div class="start-time">
+                <span class="time">{{ ride.segments[startSegment].time[0] | toTime }}</span>
+                <span class="date">{{ ride.segments[startSegment].time[0] | toDate }}</span>
+                <span class="city">{{ from.city }}</span>
+            </div>
+            <div class="route-duration">
+                <span class="duration">5h 56m</span>
+                <mat-divider></mat-divider>
+            </div>
+            <div class="end-time">
+                <span class="time">{{ ride.segments[endSegment - 1].time[1] | toTime }}</span>
+                <span class="date">{{ ride.segments[endSegment - 1].time[1] | toDate }}</span>
+                <span class="city">{{ to.city }}</span>
+            </div>
+        </div>
+        <div class="route-info">
+            <mat-icon>train</mat-icon>
+            <span class="route">City77 → City11</span>
+            <button mat-button [matMenuTriggerFor]="menu">Route</button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>Details</button>
+            </mat-menu>
+        </div>
+        <div class="price-info">
+            <div class="class-info">
+                <span>1st class</span>
+                <span class="seats">58 seats</span>
+                <span class="price">$731</span>
+            </div>
+            <div class="class-info">
+                <span>2nd class</span>
+                <span class="seats">75 seats</span>
+                <span class="price">$498</span>
+            </div>
+        </div>
+    </div>
+}

@@ -21,6 +21,9 @@ export interface Schedule {
 }
 
 export interface SearchedRoute extends Route {
+    id: number;
+    path: number[];
+    carriages: string[];
     schedule: Schedule[];
 }
 
