@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -13,10 +20,14 @@ export class EditComponent {
     @ViewChild(MatIcon, { static: true }) icon!: MatIcon;
     @Input() position: 'left' | 'right' = 'left';
 
+    @Output() toggle = new EventEmitter<void>();
+
     private is_edit = false;
 
-    toggle(): void {
+    edit(): void {
         this.is_edit = !this.is_edit;
+
+        this.toggle.emit();
     }
 
     get isEdit(): boolean {

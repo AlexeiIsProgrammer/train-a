@@ -11,3 +11,5 @@
     [pageParams]="pageParams"
     (openSchedule)="openDialog()"
 />
+
+<app-carriage [carriage]="carriagesEntities$ | async" />

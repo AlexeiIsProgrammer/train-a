@@ -1,13 +1,10 @@
 <div class="carriage_control_box">
     <div class="carriage_data">
-        <h4 [ngClass]="isSmallModel ? 'small-name' : 'large-name'">{{ carriage.name }}</h4>
+        <h4 [ngClass]="isSmallModel ? 'small-name' : 'large-name'">{{ carriage?.name }}</h4>
         <p class="seats_count" [ngClass]="isSmallModel ? 'small-seats_count' : 'large-seats_count'">
             {{ countFreeSeats() }} seats
         </p>
     </div>
-    <button *ngIf="!isSmallModel" mat-icon-button type="button" (click)="openEditForm()">
-        <mat-icon>edit</mat-icon>
-    </button>
 </div>
 <div
     class="seating-container"
@@ -21,7 +18,7 @@
                         [value]="seat.isFree"
                         [seatNumber]="seat.seat_number + 1"
                         [isSmallModel]="isSmallModel"
-                        (seatClicked)="onSeatClick(carriage.code, columnIndex, rowIndex)"
+                        (seatClicked)="onSeatClick(carriage?.code, columnIndex, rowIndex)"
                     ></app-seat>
                 </ng-container>
                 <ng-container *ngIf="seat.isFree === '-'">

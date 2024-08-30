@@ -25,15 +25,24 @@ import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe'
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { selectCarriagesEntities } from '@store/carriages/carriages.selector';
 import { SearchDetailService } from './service/search-detail/search-detail.service';
 import { PageParams } from './page-params.type';
 import { RideInfoComponent } from './ride-info/ride-info.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { CarriageComponent } from '../../shared/components/carriage/carriage.component';
 
 @Component({
     selector: 'app-search-detail',
     standalone: true,
-    imports: [RideInfoComponent, GetCityNamePipe, CommonModule, ScheduleComponent, MatDialogModule],
+    imports: [
+        RideInfoComponent,
+        GetCityNamePipe,
+        CommonModule,
+        ScheduleComponent,
+        MatDialogModule,
+        CarriageComponent,
+    ],
     templateUrl: './search-detail.component.html',
     styleUrl: './search-detail.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +50,12 @@ import { ScheduleComponent } from './schedule/schedule.component';
 })
 export class SearchDetailComponent {
     readonly stationsEntities$ = this.store.select(selectStationsEntities);
+    readonly carriagesEntities$ = this.store.select(selectCarriagesEntities).pipe(
+        map(v => {
+            return v['carriage1'] ?? null;
+        }),
+    );
+
     readonly pageParams$: Observable<PageParams> = forkJoin({
         rideId: this.activatedRoute.paramMap.pipe(
             first(),
@@ -112,7 +127,6 @@ export class SearchDetailComponent {
                 takeUntil(dialogRef.afterClosed()),
                 withLatestFrom(
                     this.pageParams$.pipe(take(1)),
-
                     this.searchDetailService.schedule$.pipe(take(1)),
                     this.stationsEntities$.pipe(take(1)),
                 ),
