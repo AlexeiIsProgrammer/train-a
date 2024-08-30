@@ -1,3 +1,4 @@
+/* eslint-disable rxjs/no-unsafe-takeuntil */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -16,19 +17,23 @@ import {
     Observable,
     withLatestFrom,
     filter,
+    take,
+    takeUntil,
 } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { Store } from '@ngrx/store';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SearchDetailService } from './service/search-detail/search-detail.service';
 import { PageParams } from './page-params.type';
 import { RideInfoComponent } from './ride-info/ride-info.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 @Component({
     selector: 'app-search-detail',
     standalone: true,
-    imports: [RideInfoComponent, GetCityNamePipe, CommonModule],
+    imports: [RideInfoComponent, GetCityNamePipe, CommonModule, ScheduleComponent, MatDialogModule],
     templateUrl: './search-detail.component.html',
     styleUrl: './search-detail.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,14 +80,7 @@ export class SearchDetailComponent {
         shareReplay({ bufferSize: 1, refCount: true }),
     );
 
-    constructor(
-        readonly searchDetailService: SearchDetailService,
-        private readonly activatedRoute: ActivatedRoute,
-        private readonly store: Store,
-        private readonly router: Router,
-    ) {}
-
-    dateOfDeparture$ = this.searchDetailService.rideDetail$.pipe(
+    readonly dateOfDeparture$ = this.searchDetailService.rideDetail$.pipe(
         filter(Boolean),
         withLatestFrom(this.pageParams$),
         map(([{ path, schedule }, { query }]) => {
@@ -92,4 +90,37 @@ export class SearchDetailComponent {
             return departureTime ?? null;
         }),
     );
+
+    constructor(
+        private readonly store: Store,
+        private readonly router: Router,
+        private readonly matDialog: MatDialog,
+        private readonly activatedRoute: ActivatedRoute,
+        readonly searchDetailService: SearchDetailService,
+    ) {}
+
+    openDialog(): void {
+        const dialogRef = this.matDialog.open(ScheduleComponent, {
+            maxWidth: '500px',
+            width: '100%',
+        });
+        const { componentRef } = dialogRef;
+
+        dialogRef
+            .afterOpened()
+            .pipe(
+                takeUntil(dialogRef.afterClosed()),
+                withLatestFrom(
+                    this.pageParams$.pipe(take(1)),
+
+                    this.searchDetailService.schedule$.pipe(take(1)),
+                    this.stationsEntities$.pipe(take(1)),
+                ),
+            )
+            .subscribe(([, pageParams, schedule, stationsEntities]) => {
+                componentRef?.setInput('schedule', schedule);
+                componentRef?.setInput('pageParams', pageParams);
+                componentRef?.setInput('stationsEntities', stationsEntities);
+            });
+    }
 }

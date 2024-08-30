@@ -6,7 +6,8 @@
 
 <app-ride-info
     [dateOfDeparture]="dateOfDeparture$ | async"
-    [fromCity]="fromCity?.toString()"
-    [toCity]="toCity?.toString()"
+    [fromCity]="fromCity?.toString() ?? null"
+    [toCity]="toCity?.toString() ?? null"
     [pageParams]="pageParams"
+    (openSchedule)="openDialog()"
 />
