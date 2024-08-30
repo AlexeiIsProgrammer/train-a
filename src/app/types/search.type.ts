@@ -6,7 +6,9 @@ export type Geolocation = {
 export type Segment = {
     time: string[];
     price: {
-        'dynamic-carriage-type-1': number;
+        [key: string]: number;
     };
     occupiedSeats: number[];
 };
+
+export type GetCurrentCities = { route1: number; route2: number };

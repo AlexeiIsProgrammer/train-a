@@ -7,7 +7,14 @@
                 <span class="city">{{ from.city }}</span>
             </div>
             <div class="route-duration">
-                <span class="duration">5h 56m</span>
+                <span class="duration">
+                    {{
+                        timeLeft(
+                            ride.segments[startSegment].time[0],
+                            ride.segments[endSegment - 1].time[1]
+                        )
+                    }}
+                </span>
                 <mat-divider></mat-divider>
             </div>
             <div class="end-time">
@@ -18,23 +25,17 @@
         </div>
         <div class="route-info">
             <mat-icon>train</mat-icon>
-            <span class="route">City77 → City11</span>
-            <button mat-button [matMenuTriggerFor]="menu">Route</button>
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item>Details</button>
-            </mat-menu>
+            <span class="route">{{ currentRoute(ride.segments) }}</span>
+            <button mat-button>Route</button>
         </div>
         <div class="price-info">
-            <div class="class-info">
-                <span>1st class</span>
-                <span class="seats">58 seats</span>
-                <span class="price">$731</span>
-            </div>
-            <div class="class-info">
-                <span>2nd class</span>
-                <span class="seats">75 seats</span>
-                <span class="price">$498</span>
-            </div>
+            @for (carriage of ride.segments[startSegment].price | toCarriages; track carriage.id) {
+                <div class="class-info">
+                    <span>{{ carriage.type }}</span>
+                    <span class="seats">{{ getCarriageCount(carriage.type) }}</span>
+                    <span class="price">${{ carriage.price }}</span>
+                </div>
+            }
         </div>
     </div>
 }
