@@ -47,19 +47,29 @@ export class SearchComponent {
         startCity: new FormControl<string | Station>('', required()),
         endCity: new FormControl<string | Station>('', required()),
         date: new FormControl<string>('', [required(), futureDateValidator]),
+        time: new FormControl<string>(''),
     });
 
     constructor(private readonly store: Store) {}
 
     onSubmit(): void {
         if (this.isCityStation(this.getStartCity) && this.isCityStation(this.getEndCity)) {
+            const formattedDate = new Date(this.getDate);
+
+            if (this.getTime) {
+                const [hours, minutes] = this.getTime.split(':');
+
+                formattedDate.setHours(Number(hours));
+                formattedDate.setMinutes(Number(minutes));
+            }
+
             this.store.dispatch(
                 SearchActions.loadAll({
                     fromLatitude: this.getStartCity.latitude,
                     fromLongitude: this.getStartCity.longitude,
                     toLatitude: this.getEndCity.latitude,
                     toLongitude: this.getEndCity.longitude,
-                    time: new Date(this.getDate).getTime(),
+                    time: formattedDate.getTime(),
                 }),
             );
         }
@@ -90,5 +100,9 @@ export class SearchComponent {
 
     get getDate(): string {
         return this.searchForm.get('date')?.value || '';
+    }
+
+    get getTime(): string {
+        return this.searchForm.get('time')?.value || '';
     }
 }

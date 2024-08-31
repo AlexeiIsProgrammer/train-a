@@ -17,7 +17,7 @@ export class TimeArrivalPipe implements PipeTransform {
 
         return `${new Date(
             new Date(time[0]).getTime() - new Date(dataSource[index - 1].time[1]).getTime(),
-        ).toLocaleTimeString([], {
+        ).toLocaleTimeString('en-US', {
             minute: '2-digit',
             hour12: false,
         })} m`;

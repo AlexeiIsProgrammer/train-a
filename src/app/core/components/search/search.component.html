@@ -36,18 +36,20 @@
     </div>
 
     <mat-form-field appearance="fill">
-        <mat-label>Date/Time</mat-label>
-        <input
-            type="datetime"
-            matInput
-            formControlName="date"
-            [matDatepicker]="picker"
-            [min]="minDate"
-        />
+        <mat-label>Date</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker" [min]="minDate" />
         <mat-error>{{ control.date.errors | getControlErrorMessage }}</mat-error>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+
+    @if (control.date.value) {
+        <mat-form-field appearance="fill">
+            <mat-label>Time</mat-label>
+            <input type="time" matInput formControlName="time" />
+            <mat-error>{{ control.time.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+    }
 
     <button mat-raised-button color="primary" type="submit" [disabled]="!searchForm.valid">
         Search

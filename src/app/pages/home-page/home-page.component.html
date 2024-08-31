@@ -8,7 +8,19 @@
             date of searchedRoutes.routes | toDateTabs: searchedRoutes.from.stationId;
             track $index
         ) {
-            <mat-tab label="{{ date | toDate }}">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <div>
+                        <p class="date">
+                            {{ date | toDate }}
+                        </p>
+
+                        <p class="day">
+                            {{ date | getDay }}
+                        </p>
+                    </div>
+                </ng-template>
+
                 <mat-list role="list">
                     @for (
                         route of searchedRoutes.routes

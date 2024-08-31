@@ -13,6 +13,7 @@ import { ToDatePipe } from '@shared/pipes/to-date/to-date.pipe';
 import { NoTrainsFoundComponent } from './components/no-trains-found/no-trains-found.component';
 import { DateFilterPipe } from './pipe/date-filter/date-filter.pipe';
 import { ToDateTabsPipe } from './pipe/to-date-tabs/to-date-tabs.pipe';
+import { GetDayPipe } from './pipe/get-day/get-day.pipe';
 
 @Component({
     selector: 'app-home-page',
@@ -27,6 +28,7 @@ import { ToDateTabsPipe } from './pipe/to-date-tabs/to-date-tabs.pipe';
         ToDatePipe,
         DateFilterPipe,
         ToDateTabsPipe,
+        GetDayPipe,
     ],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss',

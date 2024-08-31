@@ -11,9 +11,13 @@ export class ToDateTabsPipe implements PipeTransform {
             routes.reduce((acc, curr) => {
                 curr.schedule.forEach(ride => {
                     acc.add(
-                        ride.segments[curr.path.findIndex(way => way === stationId)].time[0].split(
-                            'T',
-                        )[0],
+                        new Date(
+                            ride.segments[curr.path.findIndex(way => way === stationId)].time[0],
+                        ).toLocaleDateString('en-CA', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        }),
                     );
                 });
 
