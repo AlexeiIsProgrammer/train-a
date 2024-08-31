@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Observable, map, startWith } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { StationList } from '@type/station.type';
 import { required } from '@shared/form-validators/required.validator';
@@ -17,6 +16,7 @@ import { Station } from '@interface/station.interface';
 import { getTomorrow } from '@shared/utils/get-tomorrow';
 import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
 import { futureDateValidator } from '@shared/form-validators/future-date.validator';
+import { FilterPipe } from './pipe/filter.pipe';
 
 @Component({
     selector: 'app-search',
@@ -32,12 +32,13 @@ import { futureDateValidator } from '@shared/form-validators/future-date.validat
         MatDatepickerModule,
         MatIconModule,
         GetControlErrorMessagePipe,
+        FilterPipe,
     ],
     templateUrl: './search.component.html',
     styleUrl: './search.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
     readonly stationList = input<StationList>();
 
     readonly minDate: Date = getTomorrow();
@@ -48,33 +49,7 @@ export class SearchComponent implements OnInit {
         date: new FormControl<string>('', futureDateValidator),
     });
 
-    filteredStartCities?: Observable<StationList>;
-    filteredEndCities?: Observable<StationList>;
-
     constructor(private readonly store: Store) {}
-
-    ngOnInit(): void {
-        this.filteredStartCities = this.searchForm.get('startCity')?.valueChanges.pipe(
-            startWith(''),
-            map(value => (typeof value === 'string' ? value : value?.city || '')),
-            map(title => this.filter(title)),
-        );
-
-        this.filteredEndCities = this.searchForm.get('endCity')?.valueChanges.pipe(
-            startWith(''),
-            map(value => (typeof value === 'string' ? value : value?.city || '')),
-            map(title => this.filter(title)),
-        );
-    }
-
-    private filter(city: string): StationList {
-        const filterValue = city.toLowerCase();
-
-        return (
-            this.stationList()?.filter(option => option.city.toLowerCase().includes(filterValue)) ||
-            []
-        );
-    }
 
     onSubmit(): void {
         if (this.isCityStation(this.getStartCity) && this.isCityStation(this.getEndCity)) {

@@ -7,7 +7,10 @@
             <input matInput formControlName="startCity" [matAutocomplete]="startCityAuto" />
             <mat-error>{{ control.startCity.errors | getControlErrorMessage }}</mat-error>
             <mat-autocomplete #startCityAuto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let city of filteredStartCities | async" [value]="city">
+                <mat-option
+                    *ngFor="let city of stationList() | filter: control.startCity.value"
+                    [value]="city"
+                >
                     {{ city.city }}
                 </mat-option>
             </mat-autocomplete>
@@ -22,7 +25,10 @@
             <input matInput formControlName="endCity" [matAutocomplete]="endCityAuto" />
             <mat-error>{{ control.endCity.errors | getControlErrorMessage }}</mat-error>
             <mat-autocomplete #endCityAuto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let city of filteredEndCities | async" [value]="city">
+                <mat-option
+                    *ngFor="let city of stationList() | filter: control.endCity.value"
+                    [value]="city"
+                >
                     {{ city.city }}
                 </mat-option>
             </mat-autocomplete>

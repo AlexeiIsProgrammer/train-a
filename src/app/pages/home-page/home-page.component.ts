@@ -8,6 +8,7 @@ import { selectSearchStations } from '@store/search/search.selectors';
 import { MatListModule } from '@angular/material/list';
 import { ResultListItemComponent } from '@core/components/result-list-item/result-list-item.component';
 import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
 import { NoTrainsFoundComponent } from './no-trains-found/no-trains-found.component';
 
 @Component({
@@ -19,6 +20,7 @@ import { NoTrainsFoundComponent } from './no-trains-found/no-trains-found.compon
         NoTrainsFoundComponent,
         ResultListItemComponent,
         CommonModule,
+        MatTabsModule,
     ],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss',
