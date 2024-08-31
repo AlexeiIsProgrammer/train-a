@@ -26,7 +26,18 @@
         <div class="route-info">
             <mat-icon>train</mat-icon>
             <span class="route">{{ currentRoute(ride.segments) }}</span>
-            <button mat-button>Route</button>
+            <button
+                mat-button
+                (click)="
+                    openDialog(
+                        ride.segments.slice(startSegment, endSegment),
+                        route.path.slice(startSegment, endSegment + 1),
+                        route.id
+                    )
+                "
+            >
+                Route
+            </button>
         </div>
         <div class="price-info">
             @for (carriage of ride.segments[startSegment].price | toCarriages; track carriage.id) {

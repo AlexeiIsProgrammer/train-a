@@ -7,6 +7,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Coordinate, SearchedRoute } from '@interface/search.interface';
 import { GetCurrentCities, Segment } from '@type/search.type';
+import { MatDialog } from '@angular/material/dialog';
+import { TripDetailsModalComponent } from '@pages/home-page/trip-details-modal/trip-details-modal.component';
+import { Station } from '@interface/station.interface';
 import { ToDatePipe } from './pipe/to-date.pipe';
 import { ToTimePipe } from './pipe/to-time.pipe';
 import { ToCarriagesPipe } from './pipe/to-carriages.pipe';
@@ -33,10 +36,12 @@ export class ResultListItemComponent implements OnInit {
     @Input() from!: Coordinate;
     @Input() to!: Coordinate;
     @Input() route!: SearchedRoute;
-    @Input() getCurrentCities!: (routes: GetCurrentCities) => [string, string];
+    @Input() stationList: Station[] | undefined;
 
     startSegment = 0;
     endSegment = 0;
+
+    constructor(private readonly matDialog: MatDialog) {}
 
     ngOnInit(): void {
         this.startSegment = this.route.path.findIndex(
@@ -62,7 +67,20 @@ export class ResultListItemComponent implements OnInit {
             return `No current routes`;
         }
 
-        const [city1, city2] = this.getCurrentCities({
+        const getCurrentCities = ({ route1, route2 }: GetCurrentCities): [string, string] => {
+            if (!this.stationList) {
+                return ['City is not loaded', 'City is not loaded'];
+            }
+
+            return [
+                this.stationList?.find(station => station.id === route1)?.city ||
+                    "City isn't exists",
+                this.stationList?.find(station => station.id === route2)?.city ||
+                    "City isn't exists",
+            ];
+        };
+
+        const [city1, city2] = getCurrentCities({
             route1: this.route.path[currentSegment],
             route2: this.route.path[currentSegment + 1],
         });
@@ -86,5 +104,18 @@ export class ResultListItemComponent implements OnInit {
 
     getCarriageCount(carriage: string): number {
         return this.route.carriages.reduce((acc, curr) => (carriage === curr ? acc + 1 : acc), 0);
+    }
+
+    openDialog(segments: Segment[], path: number[], routeId: number): void {
+        const dialogRef = this.matDialog.open(TripDetailsModalComponent, {
+            height: '90vh',
+            maxWidth: '1440px',
+        });
+        const { componentInstance } = dialogRef;
+
+        componentInstance.routeId = routeId;
+        componentInstance.path = path;
+        componentInstance.segments = segments;
+        componentInstance.stationList = this.stationList;
     }
 }

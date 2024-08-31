@@ -1,0 +1,40 @@
+<mat-dialog-content class="route-modal-content">
+    <h3>Route {{ routeId }}</h3>
+    <table mat-table class="demo-table" [dataSource]="dataSource">
+        <!-- Time Column -->
+        <ng-container matColumnDef="time">
+            <th *matHeaderCellDef mat-header-cell>Time</th>
+            <td *matCellDef="let path; let i = index" mat-cell>
+                {{
+                    (i === segments.length ? segments[i - 1].time : segments[i].time)
+                        | toTime: i : segments
+                }}
+            </td>
+        </ng-container>
+
+        <!-- Station Column -->
+        <ng-container matColumnDef="station">
+            <th *matHeaderCellDef mat-header-cell>Station</th>
+            <td *matCellDef="let path" mat-cell>
+                {{ getCity(path) }}
+            </td>
+        </ng-container>
+
+        <!-- Stop Column -->
+        <ng-container matColumnDef="stop">
+            <th *matHeaderCellDef mat-header-cell>Stop</th>
+            <td *matCellDef="let path; let i = index" mat-cell>
+                {{
+                    (i === segments.length ? segments[i - 1].time : segments[i].time)
+                        | timeArrival: i : segments
+                }}
+            </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+    </table>
+    <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-dialog-content>
