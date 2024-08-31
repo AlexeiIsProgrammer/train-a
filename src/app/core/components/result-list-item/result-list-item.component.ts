@@ -54,16 +54,17 @@ export class ResultListItemComponent implements OnInit {
         const difference = new Date(endDate).getTime() - new Date(startDate).getTime();
 
         const totalMinutes = Math.floor(difference / 60000);
+        const days = Math.floor(totalMinutes / 60 / 24);
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
 
-        return `${hours}h ${minutes}m`;
+        return `${days > 0 ? days : ''}d ${hours}h ${minutes}m`;
     }
 
     currentRoute(segments: Segment[]): string {
         const currentSegment = this.getCurrentSegment(segments);
 
-        if (!currentSegment) {
+        if (currentSegment === -1) {
             return `No current routes`;
         }
 
@@ -73,10 +74,8 @@ export class ResultListItemComponent implements OnInit {
             }
 
             return [
-                this.stationList?.find(station => station.id === route1)?.city ||
-                    "City isn't exists",
-                this.stationList?.find(station => station.id === route2)?.city ||
-                    "City isn't exists",
+                this.stationList?.find(station => station.id === route1)?.city || '',
+                this.stationList?.find(station => station.id === route2)?.city || '',
             ];
         };
 

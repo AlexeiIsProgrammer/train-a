@@ -37,7 +37,13 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Date/Time</mat-label>
-        <input matInput formControlName="date" [matDatepicker]="picker" [min]="minDate" />
+        <input
+            type="datetime"
+            matInput
+            formControlName="date"
+            [matDatepicker]="picker"
+            [min]="minDate"
+        />
         <mat-error>{{ control.date.errors | getControlErrorMessage }}</mat-error>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>

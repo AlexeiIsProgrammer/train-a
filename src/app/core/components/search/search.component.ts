@@ -46,7 +46,7 @@ export class SearchComponent {
     readonly searchForm = new FormGroup({
         startCity: new FormControl<string | Station>('', required()),
         endCity: new FormControl<string | Station>('', required()),
-        date: new FormControl<string>('', futureDateValidator),
+        date: new FormControl<string>('', [required(), futureDateValidator]),
     });
 
     constructor(private readonly store: Store) {}
@@ -59,7 +59,7 @@ export class SearchComponent {
                     fromLongitude: this.getStartCity.longitude,
                     toLatitude: this.getEndCity.latitude,
                     toLongitude: this.getEndCity.longitude,
-                    time: new Date(this.getDate).getFullYear(),
+                    time: new Date(this.getDate).getTime(),
                 }),
             );
         }

@@ -30,6 +30,8 @@ export class HomePageComponent {
     readonly stations = toSignal(this.store.select(selectAllStations));
     readonly searchStations = toSignal(this.store.select(selectSearchStations));
 
+    selectedTab?: string;
+
     constructor(private readonly store: Store) {
         this.store.dispatch(StationsActions.loadAll());
     }

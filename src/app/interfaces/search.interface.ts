@@ -2,7 +2,7 @@ import { Geolocation, Segment } from '@type/search.type';
 import { Route } from './route.interface';
 
 export interface Search {
-    time?: number;
+    time: number;
     fromLatitude: number;
     fromLongitude: number;
     toLatitude: number;
