@@ -7,19 +7,41 @@
     border-radius: 8px;
     margin: 16px 0;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 }
 
 .time-info {
     display: flex;
     align-items: center;
     gap: 16px;
+    @media (max-width: 768px) {
+        justify-content: space-between;
+    }
+}
+
+.main-block {
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.price-info {
+    @media (max-width: 768px) {
+        width: 100%;
+        border-top: 1px solid black;
+
+        justify-content: space-between;
+    }
 }
 
 .start-time,
 .end-time {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .time {
@@ -49,6 +71,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
+
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
 }
 
 .price-info {
@@ -59,7 +85,7 @@
 .class-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .class-info .seats {
