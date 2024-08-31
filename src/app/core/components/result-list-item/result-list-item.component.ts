@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TripDetailsModalComponent } from '@pages/home-page/components/trip-details-modal/trip-details-modal.component';
 import { Station } from '@interface/station.interface';
 import { Router, RouterLink } from '@angular/router';
+import { Carriage } from '@interface/carriage.interface';
 import { ToDatePipe } from '../../../shared/pipes/to-date/to-date.pipe';
 import { ToTimePipe } from './pipe/to-time/to-time.pipe';
 import { ToCarriagesPipe } from './pipe/to-carriages/to-carriages.pipe';
@@ -39,6 +40,7 @@ export class ResultListItemComponent implements OnInit {
     @Input() to!: Coordinate;
     @Input() route!: SearchedRoute;
     @Input() stationList: Station[] | undefined;
+    @Input() carriageList: Carriage[] | undefined;
 
     startSegment = 0;
     endSegment = 0;
@@ -106,9 +108,18 @@ export class ResultListItemComponent implements OnInit {
         return -1;
     }
 
-    getCarriageCount(carriage: string): number {
-        return this.route.carriages.reduce((acc, curr) => (carriage === curr ? acc + 1 : acc), 0);
-    }
+    // getCarriageCount(carriage: string, occupiedSeats: number[], carriages: string[]): number {
+    //     const currentCarriage = this.carriageList?.find(type => type.code === carriage);
+
+    //     if (!currentCarriage) {
+    //         return 0;
+    //     }
+
+    //     const seatsPerCarriage =
+    //         (currentCarriage.leftSeats + currentCarriage.rightSeats) * currentCarriage.rows;
+
+    //     return 0;
+    // }
 
     openDialog(segments: Segment[], path: number[], routeId: number): void {
         const dialogRef = this.matDialog.open(TripDetailsModalComponent, {
