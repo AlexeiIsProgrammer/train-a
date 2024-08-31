@@ -46,6 +46,8 @@ export class AuthService {
                         this.setUserStatus('user');
                     }
 
+                    this.router.navigateByUrl('');
+
                     this.setToken(token);
                 },
                 error: () => {

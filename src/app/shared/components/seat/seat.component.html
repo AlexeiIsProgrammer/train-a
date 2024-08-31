@@ -1,9 +1,12 @@
-<div
+<button
+    #seat
     appSeatBackground
     class="seat"
-    [seatBackground]="value"
+    [disabled]="!isFree"
     [ngClass]="isSmallModel ? 'small-seat' : 'large-seat'"
     (click)="isSmallModel ? $event.stopPropagation() : onSeatClick()"
 >
     {{ seatNumber }}
-</div>
+</button>
+
+<!-- [seatBackground]="isFree" -->

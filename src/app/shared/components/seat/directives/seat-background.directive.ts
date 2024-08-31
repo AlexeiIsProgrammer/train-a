@@ -5,7 +5,7 @@ import { Directive, ElementRef, Input, Renderer2, OnChanges, SimpleChanges } fro
     standalone: true,
 })
 export class SeatBackgroundDirective implements OnChanges {
-    @Input() seatBackground: string | number = 0;
+    @Input() seatBackground = false;
 
     constructor(
         private readonly el: ElementRef,
@@ -19,10 +19,10 @@ export class SeatBackgroundDirective implements OnChanges {
     }
 
     private updateBackground() {
-        if (this.seatBackground === 1) {
+        if (this.seatBackground) {
             this.renderer.setStyle(this.el.nativeElement, 'background-color', 'rgb(0, 0, 147)');
             this.renderer.setStyle(this.el.nativeElement, 'color', 'white');
-        } else if (this.seatBackground === 0) {
+        } else {
             this.renderer.setStyle(this.el.nativeElement, 'background-color', 'gray');
         }
     }

@@ -4,6 +4,9 @@
         <p class="seats_count" [ngClass]="isSmallModel ? 'small-seats_count' : 'large-seats_count'">
             {{ countFreeSeats() }} seats
         </p>
+        @if (carNum) {
+            <p>Car №{{ carNum }}</p>
+        }
     </div>
 </div>
 <div
@@ -14,12 +17,13 @@
         <div [ngClass]="isSmallModel ? 'small-seating-row' : 'large-seating-row'">
             <ng-container *ngFor="let seat of row; let columnIndex = index">
                 <ng-container *ngIf="seat.isFree !== '-'">
+                    @let seatNumber = seat.seat_number + firstSeatNum;
                     <app-seat
-                        [value]="seat.isFree"
-                        [seatNumber]="seat.seat_number + 1"
+                        [isFree]="seatNumber | isSeatFree: occupiedSeats"
+                        [seatNumber]="seatNumber"
                         [isSmallModel]="isSmallModel"
-                        (seatClicked)="onSeatClick(carriage?.code, columnIndex, rowIndex)"
-                    ></app-seat>
+                        (seatClicked)="onSeatClick(seatNumber)"
+                    />
                 </ng-container>
                 <ng-container *ngIf="seat.isFree === '-'">
                     <div [ngClass]="isSmallModel ? 'small-empty-seat' : 'large-empty-seat'"></div>

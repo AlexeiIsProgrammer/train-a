@@ -1,4 +1,4 @@
-@let pageParams = pageParams$ | async;
+@let pageParams = detailService.pageParams$ | async;
 @let stationsEntities = stationsEntities$ | async;
 
 @let fromCity = pageParams?.query?.from | getCityName: stationsEntities;
@@ -12,4 +12,9 @@
     (openSchedule)="openDialog()"
 />
 
-<app-carriage [carriage]="carriagesEntities$ | async" />
+<app-car-list
+    [carriages]="carriagesEntities$ | async"
+    [rideDetail]="detailService.rideDetail$ | async"
+    [fromCityIdx]="fromCityIdx | async"
+    [carriagesSeats]="carriagesSeats$ | async"
+/>

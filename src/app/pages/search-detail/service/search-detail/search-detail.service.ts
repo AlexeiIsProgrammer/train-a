@@ -1,25 +1,100 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RideDetail } from '@interface/ride.interface';
+import { PageParams } from '@pages/search-detail/page-params.type';
 import { mapToSchedule } from '@pages/search-detail/utils/map-to-schedule';
-
-import { BehaviorSubject, filter, map, Subscription } from 'rxjs';
+import {
+    BehaviorSubject,
+    catchError,
+    concatMap,
+    EMPTY,
+    EmptyError,
+    filter,
+    first,
+    forkJoin,
+    iif,
+    map,
+    Observable,
+    of,
+    shareReplay,
+    Subscription,
+    switchMap,
+    tap,
+    throwError,
+    withLatestFrom,
+} from 'rxjs';
 
 @Injectable()
 export class SearchDetailService {
     private readonly rideDetail$$ = new BehaviorSubject<RideDetail | null>(null);
 
-    readonly rideDetail$ = this.rideDetail$$.asObservable();
+    readonly rideId$ = this.activatedRoute.paramMap.pipe(
+        first(),
+        map(params => params.get('rideId')),
+        concatMap(rideId =>
+            iif(
+                () => Boolean(rideId),
+                of(rideId!),
+                throwError(() => EmptyError),
+            ),
+        ),
+    );
+
+    readonly query$ = this.activatedRoute.queryParams.pipe(
+        first(),
+        concatMap(({ from, to }) =>
+            iif(
+                () => {
+                    const isInteger =
+                        Number.isInteger(Number(from)) && Number.isInteger(Number(to));
+
+                    return isInteger;
+                },
+                of({ from: Number(from), to: Number(to) }),
+                throwError(() => EmptyError),
+            ),
+        ),
+    );
+
+    readonly pageParams$: Observable<PageParams> = forkJoin({
+        rideId: this.rideId$,
+        query: this.query$,
+    }).pipe(
+        catchError(() => {
+            this.router.navigateByUrl('404');
+
+            return EMPTY;
+        }),
+        tap(pageParams => {
+            this.loadRide(pageParams.rideId);
+        }),
+        shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
     readonly schedule$ = this.rideDetail$$.pipe(
         filter(Boolean),
         map(({ path, schedule }) => mapToSchedule(path, schedule)),
     );
 
+    readonly rideDetail$ = this.rideDetail$$.pipe(
+        filter(Boolean),
+        withLatestFrom(this.pageParams$),
+        tap(([{ path }, { query }]) => {
+            const fromIdx = Math.abs(path.indexOf(query.from));
+            const toIdx = Math.abs(path.indexOf(query.to));
+
+            if (fromIdx >= toIdx) {
+                this.router.navigateByUrl('404');
+            }
+        }),
+        switchMap(() => this.rideDetail$$),
+    );
+
     constructor(
         private readonly router: Router,
         private readonly httpClient: HttpClient,
+        private readonly activatedRoute: ActivatedRoute,
     ) {}
 
     private rideSubscription: Subscription | null = null;

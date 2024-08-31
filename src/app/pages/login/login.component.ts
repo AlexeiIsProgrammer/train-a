@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { hasGaps } from '@shared/form-validators/has-gaps.validator';
@@ -45,7 +45,6 @@ export class LoginComponent {
     readonly confirmPassword = this.formBuilder.nonNullable.control('');
 
     constructor(
-        private readonly router: Router,
         private readonly formBuilder: FormBuilder,
         private readonly authService: AuthService,
     ) {}
@@ -54,9 +53,6 @@ export class LoginComponent {
         const formValue = this.loginForm.getRawValue();
 
         this.authService.logIn(formValue).subscribe({
-            next: () => {
-                this.router.navigateByUrl('');
-            },
             error: (err: unknown) => {
                 if (!(err instanceof HttpErrorResponse)) {
                     return;

@@ -3,9 +3,7 @@ import { Carriage } from '@interface/carriage.interface';
 import { Seat } from '@interface/seat.interface';
 import { SeatingRow } from '@type/seating-row.type';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class CarriageService {
     generateSeatingData(carriage: Carriage): SeatingRow[] {
         const seatingData: SeatingRow[] = [];

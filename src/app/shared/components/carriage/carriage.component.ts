@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { SeatComponent } from '../seat/seat.component';
 import { CarriageService } from './services/carriage.service';
+import { IsSeatFreePipe } from './pipe/is-seat-free/is-seat-free.pipe';
 
 @Component({
     selector: 'app-carriage',
@@ -20,11 +21,16 @@ import { CarriageService } from './services/carriage.service';
     templateUrl: './carriage.component.html',
     styleUrls: ['./carriage.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SeatComponent, NgFor, NgIf, MatButtonModule, MatIconModule, NgClass],
+    imports: [SeatComponent, NgFor, NgIf, MatButtonModule, MatIconModule, NgClass, IsSeatFreePipe],
+    providers: [CarriageService],
 })
 export class CarriageComponent implements OnInit, OnChanges {
     @Input({ required: true }) carriage: Carriage | null = null;
     @Input() isSmallModel: boolean | null = null;
+    @Input() occupiedSeats: number[] = [];
+    @Input() carNum: number | null = null;
+    @Input() firstSeatNum = 1;
+
     rotatedSeatingMatrices: Seat[][] = [];
 
     constructor(private readonly carriageService: CarriageService) {}
@@ -55,10 +61,21 @@ export class CarriageComponent implements OnInit, OnChanges {
     }
 
     countFreeSeats(): number {
-        return this.carriageService.countFreeSeats(this.rotatedSeatingMatrices);
+        const countFreeSeats = this.rotatedSeatingMatrices
+            .flat()
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            .filter(({ seat_number, isFree }) => {
+                if (isFree === 1 && !this.occupiedSeats.includes(seat_number + this.firstSeatNum)) {
+                    return true;
+                }
+
+                return false;
+            }).length;
+
+        return countFreeSeats;
     }
 
-    onSeatClick(code: string | undefined, columnIndex: number, seatNumber: number) {
-        console.info(`Seat clicked: Code: ${code}, Column: ${columnIndex}, Row: ${seatNumber}`);
+    onSeatClick(seatNumber: number) {
+        console.info(`Seat clicked:${seatNumber}`);
     }
 }
