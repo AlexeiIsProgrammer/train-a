@@ -10,6 +10,7 @@ import { GetCurrentCities, Segment } from '@type/search.type';
 import { MatDialog } from '@angular/material/dialog';
 import { TripDetailsModalComponent } from '@pages/home-page/components/trip-details-modal/trip-details-modal.component';
 import { Station } from '@interface/station.interface';
+import { Router, RouterLink } from '@angular/router';
 import { ToDatePipe } from '../../../shared/pipes/to-date/to-date.pipe';
 import { ToTimePipe } from './pipe/to-time/to-time.pipe';
 import { ToCarriagesPipe } from './pipe/to-carriages/to-carriages.pipe';
@@ -27,6 +28,7 @@ import { ToCarriagesPipe } from './pipe/to-carriages/to-carriages.pipe';
         ToDatePipe,
         ToTimePipe,
         ToCarriagesPipe,
+        RouterLink,
     ],
     templateUrl: './result-list-item.component.html',
     styleUrl: './result-list-item.component.scss',
@@ -41,7 +43,10 @@ export class ResultListItemComponent implements OnInit {
     startSegment = 0;
     endSegment = 0;
 
-    constructor(private readonly matDialog: MatDialog) {}
+    constructor(
+        private readonly matDialog: MatDialog,
+        private readonly router: Router,
+    ) {}
 
     ngOnInit(): void {
         this.startSegment = this.route.path.findIndex(
@@ -55,7 +60,7 @@ export class ResultListItemComponent implements OnInit {
 
         const totalMinutes = Math.floor(difference / 60000);
         const days = Math.floor(totalMinutes / 60 / 24);
-        const hours = Math.floor(totalMinutes / 60);
+        const hours = Math.floor(totalMinutes / 60) % 24;
         const minutes = totalMinutes % 60;
 
         return `${days > 0 ? `${days}d ` : ''}${hours}h ${minutes}m`;
@@ -116,5 +121,15 @@ export class ResultListItemComponent implements OnInit {
         componentInstance.path = path;
         componentInstance.segments = segments;
         componentInstance.stationList = this.stationList;
+    }
+
+    onCardClick(event: MouseEvent, rideId: number): void {
+        const target = event.target as HTMLElement;
+
+        if (!target.closest('button')) {
+            this.router.navigate(['/trip', rideId], {
+                queryParams: { from: this.from.stationId, to: this.to.stationId },
+            });
+        }
     }
 }

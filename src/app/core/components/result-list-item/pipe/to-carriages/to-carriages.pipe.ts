@@ -1,17 +1,31 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Segment } from '@type/search.type';
 
-type CarriagePriceType = { id: number; price: number; type: string };
+type CarriagePriceType = { price: number; type: string };
 
 @Pipe({
     name: 'toCarriages',
     standalone: true,
 })
 export class ToCarriagesPipe implements PipeTransform {
-    transform(price: { [key: string]: number }): CarriagePriceType[] {
-        return Object.keys(price).map((key, index) => ({
-            id: index,
-            price: price[key],
-            type: key,
-        }));
+    transform(segments: Segment[]): CarriagePriceType[] {
+        return segments.reduce((acc, curr) => {
+            Object.keys(curr.price).forEach(key => {
+                const foundedCarriage = acc.find(carriage => carriage.type === key);
+
+                if (foundedCarriage) {
+                    foundedCarriage.price += curr.price[key];
+
+                    acc = acc.map(carriage => (carriage.type === key ? foundedCarriage : carriage));
+                } else {
+                    acc.push({
+                        type: key,
+                        price: curr.price[key],
+                    });
+                }
+            });
+
+            return acc;
+        }, [] as CarriagePriceType[]);
     }
 }

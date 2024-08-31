@@ -1,5 +1,5 @@
 @for (ride of route.schedule; track ride.rideId) {
-    <div class="train-schedule-card">
+    <div class="train-schedule-card" (click)="onCardClick($event, ride.rideId)">
         <div class="main-block">
             <div class="time-info">
                 <div class="start-time">
@@ -43,7 +43,10 @@
         </div>
 
         <div class="price-info">
-            @for (carriage of ride.segments[startSegment].price | toCarriages; track carriage.id) {
+            @for (
+                carriage of ride.segments.slice(startSegment, endSegment) | toCarriages;
+                track carriage.type
+            ) {
                 <div class="class-info">
                     <span>{{ carriage.type }}</span>
                     <span class="seats">{{ getCarriageCount(carriage.type) }}</span>
