@@ -11,9 +11,13 @@ export class DateFilterPipe implements PipeTransform {
             ...route,
             schedule: route.schedule.filter(
                 day =>
-                    day.segments[route.path.findIndex(way => way === stationId)].time[0].split(
-                        'T',
-                    )[0] === selectedDay,
+                    new Date(
+                        day.segments[route.path.findIndex(way => way === stationId)].time[0],
+                    ).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                    }) === selectedDay,
             ),
         }));
     }

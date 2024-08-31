@@ -13,7 +13,7 @@ export class ToDateTabsPipe implements PipeTransform {
                     acc.add(
                         new Date(
                             ride.segments[curr.path.findIndex(way => way === stationId)].time[0],
-                        ).toLocaleDateString('en-CA', {
+                        ).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: '2-digit',
                             day: '2-digit',
