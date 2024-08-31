@@ -3,16 +3,29 @@
 <app-search [stationList]="stations()"></app-search>
 
 @if (searchedRoutes && searchedRoutes.routes.length > 0) {
-    <mat-list role="list">
-        @for (route of searchedRoutes.routes; track route.id) {
-            <app-result-list-item
-                [route]="route"
-                [from]="searchedRoutes.from"
-                [to]="searchedRoutes.to"
-                [stationList]="stations()"
-            />
+    <mat-tab-group>
+        @for (
+            date of searchedRoutes.routes | toDateTabs: searchedRoutes.from.stationId;
+            track $index
+        ) {
+            <mat-tab label="{{ date | toDate }}">
+                <mat-list role="list">
+                    @for (
+                        route of searchedRoutes.routes
+                            | dateFilter: date : searchedRoutes.from.stationId;
+                        track route.id
+                    ) {
+                        <app-result-list-item
+                            [route]="route"
+                            [from]="searchedRoutes.from"
+                            [to]="searchedRoutes.to"
+                            [stationList]="stations()"
+                        />
+                    }
+                </mat-list>
+            </mat-tab>
         }
-    </mat-list>
+    </mat-tab-group>
 } @else {
     <app-no-trains-found />
 }

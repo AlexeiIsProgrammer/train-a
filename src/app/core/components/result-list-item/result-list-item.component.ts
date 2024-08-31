@@ -8,11 +8,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { Coordinate, SearchedRoute } from '@interface/search.interface';
 import { GetCurrentCities, Segment } from '@type/search.type';
 import { MatDialog } from '@angular/material/dialog';
-import { TripDetailsModalComponent } from '@pages/home-page/trip-details-modal/trip-details-modal.component';
+import { TripDetailsModalComponent } from '@pages/home-page/components/trip-details-modal/trip-details-modal.component';
 import { Station } from '@interface/station.interface';
-import { ToDatePipe } from './pipe/to-date.pipe';
-import { ToTimePipe } from './pipe/to-time.pipe';
-import { ToCarriagesPipe } from './pipe/to-carriages.pipe';
+import { ToDatePipe } from '../../../shared/pipes/to-date/to-date.pipe';
+import { ToTimePipe } from './pipe/to-time/to-time.pipe';
+import { ToCarriagesPipe } from './pipe/to-carriages/to-carriages.pipe';
 
 @Component({
     selector: 'app-result-list-item',
@@ -58,7 +58,7 @@ export class ResultListItemComponent implements OnInit {
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
 
-        return `${days > 0 ? days : ''}d ${hours}h ${minutes}m`;
+        return `${days > 0 ? `${days}d ` : ''}${hours}h ${minutes}m`;
     }
 
     currentRoute(segments: Segment[]): string {

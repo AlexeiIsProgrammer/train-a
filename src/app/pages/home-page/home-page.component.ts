@@ -9,7 +9,10 @@ import { MatListModule } from '@angular/material/list';
 import { ResultListItemComponent } from '@core/components/result-list-item/result-list-item.component';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NoTrainsFoundComponent } from './no-trains-found/no-trains-found.component';
+import { ToDatePipe } from '@shared/pipes/to-date/to-date.pipe';
+import { NoTrainsFoundComponent } from './components/no-trains-found/no-trains-found.component';
+import { DateFilterPipe } from './pipe/date-filter/date-filter.pipe';
+import { ToDateTabsPipe } from './pipe/to-date-tabs/to-date-tabs.pipe';
 
 @Component({
     selector: 'app-home-page',
@@ -21,6 +24,9 @@ import { NoTrainsFoundComponent } from './no-trains-found/no-trains-found.compon
         ResultListItemComponent,
         CommonModule,
         MatTabsModule,
+        ToDatePipe,
+        DateFilterPipe,
+        ToDateTabsPipe,
     ],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss',
@@ -30,7 +36,7 @@ export class HomePageComponent {
     readonly stations = toSignal(this.store.select(selectAllStations));
     readonly searchStations = toSignal(this.store.select(selectSearchStations));
 
-    selectedTab?: string;
+    selectedDay = '';
 
     constructor(private readonly store: Store) {
         this.store.dispatch(StationsActions.loadAll());
