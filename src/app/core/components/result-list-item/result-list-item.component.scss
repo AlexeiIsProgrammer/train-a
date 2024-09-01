@@ -1,0 +1,101 @@
+.train-schedule-card {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    margin: 16px 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.time-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    @media (max-width: 768px) {
+        justify-content: space-between;
+    }
+}
+
+.main-block {
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.price-info {
+    @media (max-width: 768px) {
+        width: 100%;
+        border-top: 1px solid black;
+
+        justify-content: space-between;
+    }
+}
+
+.start-time,
+.end-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.date,
+.city {
+    font-size: 14px;
+    color: #666;
+}
+
+.route-duration {
+    text-align: center;
+    color: #007bff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.route-duration .duration {
+    font-size: 14px;
+}
+
+.route-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
+}
+
+.price-info {
+    display: flex;
+    gap: 16px;
+}
+
+.class-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.class-info .seats {
+    font-size: 14px;
+    color: #666;
+}
+
+.class-info .price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+}

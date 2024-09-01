@@ -1,0 +1,21 @@
+.selects {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+
+    position: relative;
+
+    @media (max-width: 768px) {
+        flex-wrap: wrap;
+    }
+}
+
+.compare {
+    z-index: 10;
+    background-color: white;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

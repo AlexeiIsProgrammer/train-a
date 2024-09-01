@@ -1,0 +1,57 @@
+@let control = searchForm.controls;
+
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <div class="selects">
+        <mat-form-field appearance="fill">
+            <mat-label>From</mat-label>
+            <input matInput formControlName="startCity" [matAutocomplete]="startCityAuto" />
+            <mat-error>{{ control.startCity.errors | getControlErrorMessage }}</mat-error>
+            <mat-autocomplete #startCityAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option
+                    *ngFor="let city of stationList() | filter: control.startCity.value"
+                    [value]="city"
+                >
+                    {{ city.city }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <button type="button" mat-icon-button class="compare" (click)="swapValues()">
+            <mat-icon>compare_arrows</mat-icon>
+        </button>
+
+        <mat-form-field appearance="fill">
+            <mat-label>To</mat-label>
+            <input matInput formControlName="endCity" [matAutocomplete]="endCityAuto" />
+            <mat-error>{{ control.endCity.errors | getControlErrorMessage }}</mat-error>
+            <mat-autocomplete #endCityAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option
+                    *ngFor="let city of stationList() | filter: control.endCity.value"
+                    [value]="city"
+                >
+                    {{ city.city }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker" [min]="minDate" />
+        <mat-error>{{ control.date.errors | getControlErrorMessage }}</mat-error>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    @if (control.date.value) {
+        <mat-form-field appearance="fill">
+            <mat-label>Time</mat-label>
+            <input type="time" matInput formControlName="time" />
+            <mat-error>{{ control.time.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+    }
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!searchForm.valid">
+        Search
+    </button>
+</form>

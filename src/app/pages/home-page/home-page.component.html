@@ -1,0 +1,44 @@
+@let searchedRoutes = searchStations();
+
+<app-search [stationList]="stations()"></app-search>
+
+@if (searchedRoutes && searchedRoutes.routes.length > 0) {
+    <mat-tab-group>
+        @for (
+            date of searchedRoutes.routes | toDateTabs: searchedRoutes.from.stationId;
+            track $index
+        ) {
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <div>
+                        <p class="date">
+                            {{ date | toDate }}
+                        </p>
+
+                        <p class="day">
+                            {{ date | getDay }}
+                        </p>
+                    </div>
+                </ng-template>
+
+                <mat-list role="list">
+                    @for (
+                        route of searchedRoutes.routes
+                            | dateFilter: date : searchedRoutes.from.stationId;
+                        track route.id
+                    ) {
+                        <app-result-list-item
+                            [route]="route"
+                            [from]="searchedRoutes.from"
+                            [to]="searchedRoutes.to"
+                            [stationList]="stations()"
+                            [carriageList]="carriages()"
+                        />
+                    }
+                </mat-list>
+            </mat-tab>
+        }
+    </mat-tab-group>
+} @else {
+    <app-no-trains-found />
+}

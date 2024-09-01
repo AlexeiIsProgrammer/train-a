@@ -1,0 +1,59 @@
+@for (ride of route.schedule; track ride.rideId) {
+    <div class="train-schedule-card" (click)="onCardClick($event, ride.rideId)">
+        <div class="main-block">
+            <div class="time-info">
+                <div class="start-time">
+                    <span class="time">{{ ride.segments[startSegment].time[0] | toTime }}</span>
+                    <span class="date">{{ ride.segments[startSegment].time[0] | toDate }}</span>
+                    <span class="city">{{ from.city }}</span>
+                </div>
+                <div class="route-duration">
+                    <span class="duration">
+                        {{
+                            timeLeft(
+                                ride.segments[startSegment].time[0],
+                                ride.segments[endSegment - 1].time[1]
+                            )
+                        }}
+                    </span>
+                    <mat-divider></mat-divider>
+                </div>
+                <div class="end-time">
+                    <span class="time">{{ ride.segments[endSegment - 1].time[1] | toTime }}</span>
+                    <span class="date">{{ ride.segments[endSegment - 1].time[1] | toDate }}</span>
+                    <span class="city">{{ to.city }}</span>
+                </div>
+            </div>
+            <div class="route-info">
+                <mat-icon>train</mat-icon>
+                <span class="route">{{ currentRoute(ride.segments) }}</span>
+                <button
+                    mat-button
+                    (click)="
+                        openDialog(
+                            ride.segments.slice(startSegment, endSegment),
+                            route.path.slice(startSegment, endSegment + 1),
+                            route.id
+                        )
+                    "
+                >
+                    Route
+                </button>
+            </div>
+        </div>
+
+        <div class="price-info">
+            @for (
+                carriage of ride.segments.slice(startSegment, endSegment)
+                    | toCarriages: carriageList : route.carriages;
+                track carriage.type
+            ) {
+                <div class="class-info">
+                    <span>{{ carriage.type }}</span>
+                    <span class="seats">{{ carriage.count }}</span>
+                    <span class="price">${{ carriage.price }}</span>
+                </div>
+            }
+        </div>
+    </div>
+}
