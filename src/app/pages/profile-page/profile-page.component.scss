@@ -1,3 +1,59 @@
+@use '@angular/material' as mat;
+
+$theme: mat.define-theme();
+
 :host {
-    display: block;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+mat-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+mat-form-field {
+    margin: 2px 0;
+
+    &:first-child {
+        margin-top: 15px;
+    }
+}
+
+a {
+    text-align: center;
+    padding-top: 10px;
+    color: gray;
+    text-decoration: none;
+    transition: 0.5s;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+@media (max-width: 380px) {
+    :host {
+        padding: 20px 5px;
+    }
+}
+
+.logout {
+    @include mat.button-color($theme, $color-variant: error);
+}
+
+.input-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
 }

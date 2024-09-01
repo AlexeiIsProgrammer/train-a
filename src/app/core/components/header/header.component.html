@@ -41,7 +41,7 @@
     }
 
     @if (userType !== 'guest') {
-        <button mat-icon-button (click)="authService.logout()">
+        <button mat-icon-button (click)="logout()">
             <mat-icon>logout</mat-icon>
         </button>
     }

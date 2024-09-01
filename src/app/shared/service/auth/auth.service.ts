@@ -55,10 +55,16 @@ export class AuthService {
         );
     }
 
-    logout(): void {
-        this.router.navigateByUrl('/signin');
-        this.setUserStatus('guest');
-        localStorage.clear();
+    logout(): Observable<unknown> {
+        return this.httpClient.delete<unknown>(`/api/logout`).pipe(
+            tap({
+                next: () => {
+                    this.router.navigateByUrl('/signin');
+                    this.setUserStatus('guest');
+                    localStorage.clear();
+                },
+            }),
+        );
     }
 
     setToken(token: string): void {

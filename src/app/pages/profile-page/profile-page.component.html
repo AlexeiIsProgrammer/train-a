@@ -1,1 +1,48 @@
-<p>profile-page works!</p>
+@let control = profileForm.controls;
+
+<mat-card>
+    <mat-card-title>Profile {{ control.role.value }}</mat-card-title>
+
+    <button mat-raised-button>Change password</button>
+
+    <form [formGroup]="profileForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input
+                #email
+                matInput
+                placeholder="John"
+                formControlName="name"
+                [readonly]="!isEditMode"
+            />
+            @if (isSaving) {
+                <mat-spinner class="input-icon" [diameter]="25" [strokeWidth]="3" />
+            } @else if (isEditMode) {
+                <mat-icon class="input-icon" (click)="updateValues()">save</mat-icon>
+            } @else {
+                <mat-icon class="input-icon" (click)="changeValues()">edit</mat-icon>
+            }
+            <mat-error>{{ control.email.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+                #email
+                matInput
+                placeholder="pat@example.com"
+                formControlName="email"
+                [readonly]="!isEditMode"
+            />
+            @if (isSaving) {
+                <mat-spinner class="input-icon" [diameter]="25" [strokeWidth]="3" />
+            } @else if (isEditMode) {
+                <mat-icon class="input-icon" (click)="updateValues()">save</mat-icon>
+            } @else {
+                <mat-icon class="input-icon" (click)="changeValues()">edit</mat-icon>
+            }
+            <mat-error>{{ control.email.errors | getControlErrorMessage }}</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button class="logout" (click)="logout()">Logout</button>
+    </form>
+</mat-card>
