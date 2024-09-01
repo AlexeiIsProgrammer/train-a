@@ -96,7 +96,12 @@ export class ProfilePageComponent implements OnInit {
     }
 
     logout(): void {
-        this.authService.logout().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+        this.authService
+            .logout()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.router.navigateByUrl('');
+            });
     }
 
     private handleErr(message?: string): void {
