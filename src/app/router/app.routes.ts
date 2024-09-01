@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PageNotFoundComponent } from '@pages/page-not-found/page-not-found.component';
 import { isAdminGuard } from './guards/isAdmin/is-admin.guard';
 import { isGuestGuard } from './guards/isGuest/is-guest.guard';
+import { isUserOrAdminGuard } from './guards/isUserOrAdmin/is-user-or-admin.guard';
 
 export const routes: Routes = [
     {
@@ -16,7 +17,7 @@ export const routes: Routes = [
             import('@pages/profile-page/profile-page.component').then(
                 ({ ProfilePageComponent }) => ProfilePageComponent,
             ),
-        canMatch: [],
+        canMatch: [isUserOrAdminGuard],
     },
     {
         path: 'signup',

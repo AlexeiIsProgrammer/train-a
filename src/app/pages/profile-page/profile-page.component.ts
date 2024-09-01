@@ -14,7 +14,9 @@ import { required } from '@shared/form-validators/required.validator';
 import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
 import { AuthService } from '@shared/service/auth/auth.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
 import { ProfileService } from './services/profile/profile.service';
+import { PasswordChangerComponent } from './password-changer/password-changer.component';
 
 @Component({
     selector: 'app-profile-page',
@@ -49,6 +51,7 @@ export class ProfilePageComponent implements OnInit {
         private readonly authService: AuthService,
         private readonly profileService: ProfileService,
         private readonly destroyRef: DestroyRef,
+        private readonly matDialog: MatDialog,
     ) {}
 
     getProfile(): void {
@@ -104,5 +107,9 @@ export class ProfilePageComponent implements OnInit {
             email.setValue('');
             email.setErrors(controlErr);
         }
+    }
+
+    openDialog(): void {
+        this.matDialog.open(PasswordChangerComponent);
     }
 }

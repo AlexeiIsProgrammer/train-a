@@ -3,7 +3,7 @@
 <mat-card>
     <mat-card-title>Profile {{ control.role.value }}</mat-card-title>
 
-    <button mat-raised-button>Change password</button>
+    <button mat-raised-button (click)="openDialog()">Change password</button>
 
     <form [formGroup]="profileForm">
         <mat-form-field appearance="outline">

@@ -18,6 +18,6 @@ export class ProfileService {
     }
 
     updatePassword(newPassword: string): Observable<unknown> {
-        return this.httpClient.put<unknown>(`/api/profile/password`, { newPassword });
+        return this.httpClient.put<unknown>(`/api/profile/password`, { password: newPassword });
     }
 }
