@@ -108,19 +108,6 @@ export class ResultListItemComponent implements OnInit {
         return -1;
     }
 
-    // getCarriageCount(carriage: string, occupiedSeats: number[], carriages: string[]): number {
-    //     const currentCarriage = this.carriageList?.find(type => type.code === carriage);
-
-    //     if (!currentCarriage) {
-    //         return 0;
-    //     }
-
-    //     const seatsPerCarriage =
-    //         (currentCarriage.leftSeats + currentCarriage.rightSeats) * currentCarriage.rows;
-
-    //     return 0;
-    // }
-
     openDialog(segments: Segment[], path: number[], routeId: number): void {
         const dialogRef = this.matDialog.open(TripDetailsModalComponent, {
             height: '90vh',

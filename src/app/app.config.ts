@@ -4,7 +4,7 @@ import {
     isDevMode,
     provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withHashLocation } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
@@ -21,7 +21,7 @@ import { routes } from './router/app.routes';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
-        provideRouter(routes, withComponentInputBinding()),
+        provideRouter(routes, withComponentInputBinding(), withHashLocation()),
         provideAnimationsAsync(),
         provideHttpClient(
             withInterceptors([setAccessTokenInterceptor, handleInvalidTokenInterceptor]),
