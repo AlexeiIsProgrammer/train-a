@@ -1,0 +1,21 @@
+<button mat-icon-button routerLink="/">
+    <mat-icon>keyboard_return</mat-icon>
+</button>
+
+<div class="ride-info">
+    <div class="cities-info">
+        {{ fromCity }}
+        <mat-icon>arrow_right_alt</mat-icon>
+        {{ toCity }}
+        <span>{{ dateOfDeparture | date: 'MMMM d, h:mm a' }}</span>
+    </div>
+
+    <div class="ride-btn-wrap">
+        Ride {{ pageParams?.rideId }}
+
+        <button mat-button (click)="openSchedule.emit()">
+            <mat-icon>checklist</mat-icon>
+            Route
+        </button>
+    </div>
+</div>

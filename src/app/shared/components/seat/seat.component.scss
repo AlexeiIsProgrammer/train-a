@@ -4,16 +4,27 @@
     justify-content: center;
     border: 1px solid rgb(192, 192, 192);
     border-radius: 5px;
+    padding: 3px;
+    background-color: rgb(0 0 111 / 74%);
+    color: white;
+
+    &:disabled {
+        background-color: rgba(129, 129, 129, 0.74);
+    }
+}
+
+.selected {
+    background-color: rgb(255 145 0 / 80%);
 }
 
 .large-seat {
-    width: 40px;
+    min-width: 40px;
     height: 40px;
 }
 
 @media screen and (min-width: 769px) {
     .large-seat {
-        width: clamp(25px, 3.4vw, 40px);
+        // width: clamp(25px, 3.4vw, 40px);
         height: clamp(25px, 3.4vw, 40px);
         font-size: clamp(16px, 1.25vw, 18px);
     }

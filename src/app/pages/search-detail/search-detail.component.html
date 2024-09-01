@@ -1,0 +1,29 @@
+@let rideDetail = detailService.rideDetail$ | async;
+@let pageParams = detailService.pageParams$ | async;
+@let stationsEntities = stationsEntities$ | async;
+
+@let fromCity = pageParams?.query?.from | getCityName: stationsEntities;
+@let toCity = pageParams?.query?.to | getCityName: stationsEntities;
+
+<app-ride-info
+    [dateOfDeparture]="dateOfDeparture$ | async"
+    [fromCity]="fromCity?.toString() ?? null"
+    [toCity]="toCity?.toString() ?? null"
+    [pageParams]="pageParams"
+    (openSchedule)="openDialog()"
+/>
+
+<app-car-list
+    [carriages]="carriagesEntities$ | async"
+    [rideDetail]="rideDetail"
+    [fromCityIdx]="fromCityIdx$ | async"
+    [carriagesSeats]="carriagesSeats$ | async"
+/>
+
+<app-booking-seat-modal
+    [rideDetail]="rideDetail"
+    [selectedSeat]="detailService.selectedSeat$ | async"
+    [total]="total$ | async"
+    (closeModal)="detailService.closeReservation()"
+    (bookSeat)="detailService.makeOrder()"
+/>

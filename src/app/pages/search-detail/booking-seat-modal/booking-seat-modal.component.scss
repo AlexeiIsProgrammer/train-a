@@ -1,0 +1,32 @@
+:host {
+    display: block;
+    position: sticky;
+    bottom: 30px;
+    max-width: 300px;
+    margin-left: auto;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+}
+
+section,
+[mat-button] {
+    box-shadow: -2px 0px 18px -8px rgba(0, 0, 0, 0.63);
+}
+
+.about-seat {
+    padding: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+}

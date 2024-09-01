@@ -6,9 +6,9 @@
 
         <!-- Stations -->
         @for (control of pathControls; track $index) {
-            @let stationName = [control.value] | getConnectedCity: stationEntities();
+            @let stationName = control.value | getCityName: stationEntities();
 
-            <mat-step state="train" completed="false" appScrollToTop>
+            <mat-step state="train" completed="false" appScrollToTop editable="false">
                 <ng-template matStepLabel>
                     {{ stationName }}
                 </ng-template>

@@ -1,0 +1,59 @@
+@let departureIdx = 0;
+@let arrivalIdx = 1;
+
+@if (schedule) {
+    <h6 mat-dialog-title>Route {{ pageParams?.rideId }}</h6>
+
+    <mat-dialog-content class="mat-typography">
+        <div class="routes-wrap">
+            <div class="time">
+                <p>Time</p>
+            </div>
+            <div class="empty"></div>
+            <div class="station">Station</div>
+            <div class="stop">Stop</div>
+        </div>
+
+        @for (segment of schedule; track segment.routeId) {
+            <div class="routes-wrap">
+                <div class="time">
+                    @switch (true) {
+                        @case ($first) {
+                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm a' }}</div>
+                        }
+                        @case ($last) {
+                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm a' }}</div>
+                        }
+                        @default {
+                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm a' }}</div>
+                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm a' }}</div>
+                        }
+                    }
+                </div>
+
+                <div class="line-wrap" [class.first]="$first" [class.last]="$last">
+                    <div class="line"></div>
+                    <div class="point"></div>
+                </div>
+
+                <div class="station">{{ segment.routeId | getCityName: stationsEntities }}</div>
+
+                @switch (true) {
+                    @case ($first) {
+                        <div class="stop">First station</div>
+                    }
+                    @case ($last) {
+                        <div class="stop">Last station</div>
+                    }
+                    @default {
+                        <div class="stop">{{ segment.dwellTime }}</div>
+                    }
+                }
+            </div>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions [align]="'end'">
+        <button mat-button mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+}

@@ -1,3 +1,5 @@
 <div *ngFor="let carriage of carriages$ | async">
-    <app-carriage [carriage]="carriage"></app-carriage>
+    <app-edit position="right" (toggle)="openEditForm(carriage)">
+        <app-carriage [carriage]="carriage"></app-carriage>
+    </app-edit>
 </div>

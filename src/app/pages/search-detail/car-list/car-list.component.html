@@ -1,0 +1,22 @@
+<mat-button-toggle-group #s="matButtonToggleGroup" (change)="selectCarType($event)">
+    @for (type of carriageTypes; track type) {
+        <mat-button-toggle [checked]="type === selectedType" [value]="type">
+            {{ type }}
+        </mat-button-toggle>
+    }
+</mat-button-toggle-group>
+
+@for (item of carriageList; track item[0]) {
+    @let carNum = item[0];
+    @let carriage = item[1];
+    @let firstSeatNum = carriagesSeats?.at(carNum)?.at(0) ?? 1;
+
+    <app-carriage
+        [carriage]="carriage"
+        [carNum]="carNum + 1"
+        [firstSeatNum]="firstSeatNum"
+        [occupiedSeats]="occupiedSeats"
+        [selectedSeat]="(detailService.selectedSeat$ | async)?.seatNum ?? null"
+        (seatClicked)="bookSeat($event, carNum)"
+    />
+}

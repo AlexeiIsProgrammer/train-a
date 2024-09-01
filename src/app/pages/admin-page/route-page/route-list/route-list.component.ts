@@ -14,12 +14,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { Route } from '@interface/route.interface';
 import { Routes } from '@type/roures.type';
-import { GetConnectedCityPipe } from '@pages/admin-page/pipe/get-connected-city/get-connected-city.pipe';
 import { Station } from '@interface/station.interface';
 import { Dictionary } from '@ngrx/entity';
 import { JoinPipe } from '@pages/admin-page/pipe/join/join.pipe';
 import { ScrollToTopDirective } from '@shared/directives/scroll-to-top/scroll-to-top.directive';
 import { RouterModule } from '@angular/router';
+import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { RouteListItem } from './route-list-item.type';
 import { RouteDetailComponent } from './route-detail/route-detail.component';
 
@@ -32,7 +32,7 @@ import { RouteDetailComponent } from './route-detail/route-detail.component';
         MatIconModule,
         MatPaginatorModule,
         CommonModule,
-        GetConnectedCityPipe,
+        GetCityNamePipe,
         JoinPipe,
         ScrollToTopDirective,
         RouteDetailComponent,

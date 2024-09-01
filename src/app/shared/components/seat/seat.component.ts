@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { SeatBackgroundDirective } from './directives/seat-background.directive';
 
@@ -11,12 +11,13 @@ import { SeatBackgroundDirective } from './directives/seat-background.directive'
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeatComponent {
-    @Input() value: string | number = 1;
+    @Input() isFree = true;
     @Input() seatNumber = 1;
     @Input() isSmallModel: boolean | null = null;
-    @Output() seatClicked = new EventEmitter<number>();
+    @Input() isSelected = false;
+    // @Output() seatClicked = new EventEmitter<number>();
 
-    onSeatClick(): void {
-        this.seatClicked.emit(this.seatNumber - 1);
-    }
+    // onSeatClick(): void {
+    //     this.seatClicked.emit(this.seatNumber - 1);
+    // }
 }

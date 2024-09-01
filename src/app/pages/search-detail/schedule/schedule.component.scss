@@ -1,0 +1,90 @@
+:host {
+    display: block;
+}
+
+.time {
+    min-width: 120px;
+}
+.routes-wrap {
+    display: grid;
+    grid-template-columns: 30% repeat(2, 20%) 30%;
+    min-height: 60px;
+}
+
+.line-wrap:is(.first) {
+    .line {
+        height: 50%;
+        bottom: 0;
+    }
+
+    .point {
+        height: 8px;
+        width: 8px;
+
+        &::before {
+            content: '';
+            display: block;
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            background-color: rgb(88 99 156 / 10%);
+            transform: translateX(-9px) translateY(-9px);
+        }
+    }
+}
+
+.line-wrap:is(.last) {
+    .line {
+        height: 50%;
+        top: 0;
+    }
+
+    .point {
+        background-color: #58639c;
+        height: 8px;
+        width: 8px;
+
+        &::before {
+            content: '';
+            display: block;
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            background-color: rgb(88 99 156 / 20%);
+            transform: translateX(-9px) translateY(-9px);
+        }
+    }
+}
+
+.line-wrap {
+    height: 100%;
+    position: relative;
+}
+
+.line {
+    background-color: #58639c;
+    position: absolute;
+    height: 100%;
+    width: 2px;
+}
+
+.point {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    border: solid 2px #58639c;
+    background-color: white;
+    z-index: 2;
+}
+
+.time,
+.line-wrap,
+.station,
+.stop {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
