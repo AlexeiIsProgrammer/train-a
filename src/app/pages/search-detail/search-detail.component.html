@@ -24,6 +24,6 @@
     [rideDetail]="rideDetail"
     [selectedSeat]="detailService.selectedSeat$ | async"
     [total]="total$ | async"
-    (close)="detailService.closeReservation()"
+    (closeModal)="detailService.closeReservation()"
     (bookSeat)="detailService.makeOrder()"
 />
