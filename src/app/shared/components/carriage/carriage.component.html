@@ -18,13 +18,16 @@
             <ng-container *ngFor="let seat of row; let columnIndex = index">
                 <ng-container *ngIf="seat.isFree !== '-'">
                     @let seatNumber = seat.seat_number + firstSeatNum;
+
                     <app-seat
+                        [isSelected]="seatNumber === selectedSeat"
                         [isFree]="seatNumber | isSeatFree: occupiedSeats"
                         [seatNumber]="seatNumber"
                         [isSmallModel]="isSmallModel"
-                        (seatClicked)="onSeatClick(seatNumber)"
+                        (click)="seatClicked.emit(seatNumber)"
                     />
                 </ng-container>
+                <!-- (seatClicked)="onSeatClick(seatNumber)" -->
                 <ng-container *ngIf="seat.isFree === '-'">
                     <div [ngClass]="isSmallModel ? 'small-empty-seat' : 'large-empty-seat'"></div>
                 </ng-container>

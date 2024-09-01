@@ -19,14 +19,14 @@
                 <div class="time">
                     @switch (true) {
                         @case ($first) {
-                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm' }}</div>
+                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm a' }}</div>
                         }
                         @case ($last) {
-                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm' }}</div>
+                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm a' }}</div>
                         }
                         @default {
-                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm' }}</div>
-                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm' }}</div>
+                            <div>{{ segment.time[arrivalIdx] | date: 'M/dd/yy hh:mm a' }}</div>
+                            <div>{{ segment.time[departureIdx] | date: 'M/dd/yy hh:mm a' }}</div>
                         }
                     }
                 </div>

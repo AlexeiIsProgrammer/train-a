@@ -1,6 +1,6 @@
 /* eslint-disable rxjs/no-unsafe-takeuntil */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { map, withLatestFrom, filter, take, takeUntil, Subject } from 'rxjs';
+import { map, withLatestFrom, filter, takeUntil, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,7 @@ import { SearchDetailService } from './service/search-detail/search-detail.servi
 import { RideInfoComponent } from './ride-info/ride-info.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { CarListComponent } from './car-list/car-list.component';
-// import { HttpClient } from '@angular/common/http';
+import { BookingSeatModalComponent } from './booking-seat-modal/booking-seat-modal.component';
 
 @Component({
     selector: 'app-search-detail',
@@ -23,6 +23,7 @@ import { CarListComponent } from './car-list/car-list.component';
         ScheduleComponent,
         MatDialogModule,
         CarListComponent,
+        BookingSeatModalComponent,
     ],
     templateUrl: './search-detail.component.html',
     styleUrl: './search-detail.component.scss',
@@ -30,7 +31,7 @@ import { CarListComponent } from './car-list/car-list.component';
     providers: [SearchDetailService],
 })
 export class SearchDetailComponent {
-    readonly fromCityIdx = new Subject<number>();
+    readonly fromCityIdx$ = new Subject<number>();
     readonly stationsEntities$ = this.store.select(selectStationsEntities);
     readonly carriagesEntities$ = this.store.select(selectCarriagesEntities);
 
@@ -63,10 +64,10 @@ export class SearchDetailComponent {
         filter(Boolean),
         withLatestFrom(this.detailService.pageParams$),
         map(([{ path, schedule }, { query }]) => {
-            const cityIdx = path.slice(1).indexOf(query.to);
+            const cityIdx = path.indexOf(query.from);
             const departureTime = schedule.segments.at(cityIdx)?.time.at(0);
 
-            this.fromCityIdx.next(cityIdx);
+            this.fromCityIdx$.next(cityIdx);
 
             return departureTime ?? null;
         }),
@@ -76,16 +77,26 @@ export class SearchDetailComponent {
         private readonly store: Store,
         private readonly matDialog: MatDialog,
         readonly detailService: SearchDetailService,
-        // h: HttpClient
-    ) {
-        // h.post('/api/order', {
-        //     rideId: 103,
-        //     seat: 64,
-        //     stationStart: 4,
-        //     stationEnd: 19
-        // }).subscribe(console.log)
-        // h.get('/api/order/').subscribe(console.log)
-    }
+    ) {}
+
+    readonly total$ = this.detailService.selectedSeat$.pipe(
+        filter(Boolean),
+        withLatestFrom(
+            this.detailService.rideDetail$.pipe(filter(Boolean)),
+            this.detailService.query$.pipe(filter(Boolean)),
+        ),
+        map(([{ fromCityIdx, carType }, { schedule, path }, { to }]) => {
+            const toCityIdx = path.indexOf(to);
+            const rideCitySegments = schedule.segments.slice(fromCityIdx, toCityIdx);
+            const total = rideCitySegments.reduce((acc: number, { price }) => {
+                const sum = acc + price[carType];
+
+                return sum;
+            }, 0);
+
+            return total;
+        }),
+    );
 
     openDialog(): void {
         const dialogRef = this.matDialog.open(ScheduleComponent, {
@@ -99,9 +110,9 @@ export class SearchDetailComponent {
             .pipe(
                 takeUntil(dialogRef.afterClosed()),
                 withLatestFrom(
-                    this.detailService.pageParams$.pipe(take(1)),
-                    this.detailService.schedule$.pipe(take(1)),
-                    this.stationsEntities$.pipe(take(1)),
+                    this.detailService.pageParams$,
+                    this.detailService.schedule$,
+                    this.stationsEntities$,
                 ),
             )
             .subscribe(([, pageParams, schedule, stationsEntities]) => {

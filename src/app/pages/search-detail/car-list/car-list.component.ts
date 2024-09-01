@@ -4,13 +4,14 @@ import { RideDetail } from '@interface/ride.interface';
 import { Dictionary } from '@ngrx/entity';
 import { CarriageComponent } from '@shared/components/carriage/carriage.component';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { uniq } from 'lodash';
+import { SearchDetailService } from '../service/search-detail/search-detail.service';
 
 @Component({
     selector: 'app-car-list',
     standalone: true,
-    imports: [CarriageComponent, MatButtonToggleModule, CommonModule],
+    imports: [CarriageComponent, MatButtonToggleModule, CommonModule, AsyncPipe],
     templateUrl: './car-list.component.html',
     styleUrl: './car-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +24,8 @@ export class CarListComponent implements OnChanges {
 
     selectedType: string | undefined;
 
+    constructor(readonly detailService: SearchDetailService) {}
+
     ngOnChanges(): void {
         if (this.rideDetail && !this.selectedType) {
             const firstType = this.rideDetail.carriages.at(0);
@@ -33,6 +36,17 @@ export class CarListComponent implements OnChanges {
 
     selectCarType({ value }: MatButtonToggleChange): void {
         this.selectedType = value;
+    }
+
+    bookSeat(seatNum: number, carNum: number): void {
+        if (Number.isInteger(this.fromCityIdx) && this.selectedType) {
+            this.detailService.setSeat({
+                seatNum,
+                carNum,
+                carType: this.selectedType,
+                fromCityIdx: this.fromCityIdx!,
+            });
+        }
     }
 
     get occupiedSeats(): number[] {

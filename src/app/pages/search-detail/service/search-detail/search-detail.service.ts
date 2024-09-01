@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RideDetail } from '@interface/ride.interface';
 import { PageParams } from '@pages/search-detail/page-params.type';
+import { SelectedSeat } from '@pages/search-detail/selected-seat.interface';
 import { mapToSchedule } from '@pages/search-detail/utils/map-to-schedule';
 import {
     BehaviorSubject,
@@ -12,6 +14,7 @@ import {
     EmptyError,
     filter,
     first,
+    take,
     forkJoin,
     iif,
     map,
@@ -28,6 +31,9 @@ import {
 @Injectable()
 export class SearchDetailService {
     private readonly rideDetail$$ = new BehaviorSubject<RideDetail | null>(null);
+    private readonly selectedSeat$$ = new BehaviorSubject<SelectedSeat | null>(null);
+
+    readonly selectedSeat$ = this.selectedSeat$$.asObservable();
 
     readonly rideId$ = this.activatedRoute.paramMap.pipe(
         first(),
@@ -88,16 +94,74 @@ export class SearchDetailService {
                 this.router.navigateByUrl('404');
             }
         }),
-        switchMap(() => this.rideDetail$$),
+        switchMap(([rideDetail]) => of(rideDetail)),
     );
+
+    private rideSubscription: Subscription | null = null;
+    private makeOrderSubscription: Subscription | null = null;
 
     constructor(
         private readonly router: Router,
         private readonly httpClient: HttpClient,
         private readonly activatedRoute: ActivatedRoute,
+        private readonly snackBar: MatSnackBar,
     ) {}
 
-    private rideSubscription: Subscription | null = null;
+    makeOrder(): void {
+        if (this.makeOrderSubscription) {
+            this.makeOrderSubscription.unsubscribe();
+        }
+
+        this.makeOrderSubscription = forkJoin([
+            this.selectedSeat$.pipe(filter(Boolean), take(1)),
+            this.pageParams$.pipe(take(1)),
+        ])
+            .pipe(
+                switchMap(([{ seatNum }, { query, rideId }]) =>
+                    this.httpClient.post<{ id: number }>('/api/order', {
+                        rideId,
+                        seat: seatNum,
+                        stationStart: query.from,
+                        stationEnd: query.to,
+                    }),
+                ),
+            )
+            .subscribe({
+                next: () => {
+                    const rideId = this.rideDetail$$.value?.rideId;
+
+                    this.loadRide(`${rideId}`);
+                    this.closeReservation();
+
+                    this.openSnackBar('Ride successfully booked', false);
+                },
+                complete: () => {
+                    this.rideSubscription = null;
+                },
+                error: (err: unknown) => {
+                    if (err instanceof HttpErrorResponse) {
+                        this.openSnackBar(err.error.message, true);
+                    }
+                },
+            });
+    }
+
+    openSnackBar(massage: string, isError: boolean): void {
+        this.snackBar.open(`${massage}`, undefined, {
+            duration: 2000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+            panelClass: isError ? 'snack-bar-err' : 'snack-bar-success',
+        });
+    }
+
+    setSeat(seat: SelectedSeat): void {
+        this.selectedSeat$$.next(seat);
+    }
+
+    closeReservation(): void {
+        this.selectedSeat$$.next(null);
+    }
 
     loadRide(rideId: string): void {
         if (this.rideSubscription) {

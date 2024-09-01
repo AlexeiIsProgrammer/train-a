@@ -1,0 +1,14 @@
+@if (selectedSeat) {
+    <section>
+        <div class="about-seat">
+            <p>Car: {{ selectedSeat.carNum + 1 }}, Seat: {{ selectedSeat.seatNum }}</p>
+            <p>Total: ${{ total }}</p>
+        </div>
+
+        <button mat-button (click)="bookSeat.emit()">Book Seat</button>
+
+        <button class="close-btn" (click)="closeModal.emit()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </section>
+}

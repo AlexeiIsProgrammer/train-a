@@ -16,5 +16,7 @@
         [carNum]="carNum + 1"
         [firstSeatNum]="firstSeatNum"
         [occupiedSeats]="occupiedSeats"
+        [selectedSeat]="(detailService.selectedSeat$ | async)?.seatNum ?? null"
+        (seatClicked)="bookSeat($event, carNum)"
     />
 }

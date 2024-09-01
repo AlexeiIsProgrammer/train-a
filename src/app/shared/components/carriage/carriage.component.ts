@@ -5,6 +5,8 @@ import {
     OnInit,
     OnChanges,
     SimpleChanges,
+    EventEmitter,
+    Output,
 } from '@angular/core';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Carriage } from '@interface/carriage.interface';
@@ -27,9 +29,12 @@ import { IsSeatFreePipe } from './pipe/is-seat-free/is-seat-free.pipe';
 export class CarriageComponent implements OnInit, OnChanges {
     @Input({ required: true }) carriage: Carriage | null = null;
     @Input() isSmallModel: boolean | null = null;
+    @Input() selectedSeat: number | null = null;
     @Input() occupiedSeats: number[] = [];
     @Input() carNum: number | null = null;
     @Input() firstSeatNum = 1;
+
+    @Output() seatClicked = new EventEmitter<number>();
 
     rotatedSeatingMatrices: Seat[][] = [];
 
@@ -75,7 +80,7 @@ export class CarriageComponent implements OnInit, OnChanges {
         return countFreeSeats;
     }
 
-    onSeatClick(seatNumber: number) {
-        console.info(`Seat clicked:${seatNumber}`);
-    }
+    // onSeatClick(seatNumber: number) {
+    //     console.info(`Seat clicked:${seatNumber}`);
+    // }
 }

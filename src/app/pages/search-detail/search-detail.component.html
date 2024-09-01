@@ -1,3 +1,4 @@
+@let rideDetail = detailService.rideDetail$ | async;
 @let pageParams = detailService.pageParams$ | async;
 @let stationsEntities = stationsEntities$ | async;
 
@@ -14,7 +15,15 @@
 
 <app-car-list
     [carriages]="carriagesEntities$ | async"
-    [rideDetail]="detailService.rideDetail$ | async"
-    [fromCityIdx]="fromCityIdx | async"
+    [rideDetail]="rideDetail"
+    [fromCityIdx]="fromCityIdx$ | async"
     [carriagesSeats]="carriagesSeats$ | async"
+/>
+
+<app-booking-seat-modal
+    [rideDetail]="rideDetail"
+    [selectedSeat]="detailService.selectedSeat$ | async"
+    [total]="total$ | async"
+    (close)="detailService.closeReservation()"
+    (bookSeat)="detailService.makeOrder()"
 />
