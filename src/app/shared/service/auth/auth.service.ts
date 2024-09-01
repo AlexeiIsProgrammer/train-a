@@ -58,7 +58,7 @@ export class AuthService {
     logout(): Observable<unknown> {
         return this.httpClient.delete<unknown>(`/api/logout`).pipe(
             tap({
-                next: () => {
+                complete: () => {
                     this.router.navigateByUrl('/signin');
                     this.setUserStatus('guest');
                     localStorage.clear();
