@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '@shared/service/auth/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,9 +15,21 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     styleUrl: './header.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
     readonly authService = inject(AuthService);
     readonly destroyRef = inject(DestroyRef);
+
+    isAdminPage = false;
+
+    constructor(private readonly router: Router) {}
+
+    ngOnInit(): void {
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.isAdminPage = event.url.includes('admin');
+            }
+        });
+    }
 
     logout(): void {
         this.authService.logout().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
