@@ -30,7 +30,13 @@
             <mat-error>{{ control.password.errors | getControlErrorMessage }}</mat-error>
         </mat-form-field>
 
-        <button mat-raised-button [disabled]="!loginForm.valid" (click)="login()">Login</button>
+        <button
+            mat-raised-button
+            [disabled]="(!loginForm.valid && !isFormInitial) || loading"
+            (click)="login()"
+        >
+            Login
+        </button>
         <a routerLink="/signup">Don't have an account yet?</a>
     </form>
 </mat-card>

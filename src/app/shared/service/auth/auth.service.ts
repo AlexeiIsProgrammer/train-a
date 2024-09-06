@@ -21,9 +21,9 @@ export class AuthService {
         private readonly z: NgZone,
     ) {}
 
-    singUp(payLoad: AuthUser): Observable<Token> {
+    singUp(payLoad: AuthUser): Observable<boolean> {
         return this.httpClient.post('/api/signup', payLoad).pipe(
-            switchMap(() => this.logIn(payLoad)),
+            switchMap(() => this.router.navigateByUrl('/signin')),
             tap({
                 error: () => {
                     this.setUserStatus('guest');

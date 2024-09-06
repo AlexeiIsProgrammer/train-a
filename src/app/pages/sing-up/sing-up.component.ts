@@ -33,9 +33,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class SingUpComponent implements OnInit {
     isPasswordHide = true;
+    isFormInitial = true;
+    loading = false;
 
     readonly singUpForm = this.formBuilder.nonNullable.group({
-        email: ['', [required(), hasGaps, isEmail]],
+        email: ['', this.getEmailValidators()],
         password: '',
     });
 
@@ -77,20 +79,42 @@ export class SingUpComponent implements OnInit {
         this.confirmPassword.setValidators(this.passwordValidators);
     }
 
+    private getEmailValidators() {
+        return this.isFormInitial ? [] : [required(), hasGaps, isEmail];
+    }
+
     singUp(): void {
-        const formValue = this.singUpForm.getRawValue();
+        this.isFormInitial = false;
 
-        this.authService.singUp(formValue).subscribe({
-            error: (err: unknown) => {
-                if (!(err instanceof HttpErrorResponse)) {
-                    return;
-                }
+        this.singUpForm.controls.email.setValidators(this.getEmailValidators());
+        this.singUpForm.controls.password.setValidators(this.passwordValidators);
 
-                const message = err.error.message;
+        this.singUpForm.controls.email.updateValueAndValidity();
+        this.singUpForm.updateValueAndValidity();
 
-                this.handleErr(message);
-            },
-        });
+        this.singUpForm.markAllAsTouched();
+
+        if (this.singUpForm.valid) {
+            this.loading = true;
+            const formValue = this.singUpForm.getRawValue();
+
+            this.authService.singUp(formValue).subscribe({
+                next: () => {
+                    this.loading = false;
+                },
+                error: (err: unknown) => {
+                    this.loading = false;
+
+                    if (!(err instanceof HttpErrorResponse)) {
+                        return;
+                    }
+
+                    const message = err.error.message;
+
+                    this.handleErr(message);
+                },
+            });
+        }
     }
 
     private handleErr(message?: string): void {

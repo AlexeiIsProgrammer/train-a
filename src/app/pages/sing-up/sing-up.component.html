@@ -52,7 +52,7 @@
 
         <button
             mat-raised-button
-            [disabled]="!(singUpForm.valid && confirmPassword.valid)"
+            [disabled]="(!(singUpForm.valid && confirmPassword.valid) && !isFormInitial) || loading"
             (click)="singUp()"
         >
             Sing up
