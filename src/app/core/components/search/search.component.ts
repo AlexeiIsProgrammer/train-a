@@ -9,15 +9,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { StationList } from '@type/station.type';
-import { required } from '@shared/form-validators/required.validator';
 import { Store } from '@ngrx/store';
-import { SearchActions } from '@store/search/search.actions';
 import { Station } from '@interface/station.interface';
-import { getTomorrow } from '@shared/utils/get-tomorrow';
-import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-message/get-control-error-message.pipe';
-import { futureDateValidator } from '@shared/form-validators/future-date.validator';
-import { selectSearch } from '@store/search/search.selectors';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { required } from '../../../shared/form-validators/required.validator';
+import { SearchActions } from '../../../store/search/search.actions';
+import { getTomorrow } from '../../../shared/utils/get-tomorrow';
+import { GetControlErrorMessagePipe } from '../../../shared/pipes/get-control-error-message/get-control-error-message.pipe';
+import { futureDateValidator } from '../../../shared/form-validators/future-date.validator';
+import { selectSearch } from '../../../store/search/search.selectors';
 import { FilterPipe } from './pipe/filter.pipe';
 
 @Component({
