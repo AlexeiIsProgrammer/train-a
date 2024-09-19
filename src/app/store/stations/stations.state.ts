@@ -7,4 +7,7 @@ export type StationsState = EntityState<Station>;
 
 export const stationsAdapter = createEntityAdapter<Station>();
 
-export const stationsInitialState = stationsAdapter.getInitialState();
+export const stationsInitialState = stationsAdapter.getInitialState({
+    ids: [],
+    entities: {},
+});

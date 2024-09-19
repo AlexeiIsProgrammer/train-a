@@ -16,6 +16,13 @@ const config: Config = {
             },
         ],
     },
+    moduleNameMapper: {
+        '@shared/(.*)': '<rootDir>/src/app/shared/$1',
+        '@core/(.*)': '<rootDir>/src/app/core/$1',
+        '@interface/(.*)': '<rootDir>/src/app/interface/$1',
+        '@pages/(.*)': '<rootDir>/src/app/pages/$1',
+        '@store/(.*)': '<rootDir>/src/app/store/$1',
+    },
     transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
 };
 

@@ -36,10 +36,15 @@ export class SingUpComponent implements OnInit {
     isFormInitial = true;
     loading = false;
 
-    readonly singUpForm = this.formBuilder.nonNullable.group({
-        email: ['', this.getEmailValidators()],
-        password: '',
-    });
+    readonly singUpForm = this.formBuilder.nonNullable.group(
+        {
+            email: ['', [required(), hasGaps, isEmail]],
+            password: '',
+        },
+        {
+            updateOn: 'submit',
+        },
+    );
 
     readonly confirmPassword = this.formBuilder.nonNullable.control('');
 
@@ -79,32 +84,12 @@ export class SingUpComponent implements OnInit {
         this.confirmPassword.setValidators(this.passwordValidators);
     }
 
-    private getEmailValidators() {
-        return this.isFormInitial ? [] : [required(), hasGaps, isEmail];
-    }
-
     singUp(): void {
-        this.isFormInitial = false;
-
-        this.singUpForm.controls.email.setValidators(this.getEmailValidators());
-        this.singUpForm.controls.password.setValidators(this.passwordValidators);
-
-        this.singUpForm.controls.email.updateValueAndValidity();
-        this.singUpForm.updateValueAndValidity();
-
-        this.singUpForm.markAllAsTouched();
+        const formValue = this.singUpForm.getRawValue();
 
         if (this.singUpForm.valid) {
-            this.loading = true;
-            const formValue = this.singUpForm.getRawValue();
-
             this.authService.singUp(formValue).subscribe({
-                next: () => {
-                    this.loading = false;
-                },
                 error: (err: unknown) => {
-                    this.loading = false;
-
                     if (!(err instanceof HttpErrorResponse)) {
                         return;
                     }

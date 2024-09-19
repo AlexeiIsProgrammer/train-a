@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CarListComponent } from './car-list.component';
+import { SearchDetailService } from '../service/search-detail/search-detail.service';
 
 describe('CarListComponent', () => {
     let component: CarListComponent;
@@ -9,6 +10,12 @@ describe('CarListComponent', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CarListComponent],
+            providers: [
+                {
+                    provide: SearchDetailService,
+                    useValue: {},
+                },
+            ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(CarListComponent);

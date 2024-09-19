@@ -3,13 +3,13 @@
         <!-- City Column -->
         <ng-container matColumnDef="city">
             <th *matHeaderCellDef mat-header-cell>City</th>
-            <td *matCellDef="let item" mat-cell>{{ item.city }}</td>
+            <td *matCellDef="let item" test-id="city-name" mat-cell>{{ item.city }}</td>
         </ng-container>
 
         <!-- Connected to: Column -->
         <ng-container matColumnDef="connectedTo">
             <th *matHeaderCellDef mat-header-cell>Connected to:</th>
-            <td *matCellDef="let item" mat-cell>
+            <td *matCellDef="let item" test-id="connectedTo " mat-cell>
                 {{ item.connectedTo | toIdList | getCityName: stationEntities() | join: ', ' }}
             </td>
         </ng-container>
@@ -17,14 +17,21 @@
         <!-- Location Column -->
         <ng-container matColumnDef="location">
             <th *matHeaderCellDef mat-header-cell>Location</th>
-            <td *matCellDef="let item" mat-cell>{{ item.latitude }} {{ item.longitude }}</td>
+            <td *matCellDef="let item" test-id="coordinates" mat-cell>
+                {{ item.latitude }} {{ item.longitude }}
+            </td>
         </ng-container>
 
         <!-- Delete btn Column -->
         <ng-container matColumnDef="remove">
             <th *matHeaderCellDef mat-header-cell></th>
             <td *matCellDef="let item" mat-cell>
-                <button mat-icon-button type="button" (click)="removeOne.emit(item.id)">
+                <button
+                    test-id="remove-btn"
+                    mat-icon-button
+                    type="button"
+                    (click)="removeOne.emit(item.id)"
+                >
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>

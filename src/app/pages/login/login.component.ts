@@ -13,7 +13,6 @@ import { GetControlErrorMessagePipe } from '@shared/pipes/get-control-error-mess
 import { length } from '@shared/form-validators/length.validator';
 import { AuthService } from '@shared/service/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-login',
@@ -27,7 +26,6 @@ import { NgIf } from '@angular/common';
         MatButtonModule,
         RouterLink,
         GetControlErrorMessagePipe,
-        NgIf,
     ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
@@ -35,13 +33,23 @@ import { NgIf } from '@angular/common';
 })
 export class LoginComponent {
     isPasswordHide = true;
-    isFormInitial = true;
-    loading = false;
 
-    readonly loginForm = this.formBuilder.nonNullable.group({
-        email: ['', this.getEmailValidators()],
-        password: ['', this.getPasswordValidators()],
-    });
+    readonly loginForm = this.formBuilder.nonNullable.group(
+        {
+            email: ['', [required(), hasGaps, isEmail]],
+            password: [
+                '',
+                [
+                    required(),
+                    hasGaps,
+                    length('min', 8, 'Password must be at least 8 characters long'),
+                ],
+            ],
+        },
+        {
+            updateOn: 'submit',
+        },
+    );
 
     readonly confirmPassword = this.formBuilder.nonNullable.control('');
 
@@ -50,38 +58,12 @@ export class LoginComponent {
         private readonly authService: AuthService,
     ) {}
 
-    private getEmailValidators() {
-        return this.isFormInitial ? [] : [required(), hasGaps, isEmail];
-    }
-
-    private getPasswordValidators() {
-        return this.isFormInitial
-            ? []
-            : [
-                  required(),
-                  hasGaps,
-                  length('min', 8, 'Password must be at least 8 characters long'),
-              ];
-    }
-
     login(): void {
-        this.isFormInitial = false;
-
-        this.loginForm.controls.email.setValidators(this.getEmailValidators());
-        this.loginForm.controls.password.setValidators(this.getPasswordValidators());
-        this.loginForm.updateValueAndValidity();
+        const formValue = this.loginForm.getRawValue();
 
         if (this.loginForm.valid) {
-            this.loading = true;
-            const formValue = this.loginForm.getRawValue();
-
             this.authService.logIn(formValue).subscribe({
-                next: () => {
-                    this.loading = false;
-                },
                 error: (err: unknown) => {
-                    this.loading = false;
-
                     if (!(err instanceof HttpErrorResponse)) {
                         return;
                     }
@@ -91,8 +73,6 @@ export class LoginComponent {
                     this.handleErr(message);
                 },
             });
-        } else {
-            this.loginForm.markAllAsTouched();
         }
     }
 

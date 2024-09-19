@@ -9,11 +9,10 @@
 <mat-accordion class="example-headers-align">
     <!-- Rides -->
     @for (ride of schedule; track ride.rideId) {
-        <mat-expansion-panel #panel [expanded]="$first">
+        <mat-expansion-panel #panel test-id="mat-expansion-panel" [expanded]="$first">
             <mat-expansion-panel-header>
                 <mat-panel-description>
                     Ride {{ ride.rideId }}
-
                     <div>
                         <ng-container #saveBtnContainer />
 
@@ -66,7 +65,12 @@
 </mat-accordion>
 
 <ng-template #saveBtn let-ride let-index="index">
-    <button mat-icon-button type="button" (click)="save(ride); hideSaveBtn(index)">
+    <button
+        test-id="save-btn"
+        mat-icon-button
+        type="button"
+        (click)="save(ride); hideSaveBtn(index)"
+    >
         <mat-icon>save</mat-icon>
     </button>
 </ng-template>

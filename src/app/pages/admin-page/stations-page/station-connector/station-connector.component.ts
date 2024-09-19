@@ -36,7 +36,7 @@ import { ConnectStationService } from '../services/connect-station/connect-stati
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationConnectorComponent {
-    readonly stationList = input<StationList>();
+    readonly stationList = input<StationList | null>();
     readonly createOne = output<StationRequest>();
 
     readonly selectedStation = this.connectStationService.selectedStation;
@@ -49,42 +49,25 @@ export class StationConnectorComponent {
     });
 
     readonly connectedStationControl = this.formBuilder.nonNullable.control<number[]>([], {
-        validators: ({ value }) => (value.length ? null : { tag: 'At least one city' }),
+        validators: ({ value }) => (value.length >= 3 ? null : { tag: 'At least three city' }),
     });
 
-    superPuperUserChooosingArrayOfIds: number[] = [];
-
     constructor(
+        private readonly store: Store,
         private readonly formBuilder: FormBuilder,
         private readonly connectStationService: ConnectStationService,
-        private readonly store: Store,
     ) {
         this.connectedStationControl.valueChanges
             .pipe(
                 takeUntilDestroyed(),
                 withLatestFrom(this.stationsEntities$),
-                map(([ids, stationsEntities]) => {
-                    if (ids.length > this.superPuperUserChooosingArrayOfIds.length) {
-                        const newId = ids.find(
-                            uniqId => !this.superPuperUserChooosingArrayOfIds.includes(uniqId),
-                        );
-
-                        if (newId) {
-                            this.superPuperUserChooosingArrayOfIds.push(newId);
-                        }
-                    } else {
-                        this.superPuperUserChooosingArrayOfIds =
-                            this.superPuperUserChooosingArrayOfIds.filter(uniqId =>
-                                ids.includes(uniqId),
-                            );
-                    }
-
-                    return this.superPuperUserChooosingArrayOfIds.map(id => {
+                map(([ids, stationsEntities]) =>
+                    ids.map(id => {
                         const station = stationsEntities[id];
 
                         return [station!.latitude, station!.longitude];
-                    });
-                }),
+                    }),
+                ),
             )
             .subscribe(latLng => {
                 this.connectStationService.pathLine.set(latLng);
@@ -122,7 +105,7 @@ export class StationConnectorComponent {
         this.connectedStationControl.reset();
     }
 
-    setLeaflet({ latlng }: LeafletMouseEvent) {
+    setLeaflet({ latlng }: LeafletMouseEvent): void {
         const { city } = this.connectionForm.controls;
 
         this.connectionForm.setValue({
@@ -133,6 +116,6 @@ export class StationConnectorComponent {
     }
 
     get isFormValid(): boolean {
-        return this.connectedStationControl.value.length >= 3 && this.connectionForm.valid;
+        return this.connectedStationControl.valid && this.connectionForm.valid;
     }
 }

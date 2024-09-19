@@ -25,7 +25,7 @@ export const updateRoute = createEffect(
     (actions$ = inject(Actions), httpClient = inject(HttpClient)) =>
         actions$.pipe(
             ofType(RoutesActions.updateCurrent),
-            switchMap(({ route, err }) => {
+            switchMap(({ route }) => {
                 const { id, carriages, path } = route;
 
                 return httpClient
@@ -40,9 +40,7 @@ export const updateRoute = createEffect(
                                 },
                             }),
                         ),
-                        catchError((errMgs: unknown) => {
-                            err(errMgs);
-
+                        catchError(() => {
                             return EMPTY;
                         }),
                     );
@@ -58,7 +56,7 @@ export const createRoute = createEffect(
     (actions$ = inject(Actions), httpClient = inject(HttpClient), router = inject(Router)) =>
         actions$.pipe(
             ofType(RoutesActions.createCurrent),
-            switchMap(({ route, err }) => {
+            switchMap(({ route }) => {
                 const { carriages, path } = route;
 
                 return httpClient.post<Pick<Route, 'id'>>(`/api/route`, { carriages, path }).pipe(
@@ -67,9 +65,7 @@ export const createRoute = createEffect(
 
                         return RoutesActions.addOne({ id, ...route });
                     }),
-                    catchError((errMgs: unknown) => {
-                        err(errMgs);
-
+                    catchError(() => {
                         return EMPTY;
                     }),
                 );
@@ -85,12 +81,10 @@ export const removeRoute = createEffect(
     (actions$ = inject(Actions), httpClient = inject(HttpClient)) =>
         actions$.pipe(
             ofType(RoutesActions.removeCurrent),
-            switchMap(({ id, err }) =>
+            switchMap(({ id }) =>
                 httpClient.delete<Pick<Route, 'id'>>(`/api/route/${id}`).pipe(
                     map(() => RoutesActions.removeOne(id)),
-                    catchError((errMgs: unknown) => {
-                        err(errMgs);
-
+                    catchError(() => {
                         return EMPTY;
                     }),
                 ),

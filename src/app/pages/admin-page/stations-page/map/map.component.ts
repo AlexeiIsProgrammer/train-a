@@ -24,7 +24,7 @@ import { ConnectStationService } from '../services/connect-station/connect-stati
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent {
-    readonly stationList = input<StationList>();
+    readonly stationList = input<StationList | null>();
     private latLngCash = latLng(35.00011067419652, -119.5076444176882);
 
     readonly selectLeaflet = output<LeafletMouseEvent>();

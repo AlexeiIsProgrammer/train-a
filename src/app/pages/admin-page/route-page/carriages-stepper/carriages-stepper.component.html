@@ -22,14 +22,16 @@
 
             <div class="btns-wrap">
                 <button
+                    test-id="edit-btn"
                     mat-button
                     [disabled]="!select.value"
-                    (click)="selectCity($index, select.value)"
+                    (click)="editOne($index, select.value)"
                 >
                     Edit
                 </button>
 
                 <button
+                    test-id="add-btn"
                     mat-button
                     [disabled]="!select.value"
                     (click)="addOne($index, select.value); select.value = ''"
@@ -37,7 +39,12 @@
                     Add
                 </button>
 
-                <button mat-button [disabled]="!canRemove" (click)="removeOne($index)">
+                <button
+                    test-id="remove-btn"
+                    mat-button
+                    [disabled]="!canRemove"
+                    (click)="removeOne($index)"
+                >
                     Remove
                 </button>
             </div>

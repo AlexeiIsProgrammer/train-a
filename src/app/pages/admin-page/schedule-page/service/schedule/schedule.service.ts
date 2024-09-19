@@ -38,7 +38,6 @@ export class ScheduleService {
 
         this.rideSubscription = this.httpClient.get<Rides>(`/api/route/${id}`).subscribe({
             next: rides => {
-                // console.log(rides)
                 this.rides.next(rides);
             },
             complete: () => {

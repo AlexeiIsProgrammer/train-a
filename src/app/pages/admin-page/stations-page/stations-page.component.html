@@ -1,12 +1,15 @@
 <mat-card appearance="outlined">
     <div class="map-wrap">
-        <app-map [stationList]="stations()" (selectLeaflet)="connector.setLeaflet($event)" />
+        <app-map [stationList]="stations$ | async" (selectLeaflet)="connector.setLeaflet($event)" />
         <app-station-connector
             #connector
-            [stationList]="stations()"
+            [stationList]="stations$ | async"
             (createOne)="createOne($event)"
         />
     </div>
 
-    <app-station-list [stationEntities]="stationEntities()" (removeOne)="removeOne($event)" />
+    <app-station-list
+        [stationEntities]="stationEntities$ | async"
+        (removeOne)="removeOne($event)"
+    />
 </mat-card>
