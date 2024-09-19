@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RouteListComponent } from './route-list.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('RouteListComponent', () => {
     let component: RouteListComponent;
@@ -8,7 +8,7 @@ describe('RouteListComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [RouteListComponent],
+            imports: [RouteListComponent, NoopAnimationsModule],
         }).compileComponents();
 
         fixture = TestBed.createComponent(RouteListComponent);

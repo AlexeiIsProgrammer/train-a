@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { ChangeDetectionStrategy, Component, effect, Injector, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,20 +20,25 @@ import { MatStepperModule } from '@angular/material/stepper';
         },
     ],
 })
-export class CarriagesStepperComponent {
-    readonly carriagesTypes = input<string[]>();
+export class CarriagesStepperComponent implements OnChanges {
+    readonly carriagesTypes = input<string[] | null>();
     readonly carriages = input<string[]>();
 
-    constructor(
-        private readonly formBuilder: FormBuilder,
-        private readonly injector: Injector,
-    ) {
-        this.watchCarriagesTypes();
+    constructor(private readonly formBuilder: FormBuilder) {}
+
+    ngOnChanges({ carriages }: SimpleChanges): void {
+        if (carriages) {
+            this.carriages()?.forEach(type => {
+                const newControl = this.formBuilder.nonNullable.control(type);
+
+                this.carriagesForm.push(newControl);
+            });
+        }
     }
 
     readonly carriagesForm = this.formBuilder.nonNullable.array<string>([]);
 
-    selectCity(carriagesFormIndex: number, type: string): void {
+    editOne(carriagesFormIndex: number, type: string): void {
         const { controls } = this.carriagesForm;
 
         controls[carriagesFormIndex].setValue(type);
@@ -61,18 +66,5 @@ export class CarriagesStepperComponent {
 
     get canSave(): boolean {
         return this.carriagesForm.controls.length >= 3;
-    }
-
-    private watchCarriagesTypes(): void {
-        effect(
-            () => {
-                this.carriages()?.forEach(type => {
-                    const newControl = this.formBuilder.nonNullable.control(type);
-
-                    this.carriagesForm.push(newControl);
-                });
-            },
-            { injector: this.injector },
-        );
     }
 }

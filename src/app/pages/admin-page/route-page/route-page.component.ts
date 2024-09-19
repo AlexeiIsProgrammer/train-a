@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectAllRoutes } from '@store/routes/routes.selectors';
 import { selectStationsEntities } from '@store/stations/stations.selectors';
 import { selectCarriageTypes } from '@store/carriages/carriages.selectors';
@@ -9,24 +9,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { keys, take } from 'lodash';
 import { Route } from '@interface/route.interface';
-import { filter } from 'rxjs';
+import { filter, withLatestFrom } from 'rxjs';
 import { RoutesActions } from '@store/routes/routes.actions';
 import { ConfirmDeleteComponent } from '@shared/components/confirm-delete/confirm-delete.component';
+import { AsyncPipe } from '@angular/common';
 import { RouteListComponent } from './route-list/route-list.component';
 import { CreateRouteComponent } from './route-list/create-route/create-route.component';
 
 @Component({
     selector: 'app-route-page',
     standalone: true,
-    imports: [RouteListComponent, MatButtonModule, MatIconModule, MatDialogModule],
+    imports: [RouteListComponent, MatButtonModule, MatIconModule, MatDialogModule, AsyncPipe],
     templateUrl: './route-page.component.html',
     styleUrl: './route-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutePageComponent {
-    readonly routes = toSignal(this.store.select(selectAllRoutes));
-    readonly stationEntities = toSignal(this.store.select(selectStationsEntities));
-    readonly carriagesTypes = toSignal(this.store.select(selectCarriageTypes));
+    readonly routes$ = this.store.select(selectAllRoutes);
+    readonly stationEntities$ = this.store.select(selectStationsEntities);
+    readonly carriagesTypes$ = this.store.select(selectCarriageTypes);
 
     constructor(
         private readonly store: Store,
@@ -35,19 +36,11 @@ export class RoutePageComponent {
     ) {}
 
     updateRoute(route: Route): void {
-        this.store.dispatch(
-            RoutesActions.updateCurrent(route, (_err: unknown) => {
-                // Todo: handle err
-            }),
-        );
+        this.store.dispatch(RoutesActions.updateCurrent(route));
     }
 
     createRoute(route: Omit<Route, 'id'>): void {
-        this.store.dispatch(
-            RoutesActions.createCurrent(route, (_err: unknown) => {
-                // Todo: handle err
-            }),
-        );
+        this.store.dispatch(RoutesActions.createCurrent(route));
     }
 
     removeRoute(id: Route['id']): void {
@@ -58,11 +51,7 @@ export class RoutePageComponent {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(boolean => {
                 if (boolean) {
-                    this.store.dispatch(
-                        RoutesActions.removeCurrent(id, (_err: unknown) => {
-                            // Todo: handle err
-                        }),
-                    );
+                    this.store.dispatch(RoutesActions.removeCurrent(id));
                 }
             });
     }
@@ -72,18 +61,23 @@ export class RoutePageComponent {
             height: '90vh',
             maxWidth: '1440px',
         });
-        const { componentInstance } = dialogRef;
+        const { componentRef } = dialogRef;
 
-        const randomCarriagesTypes = take(this.carriagesTypes(), 1);
-        const randomStationId = take(
-            keys(this.stationEntities()).map(id => Number(id)),
-            1,
-        );
+        dialogRef
+            .afterOpened()
+            .pipe(withLatestFrom(this.carriagesTypes$, this.stationEntities$))
+            .subscribe(([, carriagesTypes, stationEntities]) => {
+                const randomCarriagesTypes = take(carriagesTypes, 1);
+                const randomStationId = take(
+                    keys(stationEntities).map(id => Number(id)),
+                    1,
+                );
 
-        componentInstance.stationEntities = this.stationEntities();
-        componentInstance.carriagesTypes = this.carriagesTypes();
-        componentInstance.carriages = randomCarriagesTypes;
-        componentInstance.pathIds = randomStationId;
+                componentRef?.setInput('stationEntities', stationEntities);
+                componentRef?.setInput('carriages', randomCarriagesTypes);
+                componentRef?.setInput('carriagesTypes', carriagesTypes);
+                componentRef?.setInput('pathIds', randomStationId);
+            });
 
         dialogRef
             .afterClosed()

@@ -41,6 +41,12 @@
     </mat-form-field>
 </ng-container>
 
-<button mat-flat-button class="submit-btn" [disabled]="!isFormValid" (click)="submit()">
+<button
+    test-id="submit-btn"
+    mat-flat-button
+    class="submit-btn"
+    [disabled]="!isFormValid"
+    (click)="submit()"
+>
     Add city
 </button>

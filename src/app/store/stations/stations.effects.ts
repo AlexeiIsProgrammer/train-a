@@ -59,10 +59,9 @@ export const removeStation = createEffect(
                             snackBar.open('Cannot delete station with active rides', true);
                         },
                     }),
-                    map(() => StationsActions.removeOneSuccess(id)),
-                    catchError(() => EMPTY),
                 ),
             ),
+            map(res => StationsActions.removeOneSuccess(res.id)),
         ),
     { functional: true, dispatch: true },
 );

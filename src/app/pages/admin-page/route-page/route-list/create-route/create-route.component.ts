@@ -16,10 +16,10 @@ import { StationStepperComponent } from '../../station-stepper/station-stepper.c
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateRouteComponent {
-    @Input() pathIds: number[] | undefined;
-    @Input() carriages: string[] | undefined;
-    @Input() carriagesTypes: string[] | undefined;
-    @Input() stationEntities: Dictionary<Station | undefined> | undefined;
+    @Input({ required: true }) pathIds: number[] | undefined;
+    @Input({ required: true }) carriages: string[] | undefined;
+    @Input({ required: true }) carriagesTypes: string[] | undefined;
+    @Input({ required: true }) stationEntities: Dictionary<Station | undefined> | undefined;
 
     @ViewChild(StationStepperComponent, { static: true }) stationStepper:
         | StationStepperComponent
