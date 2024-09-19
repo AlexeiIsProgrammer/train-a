@@ -44,30 +44,6 @@ describe('HomePageComponent', () => {
         fixture = TestBed.createComponent(HomePageComponent);
         component = fixture.componentInstance;
 
-        // Mocking signals for stations, searchStations, and carriages
-        component.stations = signal(() => [
-            { id: 1, city: 'New York' },
-            { id: 2, city: 'Los Angeles' },
-        ]);
-
-        component.searchStations = signal(() => ({
-            routes: [
-                {
-                    id: 1,
-                    from: { stationId: 1, name: 'New York' },
-                    to: { stationId: 2, name: 'Los Angeles' },
-                    date: '2024-09-20',
-                },
-            ],
-            from: { stationId: 1, name: 'New York' },
-            to: { stationId: 2, name: 'Los Angeles' },
-        }));
-
-        component.carriages = signal(() => [
-            { id: 1, name: 'Carriage 1' },
-            { id: 2, name: 'Carriage 2' },
-        ]);
-
         fixture.detectChanges();
     });
 
@@ -104,7 +80,6 @@ describe('HomePageComponent', () => {
 
     it('should show "no trains found" component if no routes available', () => {
         // Mocking empty routes
-        component.searchStations = signal(() => ({ routes: [], from: null, to: null }));
         fixture.detectChanges();
 
         const noTrainsFound = fixture.nativeElement.querySelector('app-no-trains-found');
@@ -113,7 +88,6 @@ describe('HomePageComponent', () => {
 
     it('should not render tab group if searchStations is null or has no routes', () => {
         // Mocking no data from searchStations
-        component.searchStations = signal(() => ({ routes: [], from: null, to: null }));
         fixture.detectChanges();
 
         const tabGroup = fixture.nativeElement.querySelector('mat-tab-group');
