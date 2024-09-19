@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { AuthUser, UserType } from '@type/user-type.type';
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { accessTokenName, ADMIN_TOKEN_SHORT_NAME } from './token-names.const';
 
@@ -21,10 +21,13 @@ export class AuthService {
         private readonly z: NgZone,
     ) {}
 
-    singUp(payLoad: AuthUser): Observable<boolean> {
+    singUp(payLoad: AuthUser): Observable<object> {
         return this.httpClient.post('/api/signup', payLoad).pipe(
-            switchMap(() => this.router.navigateByUrl('/signin')),
             tap({
+                next: () => {
+                    this.router.navigateByUrl('/signin');
+                },
+
                 error: () => {
                     this.setUserStatus('guest');
                 },

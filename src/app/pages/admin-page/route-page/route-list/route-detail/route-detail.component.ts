@@ -16,9 +16,9 @@ import { RouteListItem } from '../route-list-item.type';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RouteDetailComponent {
-    readonly route = input<RouteListItem>();
-    readonly carriagesTypes = input<string[]>();
-    readonly stationEntities = input<Dictionary<Station | undefined>>();
+    readonly route = input<RouteListItem | null>();
+    readonly carriagesTypes = input<string[] | null>();
+    readonly stationEntities = input<Dictionary<Station | undefined> | null>();
 
     readonly update = output<Route>();
 

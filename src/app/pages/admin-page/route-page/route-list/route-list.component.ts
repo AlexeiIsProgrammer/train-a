@@ -52,9 +52,9 @@ import { RouteDetailComponent } from './route-detail/route-detail.component';
 export class RouteListComponent {
     readonly paginator = viewChild.required(MatPaginator);
 
-    readonly routes = input<Routes>();
-    readonly carriagesTypes = input<string[]>();
-    readonly stationEntities = input<Dictionary<Station>>();
+    readonly routes = input<Routes | null>();
+    readonly carriagesTypes = input<string[] | null>();
+    readonly stationEntities = input<Dictionary<Station> | null>();
 
     readonly updateOne = output<Route>();
     readonly removeOne = output<Route['id']>();

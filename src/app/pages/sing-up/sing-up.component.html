@@ -13,6 +13,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Enter your password</mat-label>
             <input
+                #password
                 matInput
                 formControlName="password"
                 [type]="isPasswordHide ? 'password' : 'text'"
@@ -33,6 +34,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Confirm your password</mat-label>
             <input
+                #confPassword
                 matInput
                 [formControl]="confirmPassword"
                 [type]="isPasswordHide ? 'password' : 'text'"
@@ -52,7 +54,7 @@
 
         <button
             mat-raised-button
-            [disabled]="(!(singUpForm.valid && confirmPassword.valid) && !isFormInitial) || loading"
+            [disabled]="!(email.value && password.value && confPassword.value)"
             (click)="singUp()"
         >
             Sing up

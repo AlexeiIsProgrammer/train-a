@@ -13,6 +13,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Enter your password</mat-label>
             <input
+                #password
                 matInput
                 formControlName="password"
                 [type]="isPasswordHide ? 'password' : 'text'"
@@ -30,11 +31,7 @@
             <mat-error>{{ control.password.errors | getControlErrorMessage }}</mat-error>
         </mat-form-field>
 
-        <button
-            mat-raised-button
-            [disabled]="(!loginForm.valid && !isFormInitial) || loading"
-            (click)="login()"
-        >
+        <button mat-raised-button [disabled]="!(email.value && password.value)" (click)="login()">
             Login
         </button>
         <a routerLink="/signup">Don't have an account yet?</a>

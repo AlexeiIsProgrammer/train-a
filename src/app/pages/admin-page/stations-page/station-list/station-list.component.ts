@@ -38,7 +38,7 @@ import { GetCityNamePipe } from '@shared/pipes/get-city-name/get-city-name.pipe'
 export class StationListComponent {
     readonly displayedColumns: string[] = ['city', 'connectedTo', 'location', 'remove'];
 
-    readonly stationEntities = input<Dictionary<Station>>();
+    readonly stationEntities = input<Dictionary<Station> | null>();
 
     readonly paginator = viewChild.required(MatPaginator);
 
