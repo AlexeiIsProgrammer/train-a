@@ -20,9 +20,14 @@
     }
 
     @if (userType === 'admin') {
-        <a mat-button routerLinkActive="active" [routerLink]="['admin/stations']">Stations</a>
-        <a mat-button routerLinkActive="active" [routerLink]="['admin/routes']">Routes</a>
-        <a mat-button routerLinkActive="active" [routerLink]="['admin/carriages']">Carriages</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/profile']">Profile</a>
+        <a mat-button routerLinkActive="active" [routerLink]="['/orders']">Orders</a>
+
+        @if (isAdminPage) {
+            <a mat-button routerLinkActive="active" [routerLink]="['admin/stations']">Stations</a>
+            <a mat-button routerLinkActive="active" [routerLink]="['admin/routes']">Routes</a>
+            <a mat-button routerLinkActive="active" [routerLink]="['admin/carriages']">Carriages</a>
+        }
     }
 
     <span class="space"></span>
