@@ -52,7 +52,7 @@ export class CarriageComponent implements OnInit, OnChanges {
         }
     }
 
-    private updateSeatingMatrix() {
+    updateSeatingMatrix() {
         if (!this.carriage) {
             return;
         }
